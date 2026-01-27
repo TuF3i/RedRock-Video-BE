@@ -1,4 +1,4 @@
-package main
+package pub
 
 import (
 	pub "LiveDanmu/apps/rpc/pub/kitex_gen/pub/pub"
