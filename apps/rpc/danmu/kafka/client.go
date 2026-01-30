@@ -7,55 +7,48 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-func (r *KClient) InitKafkaClient() {
+func (r *KClient) initKafkaClient() {
 	// 连接拨号器
-	dialer := &kafka.Dialer{
-		ClientID:  "", // TODO
-		Timeout:   10 * time.Second,
-		DualStack: true,
+	dialer := &kafka.Transport{
+		ClientID:    r.conf.PodUID,
+		DialTimeout: 10 * time.Second,
 	}
 
-	// 热弹幕生产者
-	r.HotDanmuWriter = kafka.NewWriter(
-		kafka.WriterConfig{
-			Brokers:          []string{}, // TODO
-			Topic:            kafkaCfg.HOT_DANMU_PUB_TOPIC,
-			Balancer:         &kafka.LeastBytes{},
-			RequiredAcks:     1,
-			Async:            false,           // 同步写入
-			BatchSize:        100,             // 批量大小
-			BatchTimeout:     1 * time.Second, // 批量超时时间
-			Dialer:           dialer,
-			CompressionCodec: kafka.Snappy.Codec(),
-		},
-	)
+	// 直播弹幕生产者
+	r.liveDanmuWriter = &kafka.Writer{
+		Addr:                   kafka.TCP(r.conf.KafKa.Urls...),
+		Topic:                  kafkaCfg.HOT_DANMU_PUB_TOPIC,
+		Balancer:               &RoomPartitioner{},
+		MaxAttempts:            1, // 重试次数
+		BatchSize:              1,
+		BatchTimeout:           1 * time.Millisecond, // 超时时间
+		RequiredAcks:           1,
+		Async:                  false,
+		Compression:            kafka.Snappy,
+		AllowAutoTopicCreation: true,
+		Transport:              dialer,
+	}
 
-	// 正常弹幕生产者
-	r.NormalDanmuWriter = kafka.NewWriter(
-		kafka.WriterConfig{
-			Brokers:          []string{}, // TODO
-			Topic:            kafkaCfg.NORMAL_DANMU_PUB_TOPIC,
-			Balancer:         &kafka.LeastBytes{},
-			RequiredAcks:     1,
-			Async:            false,           // 同步写入
-			BatchSize:        100,             // 批量大小
-			BatchTimeout:     1 * time.Second, // 批量超时时间
-			Dialer:           dialer,
-			CompressionCodec: kafka.Snappy.Codec(),
-		},
-	)
+	// 视频弹幕生产者
+	r.videoDanmuWriter = &kafka.Writer{
+		Addr:                   kafka.TCP(r.conf.KafKa.Urls...),
+		Topic:                  kafkaCfg.VIDEO_DANMU_PUB_TOPIC,
+		Balancer:               &RoomPartitioner{},
+		MaxAttempts:            5, // 重试次数
+		BatchSize:              15,
+		BatchTimeout:           5 * time.Millisecond, // 超时时间
+		RequiredAcks:           1,
+		Async:                  false,
+		Compression:            kafka.Snappy,
+		AllowAutoTopicCreation: true,
+		Transport:              dialer,
+	}
 
-	r.VideoDanmuWriter = kafka.NewWriter(
-		kafka.WriterConfig{
-			Brokers:          []string{}, // TODO
-			Topic:            kafkaCfg.VIDEO_DANMU_PUB_TOPIC,
-			Balancer:         &kafka.LeastBytes{},
-			RequiredAcks:     1,
-			Async:            false,           // 同步写入
-			BatchSize:        100,             // 批量大小
-			BatchTimeout:     1 * time.Second, // 批量超时时间
-			Dialer:           dialer,
-			CompressionCodec: kafka.Snappy.Codec(),
-		},
-	)
+	for _, addr := range r.conf.KafKa.Urls { // 故障轮询
+		conn, err := kafka.Dial("tcp", addr)
+		if err != nil {
+			continue
+		}
+		r.utilClient = conn
+	}
 }

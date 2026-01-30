@@ -22,3 +22,37 @@ func LoadDanmuGatewayConfig() (*config_template.DanmuGatewayConfig, error) {
 
 	return conf, nil
 }
+
+func LoadDanmuRpcConfig() (*config_template.DanmuRpcConfig, error) {
+	// 初始化配置文件主体
+	conf, err := config_reader.DanmuRpcConfigLoader()
+	if err != nil {
+		return nil, err
+	}
+	// 服务发现
+	addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Etcd.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.KafKa.ServiceName, conf.KafKa.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.KafKa.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.PgSQL.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Redis.Urls = addrList
+
+	return conf, nil
+}

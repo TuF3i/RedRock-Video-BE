@@ -2,6 +2,7 @@
   <dictionary name="project">
     <words>
       <w>danmu</w>
+      <w>kmsg</w>
       <w>listenaddr</w>
     </words>
   </dictionary>

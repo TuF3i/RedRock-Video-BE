@@ -1,11 +1,20 @@
 package kafka
 
-import "github.com/segmentio/kafka-go"
+import (
+	"LiveDanmu/apps/public/config/config_template"
+
+	"github.com/segmentio/kafka-go"
+)
 
 type KClient struct {
-	HotDanmuWriter    *kafka.Writer
-	NormalDanmuWriter *kafka.Writer
-	VideoDanmuWriter  *kafka.Writer
+	liveDanmuWriter  *kafka.Writer
+	videoDanmuWriter *kafka.Writer
+	utilClient       *kafka.Conn
+	conf             *config_template.DanmuRpcConfig
 }
 
-func InitKClient() *KClient {}
+func GetKClient(conf *config_template.DanmuRpcConfig) *KClient {
+	k := &KClient{conf: conf}
+	k.initKafkaClient()
+	return k
+}
