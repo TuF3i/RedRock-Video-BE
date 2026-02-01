@@ -1,10 +1,10 @@
 package service
 
 import (
-	"LiveDanmu/apps/rpc/danmu"
-	"LiveDanmu/apps/rpc/danmu/dto"
+	"LiveDanmu/apps/public/dto"
+	"LiveDanmu/apps/rpc/danmu/core"
+	"LiveDanmu/apps/rpc/danmu/core/pkg"
 	"LiveDanmu/apps/rpc/danmu/kitex_gen/danmusvr"
-	"LiveDanmu/apps/rpc/danmu/pkg"
 	"context"
 	"errors"
 )
@@ -29,7 +29,7 @@ func PubVideoDanmu(ctx context.Context, req *danmusvr.PubReq) dto.Response {
 		return dto.InvalidContent
 	}
 	// 发送kafka消息
-	resp := danmu.KClient.SendVideoDanmuMsg(ctx, danmuData)
+	resp := core.KClient.SendVideoDanmuMsg(ctx, danmuData)
 	if !errors.Is(resp, dto.OperationSuccess) {
 		return resp
 	}
@@ -56,7 +56,7 @@ func PubLiveDanmu(ctx context.Context, req *danmusvr.PubReq) dto.Response {
 		return dto.InvalidContent
 	}
 	// 发送kafka消息
-	resp := danmu.KClient.SendLiveDanmuMsg(ctx, danmuData)
+	resp := core.KClient.SendLiveDanmuMsg(ctx, danmuData)
 	if !errors.Is(resp, dto.OperationSuccess) {
 		return resp
 	}

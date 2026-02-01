@@ -13,10 +13,14 @@ func setDefaultForDanmuRpc(v *viper.Viper) {
 	v.SetDefault(config_template.DANMU_RPC_ETCD_NAMESPACE, "middleware")
 	v.SetDefault(config_template.DANMU_RPC_KAFKA_SERVICENAME, "kafka")
 	v.SetDefault(config_template.DANMU_RPC_KAFKA_NAMESPACE, "middleware")
-	v.SetDefault(config_template.DANMU_RPC_PGSQL_SERVICENAME, "pgsql")
-	v.SetDefault(config_template.DANMU_RPC_PGSQL_NAMESPACE, "middleware")
+	v.SetDefault(config_template.DANMU_RPC_PGSQL_SERVICENAME, "pgpool")
+	v.SetDefault(config_template.DANMU_RPC_PGSQL_NAMESPACE, "dao")
+	v.SetDefault(config_template.DANMU_RPC_PGSQL_USER, "root")
+	v.SetDefault(config_template.DANMU_RPC_PGSQL_PASSWORD, "")
+	v.SetDefault(config_template.DANMU_RPC_PGSQL_DBNAME, "rvideo")
 	v.SetDefault(config_template.DANMU_RPC_REDIS_SERVICENAME, "redis")
-	v.SetDefault(config_template.DANMU_RPC_REDIS_NAMESPACE, "middleware")
+	v.SetDefault(config_template.DANMU_RPC_REDIS_NAMESPACE, "dao")
+	v.SetDefault(config_template.DANMU_RPC_REDIS_PASSWORD, "")
 	v.SetDefault(config_template.DANMU_RPC_POD_UID, uuid.New().String())
 }
 

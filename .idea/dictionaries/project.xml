@@ -4,6 +4,8 @@
       <w>danmu</w>
       <w>kmsg</w>
       <w>listenaddr</w>
+      <w>pgdb</w>
+      <w>rvid</w>
     </words>
   </dictionary>
 </component>

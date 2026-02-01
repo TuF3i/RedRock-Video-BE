@@ -21,12 +21,16 @@ type KafkaForDanmuRpc struct {
 }
 
 type PostgresForDanmuRpc struct {
+	User        string
+	Password    string
+	DBName      string
 	ServiceName string
 	Namespace   string
 	Urls        []string
 }
 
 type RedisForDanmuRpc struct {
+	Password    string
 	ServiceName string
 	Namespace   string
 	Urls        []string

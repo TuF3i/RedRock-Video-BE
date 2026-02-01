@@ -154,7 +154,7 @@ var fieldIDToName_PubReq = map[int16]string{
 type GetResp struct {
 	Status int64       `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
 	Info   string      `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   []*DanmuMsg `thrift:"data,3,required" frugal:"3,required,list<DanmuMsg>" json:"data"`
+	Data   []*DanmuMsg `thrift:"dao,3,required" frugal:"3,required,list<DanmuMsg>" json:"dao"`
 }
 
 func NewGetResp() *GetResp {
@@ -195,7 +195,7 @@ func (p *GetResp) String() string {
 var fieldIDToName_GetResp = map[int16]string{
 	1: "status",
 	2: "info",
-	3: "data",
+	3: "dao",
 }
 
 type GetReq struct {
@@ -230,7 +230,7 @@ var fieldIDToName_GetReq = map[int16]string{
 type GetTopResp struct {
 	Status int64       `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
 	Info   string      `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   []*DanmuMsg `thrift:"data,3,required" frugal:"3,required,list<DanmuMsg>" json:"data"`
+	Data   []*DanmuMsg `thrift:"dao,3,required" frugal:"3,required,list<DanmuMsg>" json:"dao"`
 }
 
 func NewGetTopResp() *GetTopResp {
@@ -271,7 +271,7 @@ func (p *GetTopResp) String() string {
 var fieldIDToName_GetTopResp = map[int16]string{
 	1: "status",
 	2: "info",
-	3: "data",
+	3: "dao",
 }
 
 type GetTopReq struct {

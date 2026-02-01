@@ -17,7 +17,7 @@ func (r *KClient) initKafkaClient() {
 	// 直播弹幕生产者
 	r.liveDanmuWriter = &kafka.Writer{
 		Addr:                   kafka.TCP(r.conf.KafKa.Urls...),
-		Topic:                  kafkaCfg.HOT_DANMU_PUB_TOPIC,
+		Topic:                  kafkaCfg.LIVE_DANMU_PUB_TOPIC,
 		Balancer:               &RoomPartitioner{},
 		MaxAttempts:            1, // 重试次数
 		BatchSize:              1,

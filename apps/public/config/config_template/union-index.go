@@ -14,7 +14,11 @@ const (
 	DANMU_RPC_KAFKA_NAMESPACE   = "kafka.namespace"
 	DANMU_RPC_PGSQL_SERVICENAME = "pgsql.servicename"
 	DANMU_RPC_PGSQL_NAMESPACE   = "pgsql.namespace"
+	DANMU_RPC_PGSQL_USER        = "pgsql.user"
+	DANMU_RPC_PGSQL_PASSWORD    = "pgsql.password"
+	DANMU_RPC_PGSQL_DBNAME      = "pgsql.dbname"
 	DANMU_RPC_REDIS_SERVICENAME = "redis.servicename"
 	DANMU_RPC_REDIS_NAMESPACE   = "redis.namespace"
+	DANMU_RPC_REDIS_PASSWORD    = "redis.password"
 	DANMU_RPC_POD_UID           = "poduid"
 )

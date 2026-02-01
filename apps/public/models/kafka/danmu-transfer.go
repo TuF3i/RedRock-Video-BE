@@ -1,7 +1,13 @@
 package kafka
 
+import "LiveDanmu/apps/public/models/dao"
+
 const (
-	HOT_DANMU_PUB_TOPIC    = "danmu.hot"
-	NORMAL_DANMU_PUB_TOPIC = "danmu.normal"
-	VIDEO_DANMU_PUB_TOPIC  = "danmu.video"
+	LIVE_DANMU_PUB_TOPIC  = "danmu.live"
+	VIDEO_DANMU_PUB_TOPIC = "danmu.video"
 )
+
+type DanmuKMsg struct {
+	RVID int64
+	Data dao.DanmuData
+}

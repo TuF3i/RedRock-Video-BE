@@ -1,7 +1,9 @@
 package kafka
 
 import (
-	"LiveDanmu/apps/rpc/danmu/dto"
+	"LiveDanmu/apps/public/dto"
+	"LiveDanmu/apps/public/models/dao"
+	KMsg "LiveDanmu/apps/public/models/kafka"
 	"LiveDanmu/apps/rpc/danmu/kitex_gen/danmusvr"
 	"context"
 	"errors"
@@ -11,9 +13,25 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
+func (r *KClient) genDanmuKMsg(msg *danmusvr.DanmuMsg) KMsg.DanmuKMsg {
+	// 结构体转换
+	return KMsg.DanmuKMsg{
+		RVID: msg.RoomId,
+		Data: dao.DanmuData{
+			RVID:    msg.RoomId,
+			UserId:  msg.UserId,
+			Content: msg.Content,
+			Color:   msg.Color,
+			Ts:      msg.Ts,
+		},
+	}
+}
+
 func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.DanmuMsg, writer *kafka.Writer) dto.Response {
+	// 生成KMsg
+	source := r.genDanmuKMsg(data)
 	// 序列化Json
-	msg, err := jsoniter.ConfigCompatibleWithStandardLibrary.Marshal(*data)
+	msg, err := jsoniter.ConfigCompatibleWithStandardLibrary.Marshal(source)
 	if err != nil {
 		return dto.ServerInternalError(err)
 	}

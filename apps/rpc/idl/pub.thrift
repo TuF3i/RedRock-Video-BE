@@ -37,7 +37,7 @@ struct GetTopResp { // 获取Top1000弹幕的响应
 }
 
 struct GetTopReq { // 获取Top1000弹幕的请求
-  1: required string BV
+  1: required i64 BV
 }
 
 // 发送Live弹幕
