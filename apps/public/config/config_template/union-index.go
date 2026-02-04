@@ -29,6 +29,7 @@ const (
 	LIVE_DANMU_CONSUMER_PGSQL_USER        = "pgsql.user"
 	LIVE_DANMU_CONSUMER_PGSQL_PASSWORD    = "pgsql.password"
 	LIVE_DANMU_CONSUMER_PGSQL_DBNAME      = "pgsql.dbname"
+	LIVE_DANMU_CONSUMER_GROUPID           = "groupid"
 	LIVE_DANMU_CONSUMER_POD_UID           = "poduid"
 
 	VIDEO_DANMU_CONSUMER_KAFKA_SERVICENAME = "kafka.servicename"
@@ -41,5 +42,6 @@ const (
 	VIDEO_DANMU_CONSUMER_REDIS_SERVICENAME = "redis.servicename"
 	VIDEO_DANMU_CONSUMER_REDIS_NAMESPACE   = "redis.namespace"
 	VIDEO_DANMU_CONSUMER_REDIS_PASSWORD    = "redis.password"
+	VIEDO_DANMU_CONSUMER_GROUPID           = "groupid"
 	VIDEO_DANMU_CONSUMER_POD_UID           = "poduid"
 )

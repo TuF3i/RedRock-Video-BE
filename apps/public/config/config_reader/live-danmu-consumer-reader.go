@@ -16,6 +16,7 @@ func setDefaultForLiveDanmuConsumer(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_USER, "root")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_PASSWORD, "")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_DBNAME, "rvideo")
+	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_GROUPID, "live-danmu-consumer-group-union")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_POD_UID, uuid.New().String())
 }
 

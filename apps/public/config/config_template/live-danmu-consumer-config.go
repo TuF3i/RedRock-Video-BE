@@ -1,9 +1,10 @@
 package config_template
 
 type LiveDanmuConsumerConfig struct {
-	PodUID string
-	KafKa  KafkaForLiveDanmuConsumer
-	PgSQL  PostgresForLiveDanmuConsumer
+	PodUID  string
+	GroupID string
+	KafKa   KafkaForLiveDanmuConsumer
+	PgSQL   PostgresForLiveDanmuConsumer
 }
 
 type KafkaForLiveDanmuConsumer struct {

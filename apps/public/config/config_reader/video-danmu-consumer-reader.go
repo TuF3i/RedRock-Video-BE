@@ -19,6 +19,7 @@ func setDefaultForVideoDanmuConsumer(v *viper.Viper) {
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_REDIS_SERVICENAME, "redis")
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_REDIS_NAMESPACE, "dao")
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_REDIS_PASSWORD, "")
+	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_GROUPID, "video-danmu-consumer-group-union")
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_POD_UID, uuid.New().String())
 }
 

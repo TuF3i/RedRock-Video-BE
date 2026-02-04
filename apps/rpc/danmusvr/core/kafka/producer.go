@@ -16,7 +16,8 @@ import (
 func (r *KClient) genDanmuKMsg(msg *danmusvr.DanmuMsg) KMsg.DanmuKMsg {
 	// 结构体转换
 	return KMsg.DanmuKMsg{
-		RVID: msg.RoomId,
+		RVID:    msg.RoomId,
+		TraceID: "", //TODO
 		Data: dao.DanmuData{
 			RVID:    msg.RoomId,
 			UserId:  msg.UserId,
@@ -37,7 +38,7 @@ func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.DanmuMsg,
 	}
 	// 组装弹幕消息
 	kmsg := kafka.Message{
-		Key:   []byte(strconv.FormatInt(data.RoomId, 10)),
+		Key:   []byte(strconv.FormatInt(source.RVID, 10)),
 		Value: msg,
 		Headers: []kafka.Header{
 			{Key: "version", Value: []byte("1.0")},

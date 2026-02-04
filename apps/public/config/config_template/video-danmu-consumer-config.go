@@ -1,10 +1,11 @@
 package config_template
 
 type VideoDanmuConsumerConfig struct {
-	PodUID string
-	KafKa  KafkaForVideoDanmuConsumer
-	PgSQL  PostgresForVideoDanmuConsumer
-	Redis  RedisForVideoDanmuConsumer
+	PodUID  string
+	GroupID string
+	KafKa   KafkaForVideoDanmuConsumer
+	PgSQL   PostgresForVideoDanmuConsumer
+	Redis   RedisForVideoDanmuConsumer
 }
 
 type KafkaForVideoDanmuConsumer struct {
