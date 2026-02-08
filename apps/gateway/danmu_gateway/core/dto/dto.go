@@ -51,3 +51,5 @@ func GenFinalResponseForGetDanmuReq(raw *danmusvr.GetResp) response.FinalRespons
 		Data:   raw.Data,
 	}
 }
+
+func GenPingMsg()
