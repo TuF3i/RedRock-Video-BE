@@ -19,5 +19,10 @@ func (r *ConsumerGroup) initKClient() {
 		GroupID: r.conf.GroupID,
 		Dialer:  dialer,
 		Topic:   kafka2.VIDEO_DANMU_PUB_TOPIC,
+
+		MinBytes:        1,                     // 立即返回，不等待批次填满
+		MaxBytes:        10e6,                  // 10MB 上限
+		MaxWait:         10 * time.Millisecond, // 最长等待10ms
+		ReadLagInterval: -1,                    // 禁用延迟统计，减少开销
 	})
 }

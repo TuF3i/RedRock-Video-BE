@@ -7,18 +7,19 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-func (r *ConsumerGroup) initKClient() {
+func (r *KClient) initKafkaClient() {
 	// 连接拨号器
 	dialer := &kafka.Dialer{
 		ClientID: r.conf.PodUID,
 		Timeout:  10 * time.Second,
 	}
 
-	r.kClient = kafka.NewReader(kafka.ReaderConfig{
-		Brokers: r.conf.KafKa.Urls,
-		GroupID: r.conf.GroupID,
-		Topic:   kafka2.VIDEO_DANMU_PUB_TOPIC,
-		Dialer:  dialer,
+	r.consumer = kafka.NewReader(kafka.ReaderConfig{
+		Brokers:     r.conf.Kafka.Urls,
+		GroupID:     r.conf.PodUID, // 使用不同的GroupID已达到广播的效果
+		Dialer:      dialer,
+		Topic:       kafka2.LIVE_DANMU_BOARDCAST_TOPIC,
+		StartOffset: kafka.LastOffset,
 
 		MinBytes:        1,                     // 立即返回，不等待批次填满
 		MaxBytes:        10e6,                  // 10MB 上限

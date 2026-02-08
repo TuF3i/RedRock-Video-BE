@@ -14,6 +14,8 @@ const (
 	DANMU_GATEWAY_REDIS_SERVICENAME    = "redis.servicename"
 	DANMU_GATEWAY_REDIS_NAMESPACE      = "redis.namespace"
 	DANMU_GATEWAY_REDIS_PASSWORD       = "redis.password"
+	DANMU_GATEWAY_KAFKA_SERVICENAME    = "kafka.servicename"
+	DANMU_GATEWAY_KAFKA_NAMESPACE      = "kafka.namespace"
 	DANMU_GATEWAY_POD_UID              = "poduid"
 
 	DANMU_RPC_ETCD_SERVICENAME  = "etcd.servicename"

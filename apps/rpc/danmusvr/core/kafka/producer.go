@@ -18,6 +18,7 @@ func (r *KClient) genDanmuKMsg(msg *danmusvr.DanmuMsg) KMsg.DanmuKMsg {
 	// 结构体转换
 	return KMsg.DanmuKMsg{
 		RVID: msg.RoomId,
+		OP:   KMsg.PUB_LIVE_DANMU,
 		Data: dao.DanmuData{
 			RVID:    msg.RoomId,
 			UserId:  msg.UserId,

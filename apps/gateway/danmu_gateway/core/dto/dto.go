@@ -1,6 +1,7 @@
 package dto
 
 import (
+	"LiveDanmu/apps/gateway/danmu_gateway/core/models"
 	"LiveDanmu/apps/public/models/dao"
 	"LiveDanmu/apps/public/response"
 	"LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
@@ -52,4 +53,26 @@ func GenFinalResponseForGetDanmuReq(raw *danmusvr.GetResp) response.FinalRespons
 	}
 }
 
-func GenPingMsg()
+func GenAddDanmuWMsg(raw *dao.DanmuData) models.WebsocketMsg {
+	return models.WebsocketMsg{
+		Msg:      "danmu.add",
+		Data:     raw,
+		MataData: make(map[string]interface{}),
+	}
+}
+
+func GenRemoveDanmuWMsg(raw *dao.DanmuData) models.WebsocketMsg {
+	return models.WebsocketMsg{
+		Msg:      "danmu.del",
+		Data:     raw,
+		MataData: make(map[string]interface{}),
+	}
+}
+
+func GenLiveOffWMsg() models.WebsocketMsg {
+	return models.WebsocketMsg{
+		Msg:      "live.off",
+		Data:     nil,
+		MataData: make(map[string]interface{}),
+	}
+}

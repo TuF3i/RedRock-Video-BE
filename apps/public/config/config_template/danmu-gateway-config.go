@@ -6,12 +6,19 @@ type DanmuGatewayConfig struct {
 	Etcd   EtcdForDanmuGateway
 	Redis  RedisForDanmuGateway
 	Loki   LokiConfigForDanmuGateway
+	Kafka  KafkaForDanmuGateway
 }
 
 type HertzForDanmuGateway struct {
 	ListenAddr     string
 	ListenPort     string
 	MonitoringPort string
+}
+
+type KafkaForDanmuGateway struct {
+	ServiceName string
+	Namespace   string
+	Urls        []string
 }
 
 type RedisForDanmuGateway struct {

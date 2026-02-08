@@ -23,6 +23,8 @@ func setDefaultForDanmuGateway(v *viper.Viper) {
 	v.SetDefault(config_template.DANMU_GATEWAY_REDIS_SERVICENAME, "redis")
 	v.SetDefault(config_template.DANMU_GATEWAY_REDIS_NAMESPACE, "dao")
 	v.SetDefault(config_template.DANMU_GATEWAY_REDIS_PASSWORD, "")
+	v.SetDefault(config_template.DANMU_GATEWAY_KAFKA_SERVICENAME, "kafka")
+	v.SetDefault(config_template.DANMU_GATEWAY_KAFKA_NAMESPACE, "middleware")
 }
 
 func DanmuGatewayConfigLoader() (*config_template.DanmuGatewayConfig, error) {
