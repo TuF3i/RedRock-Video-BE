@@ -50,9 +50,31 @@ struct PubLiveReq { // 发送Live弹幕请求
   1: required DanmuMsg danmuMsg
 }
 
+// 删除Live弹幕
+struct DelLiveResp { // 删除Live弹幕响应
+  1: required i64 status
+  2: required string info
+}
+
+struct DelLiveReq { // 删除Live弹幕请求
+  1: required DanmuMsg danmuMsg
+}
+
+// 删除Video弹幕
+struct DelResp { // 删除Video弹幕响应
+  1: required i64 status
+  2: required string info
+}
+
+struct DelReq { // 删除Video弹幕请求
+  1: required DanmuMsg danmuMsg
+}
+
 service DanmuSvr { // 服务方法
   PubResp PubDanmu(1: PubReq req)
   PubLiveResp PubLiveDanmu(1: PubLiveReq req)
   GetResp GetDanmu(1: GetReq req)
   GetTopResp GetTop(1: GetTopReq req)
+  DelLiveResp DelLiveDanmu(1: DelLiveReq req)
+  DelResp DelDanmu(1: DelReq req)
 }
