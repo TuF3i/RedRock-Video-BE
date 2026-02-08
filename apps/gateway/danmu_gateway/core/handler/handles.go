@@ -11,7 +11,17 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/hertz-contrib/websocket"
 )
+
+// websocket设置
+var upgrader = websocket.HertzUpgrader{
+	ReadBufferSize:  2048,
+	WriteBufferSize: 2048,
+	CheckOrigin: func(ctx *app.RequestContext) bool {
+		return true
+	}, // 跨域
+}
 
 func PubDanmuHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
@@ -124,5 +134,91 @@ func GetFullDanmuHandleFunc() app.HandlerFunc {
 		}
 		finalResp := dto.GenFinalResponseForGetDanmuReq(resp)
 		c.JSON(consts.StatusOK, finalResp)
+	}
+}
+
+func DelLiveDanmuHandleFunc() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// 弹幕请求
+		var danmuData dao.DanmuData
+		//// 获取上下文中的claims
+		//claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		//// 类型断言
+		//claim := claims.(*dao.MainClaims)
+		// 提取请求体中的弹幕信息
+		err := c.BindAndValidate(&danmuData)
+		if err != nil {
+			c.JSON(consts.StatusOK, response.ValidateRequestFail)
+			return
+		}
+		// 转换结构体
+		delLiveReq := dto.GenDelLiveReq(danmuData)
+		// 调用PubDanmu微服务
+		_, err = core.DanmuSvr.DelLiveDanmu(ctx, delLiveReq)
+		if err != nil {
+			c.JSON(consts.StatusOK, response.InternalError(err))
+			return
+		}
+
+		c.JSON(consts.StatusOK, response.OperationSuccess)
+	}
+}
+
+func DelDanmuHandleFunc() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// 弹幕请求
+		var danmuData dao.DanmuData
+		//// 获取上下文中的claims
+		//claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		//// 类型断言
+		//claim := claims.(*dao.MainClaims)
+		// 提取请求体中的弹幕信息
+		err := c.BindAndValidate(&danmuData)
+		if err != nil {
+			c.JSON(consts.StatusOK, response.ValidateRequestFail)
+			return
+		}
+		// 转换结构体
+		delReq := dto.GenDelReq(danmuData)
+		// 调用PubDanmu微服务
+		_, err = core.DanmuSvr.DelDanmu(ctx, delReq)
+		if err != nil {
+			c.JSON(consts.StatusOK, response.InternalError(err))
+			return
+		}
+
+		c.JSON(consts.StatusOK, response.OperationSuccess)
+	}
+}
+
+func LiveDanmuHandleFunc() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// danmu/live/:rvid
+		// 将连接升级成ws
+		err := upgrader.Upgrade(c, func(conn *websocket.Conn) {
+			// 从路由中提取rvid
+			rvid := c.Param("rvid")
+			if rvid == "" {
+				c.JSON(consts.StatusOK, response.EmptyRVID)
+				return
+			}
+			// 将string转为int64
+			num, err := strconv.ParseInt(rvid, 10, 64)
+			if err != nil {
+				c.JSON(consts.StatusOK, response.InternalError(err))
+				return
+			}
+			// 在连接池内新建连接
+			err = core.PoolGroup.AddConnToGroup(num, conn)
+			if err != nil {
+				c.JSON(consts.StatusOK, response.InternalError(err))
+				return
+			}
+		})
+		// 是否升级成功
+		if err != nil {
+			c.JSON(consts.StatusOK, response.InternalError(err))
+			return
+		}
 	}
 }

@@ -76,3 +76,25 @@ func GenLiveOffWMsg() models.WebsocketMsg {
 		MataData: make(map[string]interface{}),
 	}
 }
+
+func GenDelLiveReq(raw dao.DanmuData) *danmusvr.DelLiveReq {
+	return &danmusvr.DelLiveReq{
+		DanmuMsg: &danmusvr.DanmuMsg{
+			RoomId:  raw.RVID,
+			UserId:  raw.UserId,
+			Content: raw.Content,
+			Color:   raw.Color,
+			Ts:      raw.Ts,
+		}}
+}
+
+func GenDelReq(raw dao.DanmuData) *danmusvr.DelReq {
+	return &danmusvr.DelReq{
+		DanmuMsg: &danmusvr.DanmuMsg{
+			RoomId:  raw.RVID,
+			UserId:  raw.UserId,
+			Content: raw.Content,
+			Color:   raw.Color,
+			Ts:      raw.Ts,
+		}}
+}
