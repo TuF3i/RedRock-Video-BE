@@ -59,11 +59,6 @@ func ValidateDescription(description string) bool {
 	return utf8.RuneCountInString(description) <= 10000
 }
 
-// 6. 校验 ViewNum：非负数（≥0）
-func ValidateViewNum(viewNum int64) bool {
-	return viewNum >= 0
-}
-
 // 9. 校验 AuthorID：必须是大于 0 的整数
 func ValidateAuthorID(authorID int64) bool {
 	return authorID > 0
