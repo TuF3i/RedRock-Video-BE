@@ -117,6 +117,44 @@ var fieldIDToName_VideoInfo = map[int16]string{
 	10: "author_name",
 }
 
+type GetVideoListData struct {
+	Total  int64        `thrift:"total,1,required" frugal:"1,required,i64" json:"total"`
+	Videos []*VideoInfo `thrift:"videos,2,required" frugal:"2,required,list<VideoInfo>" json:"videos"`
+}
+
+func NewGetVideoListData() *GetVideoListData {
+	return &GetVideoListData{}
+}
+
+func (p *GetVideoListData) InitDefault() {
+}
+
+func (p *GetVideoListData) GetTotal() (v int64) {
+	return p.Total
+}
+
+func (p *GetVideoListData) GetVideos() (v []*VideoInfo) {
+	return p.Videos
+}
+func (p *GetVideoListData) SetTotal(val int64) {
+	p.Total = val
+}
+func (p *GetVideoListData) SetVideos(val []*VideoInfo) {
+	p.Videos = val
+}
+
+func (p *GetVideoListData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetVideoListData(%+v)", *p)
+}
+
+var fieldIDToName_GetVideoListData = map[int16]string{
+	1: "total",
+	2: "videos",
+}
+
 type AddVideoReq struct {
 	VideoInfo *VideoInfo `thrift:"video_info,1,required" frugal:"1,required,VideoInfo" json:"video_info"`
 }
@@ -366,9 +404,9 @@ var fieldIDToName_GetVideoListReq = map[int16]string{
 }
 
 type GetVideoListResp struct {
-	Status int64        `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string       `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   []*VideoInfo `thrift:"data,3,required" frugal:"3,required,list<VideoInfo>" json:"data"`
+	Status int64             `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string            `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *GetVideoListData `thrift:"data,3,required" frugal:"3,required,GetVideoListData" json:"data"`
 }
 
 func NewGetVideoListResp() *GetVideoListResp {
@@ -386,7 +424,12 @@ func (p *GetVideoListResp) GetInfo() (v string) {
 	return p.Info
 }
 
-func (p *GetVideoListResp) GetData() (v []*VideoInfo) {
+var GetVideoListResp_Data_DEFAULT *GetVideoListData
+
+func (p *GetVideoListResp) GetData() (v *GetVideoListData) {
+	if !p.IsSetData() {
+		return GetVideoListResp_Data_DEFAULT
+	}
 	return p.Data
 }
 func (p *GetVideoListResp) SetStatus(val int64) {
@@ -395,8 +438,12 @@ func (p *GetVideoListResp) SetStatus(val int64) {
 func (p *GetVideoListResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *GetVideoListResp) SetData(val []*VideoInfo) {
+func (p *GetVideoListResp) SetData(val *GetVideoListData) {
 	p.Data = val
+}
+
+func (p *GetVideoListResp) IsSetData() bool {
+	return p.Data != nil
 }
 
 func (p *GetVideoListResp) String() string {

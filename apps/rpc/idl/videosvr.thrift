@@ -15,6 +15,11 @@ struct VideoInfo {
   10: required string author_name
 }
 
+struct GetVideoListData {
+  1: required i64 total
+  2: required list<VideoInfo> videos
+}
+
 // 添加视频
 struct AddVideoReq {
   1: required VideoInfo video_info
@@ -54,7 +59,7 @@ struct GetVideoListReq {
 struct GetVideoListResp {
   1: required i64 status
   2: required string info
-  3: required list<VideoInfo> data
+  3: required GetVideoListData data
 }
 
 // 获取预签名链接

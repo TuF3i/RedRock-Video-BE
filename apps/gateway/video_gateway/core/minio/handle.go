@@ -26,6 +26,7 @@ func (r *Minio) UploadFile(ctx context.Context, minioKey string, file *multipart
 		return err
 	}
 
+	_ = f.Close()
 	return nil
 }
 
@@ -48,5 +49,6 @@ func (r *Minio) UploadFaceFile(ctx context.Context, minioKey string, file *multi
 		return err
 	}
 
+	_ = f.Close()
 	return nil
 }

@@ -21,7 +21,7 @@ type VideoInfo struct {
 	ViewNum     int64  `gorm:"column:view_num;default:0" json:"view_num"`
 	// 属性段
 	UseFace bool `gorm:"column:use_face;default:false" json:"use_face"`
-	InJudge bool `gorm:"column:in_judge;default:true" json:"in_judge"`
+	InJudge bool `gorm:"column:in_judge;default:true" json:"-"`
 	// 用户段
 	AuthorID   int64  `gorm:"column:author_id" json:"author_id"`
 	AuthorName string `gorm:"column:author_name" json:"author_name"`
