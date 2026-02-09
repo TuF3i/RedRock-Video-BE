@@ -64,7 +64,7 @@ struct GetPreSignedUrlReq {
 struct GetPreSignedUrlResp {
   1: required i64 status
   2: required string info
-  3: required string url
+  3: required string data
 }
 
 service VideoSvr {

@@ -1,0 +1,4 @@
+service_tag:
+  group: "apps.rpc"
+  name: "danmusvr"
+  svr_id: "4"

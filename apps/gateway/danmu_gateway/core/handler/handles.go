@@ -42,9 +42,9 @@ func PubDanmuHandleFunc() app.HandlerFunc {
 		// 转换结构体
 		pubReq := dto.GenPubReq(danmuData)
 		// 调用PubDanmu微服务
-		_, err = core.DanmuSvr.PubDanmu(ctx, pubReq)
+		resp, err := core.DanmuSvr.PubDanmu(ctx, pubReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.JSON(consts.StatusOK, dto.GenFinalResponseForPubReq(resp))
 			return
 		}
 
@@ -71,9 +71,9 @@ func PubLiveDanmuHandleFunc() app.HandlerFunc {
 		// 转换结构体
 		pubReq := dto.GenPubLiveReq(danmuData)
 		// 调用PubDanmu微服务
-		_, err = core.DanmuSvr.PubLiveDanmu(ctx, pubReq)
+		resp, err := core.DanmuSvr.PubLiveDanmu(ctx, pubReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.JSON(consts.StatusOK, dto.GenFinalResponseForPubLive(resp))
 			return
 		}
 
@@ -101,7 +101,7 @@ func GetHotDanmuHandleFunc() app.HandlerFunc {
 		// 调用GetTop
 		resp, err := core.DanmuSvr.GetTop(ctx, getTopReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.JSON(consts.StatusOK, dto.GenFinalResponseForGetTopReq(resp))
 			return
 		}
 		finalResp := dto.GenFinalResponseForGetTopReq(resp)
@@ -129,7 +129,7 @@ func GetFullDanmuHandleFunc() app.HandlerFunc {
 		// 调用GetDanmu
 		resp, err := core.DanmuSvr.GetDanmu(ctx, getReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.JSON(consts.StatusOK, dto.GenFinalResponseForGetDanmuReq(resp))
 			return
 		}
 		finalResp := dto.GenFinalResponseForGetDanmuReq(resp)
@@ -159,9 +159,9 @@ func DelLiveDanmuHandleFunc() app.HandlerFunc {
 		// 转换结构体
 		delLiveReq := dto.GenDelLiveReq(danmuData)
 		// 调用PubDanmu微服务
-		_, err = core.DanmuSvr.DelLiveDanmu(ctx, delLiveReq)
+		resp, err := core.DanmuSvr.DelLiveDanmu(ctx, delLiveReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.JSON(consts.StatusOK, dto.GenFinalResponseForDelLiveReq(resp))
 			return
 		}
 
@@ -191,9 +191,9 @@ func DelDanmuHandleFunc() app.HandlerFunc {
 		// 转换结构体
 		delReq := dto.GenDelReq(danmuData)
 		// 调用PubDanmu微服务
-		_, err = core.DanmuSvr.DelDanmu(ctx, delReq)
+		resp, err := core.DanmuSvr.DelDanmu(ctx, delReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.JSON(consts.StatusOK, dto.GenFinalResponseForDelReq(resp))
 			return
 		}
 

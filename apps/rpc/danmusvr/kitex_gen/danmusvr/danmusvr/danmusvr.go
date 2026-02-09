@@ -10,7 +10,7 @@ import (
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 )
 
-var errInvalidMessageType = errors.New("invalid message type for service method handler")
+var errInvalidMessageType = errors.New("invalid message type for service_tag.yaml method handler")
 
 var serviceMethods = map[string]kitex.MethodInfo{
 	"PubDanmu": kitex.NewMethodInfo(

@@ -48,7 +48,7 @@ func (h *lokiHook) Fire(entry zapcore.Entry) error {
 	case h.logChan <- &entry: // 通道有空闲，放入日志
 	default: // 通道满时丢弃日志，避免阻塞业务，可根据需求改为落盘本地
 		zap.L().Warn("loki log channel is full, discard log",
-			zap.String("service", h.config.Service),
+			zap.String("service_tag.yaml", h.config.Service),
 			zap.String("msg", entry.Message[:min(100, len(entry.Message))])) // 截断超长消息
 	}
 	return nil
@@ -74,9 +74,9 @@ func (h *lokiHook) worker(id int) {
 func (h *lokiHook) pushToLoki(entry *zapcore.Entry) error {
 	// 1. 构造Loki低基数标签（禁止用trace_id/order_id等高基数字段）
 	labels := map[string]string{
-		"service": h.config.Service,
-		"env":     h.config.Env,
-		"level":   entry.Level.String(),
+		"service_tag.yaml": h.config.Service,
+		"env":              h.config.Env,
+		"level":            entry.Level.String(),
 	}
 	labelsJson, err := json.Marshal(labels)
 	if err != nil {
@@ -195,7 +195,7 @@ func initZapWithLoki(config LokiConfig) (*zap.Logger, *lokiHook) {
 //	// 1. 配置Loki（生产可通过viper从yaml/nacos读取）
 //	lokiConfig := LokiConfig{
 //		LokiAddr: []string{"http://127.0.0.1:3100"}, // 本地Loki地址，确保3100端口可访问
-//		Service:  "pay-service",                     // 你的微服务名
+//		Service:  "pay-service_tag.yaml",                     // 你的微服务名
 //		Env:      "prod",                            // 运行环境
 //		Level:    "debug",                           // 日志级别
 //	}

@@ -3,13 +3,11 @@ package dto
 import "LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
 
 var (
-	OperationSuccess = Response{Status: 20000, Info: "Operation Success"}
-	RevDataError     = Response{Status: 40000, Info: "Validate Data Error"}
-
-	InvalidRoomID  = Response{Status: 40001, Info: "Invalid RoomID"}
-	InvalidUserID  = Response{Status: 40002, Info: "Invalid UserID"}
-	InvalidColor   = Response{Status: 40003, Info: "Invalid Color"}
-	InvalidContent = Response{Status: 40004, Info: "Invalid Content"}
+	OperationSuccess = Response{Status: 40200, Info: "Operation Success"}
+	InvalidRoomID    = Response{Status: 40001, Info: "Invalid RoomID"}
+	InvalidUserID    = Response{Status: 40002, Info: "Invalid UserID"}
+	InvalidColor     = Response{Status: 40003, Info: "Invalid Color"}
+	InvalidContent   = Response{Status: 40004, Info: "Invalid Content"}
 )
 
 // Response 业务层错误封装

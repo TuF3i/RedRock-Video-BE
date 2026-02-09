@@ -1,0 +1,4 @@
+service_tag:
+  group: "apps.consumer"
+  name: "video_danmu_consumer"
+  svr_id: "8"

@@ -8,9 +8,9 @@ import (
 
 type VideoInfo struct {
 	// gorm段
-	ID        uint           `json:"id" gorm:"primarykey"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
+	ID        uint           `json:"-" gorm:"primarykey"`
+	CreatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 	// 数据段
 	RVID        int64  `gorm:"column:rvid;primaryKey;autoIncrement" json:"rvid"`

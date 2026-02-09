@@ -7,6 +7,7 @@ import (
 	"LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
 )
 
+// Pub
 func GenPubReq(raw dao.DanmuData) *danmusvr.PubReq {
 	return &danmusvr.PubReq{
 		DanmuMsg: &danmusvr.DanmuMsg{
@@ -18,6 +19,15 @@ func GenPubReq(raw dao.DanmuData) *danmusvr.PubReq {
 		}}
 }
 
+func GenFinalResponseForPubReq(raw *danmusvr.PubResp) response.FinalResponse {
+	return response.FinalResponse{
+		Status: uint(raw.Status),
+		Info:   raw.Info,
+		Data:   nil,
+	}
+}
+
+// PubLive
 func GenPubLiveReq(raw dao.DanmuData) *danmusvr.PubLiveReq {
 	return &danmusvr.PubLiveReq{
 		DanmuMsg: &danmusvr.DanmuMsg{
@@ -29,6 +39,15 @@ func GenPubLiveReq(raw dao.DanmuData) *danmusvr.PubLiveReq {
 		}}
 }
 
+func GenFinalResponseForPubLive(raw *danmusvr.PubLiveResp) response.FinalResponse {
+	return response.FinalResponse{
+		Status: uint(raw.Status),
+		Info:   raw.Info,
+		Data:   nil,
+	}
+}
+
+// GetTop
 func GenGetTopReq(rvid int64) *danmusvr.GetTopReq {
 	return &danmusvr.GetTopReq{BV: rvid}
 }
@@ -41,6 +60,7 @@ func GenFinalResponseForGetTopReq(raw *danmusvr.GetTopResp) response.FinalRespon
 	}
 }
 
+// GetDAnmu
 func GenGetDanmuReq(rvid int64) *danmusvr.GetReq {
 	return &danmusvr.GetReq{BV: rvid}
 }
@@ -77,6 +97,7 @@ func GenLiveOffWMsg() models.WebsocketMsg {
 	}
 }
 
+// DelLive
 func GenDelLiveReq(raw dao.DanmuData) *danmusvr.DelLiveReq {
 	return &danmusvr.DelLiveReq{
 		DanmuMsg: &danmusvr.DanmuMsg{
@@ -88,6 +109,14 @@ func GenDelLiveReq(raw dao.DanmuData) *danmusvr.DelLiveReq {
 		}}
 }
 
+func GenFinalResponseForDelLiveReq(raw *danmusvr.DelLiveResp) response.FinalResponse {
+	return response.FinalResponse{
+		Status: uint(raw.Status),
+		Info:   raw.Info,
+		Data:   nil,
+	}
+}
+
 func GenDelReq(raw dao.DanmuData) *danmusvr.DelReq {
 	return &danmusvr.DelReq{
 		DanmuMsg: &danmusvr.DanmuMsg{
@@ -97,4 +126,12 @@ func GenDelReq(raw dao.DanmuData) *danmusvr.DelReq {
 			Color:   raw.Color,
 			Ts:      raw.Ts,
 		}}
+}
+
+func GenFinalResponseForDelReq(raw *danmusvr.DelResp) response.FinalResponse {
+	return response.FinalResponse{
+		Status: uint(raw.Status),
+		Info:   raw.Info,
+		Data:   nil,
+	}
 }

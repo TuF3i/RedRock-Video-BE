@@ -7,7 +7,7 @@ import (
 
 var colorRe = regexp.MustCompile(`(?i)^#([0-9a-f]{3}|[0-9a-f]{6})$`)
 
-// 校验房间ID
+// ValidateRoomID 校验房间ID
 func ValidateRoomID(roomID int64) bool {
 	if roomID < 1 || roomID > 9999999999 {
 		return false
@@ -15,7 +15,7 @@ func ValidateRoomID(roomID int64) bool {
 	return true
 }
 
-// 校验用户ID
+// ValidateUserID 校验用户ID
 func ValidateUserID(userID int64) bool {
 	if userID < 1 {
 		return false
@@ -23,7 +23,7 @@ func ValidateUserID(userID int64) bool {
 	return true
 }
 
-// 校验颜色
+// ValidateColor 校验颜色
 func ValidateColor(color string) bool {
 	if !colorRe.MatchString(color) {
 		return false
@@ -31,7 +31,7 @@ func ValidateColor(color string) bool {
 	return true
 }
 
-// 校验弹幕内容
+// ValidateContent 校验弹幕内容
 func ValidateContent(content string) bool {
 	if utf8.RuneCountInString(content) == 0 || utf8.RuneCountInString(content) > 60 {
 		return false

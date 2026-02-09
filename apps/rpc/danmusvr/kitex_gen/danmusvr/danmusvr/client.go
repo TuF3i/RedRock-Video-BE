@@ -19,7 +19,7 @@ type Client interface {
 	DelDanmu(ctx context.Context, req *danmusvr.DelReq, callOptions ...callopt.Option) (r *danmusvr.DelResp, err error)
 }
 
-// NewClient creates a client for the service defined in IDL.
+// NewClient creates a client for the service_tag.yaml defined in IDL.
 func NewClient(destService string, opts ...client.Option) (Client, error) {
 	var options []client.Option
 	options = append(options, client.WithDestService(destService))
@@ -35,7 +35,7 @@ func NewClient(destService string, opts ...client.Option) (Client, error) {
 	}, nil
 }
 
-// MustNewClient creates a client for the service defined in IDL. It panics if any error occurs.
+// MustNewClient creates a client for the service_tag.yaml defined in IDL. It panics if any error occurs.
 func MustNewClient(destService string, opts ...client.Option) Client {
 	kc, err := NewClient(destService, opts...)
 	if err != nil {
