@@ -64,7 +64,7 @@ struct GetVideoListResp {
 
 // 获取预签名链接
 struct GetPreSignedUrlReq {
-  1: required string rvid
+  1: required i64 rvid
   2: required i64 uid
   3: required string role
 }

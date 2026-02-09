@@ -6,6 +6,8 @@ import (
 	"LiveDanmu/apps/public/utils"
 	"context"
 	"errors"
+
+	"gorm.io/gorm"
 )
 
 func (r *Dao) SetPreSignedUrlToRedis(ctx context.Context, url string, uid int64, rvid int64) error {
@@ -59,25 +61,25 @@ func (r *Dao) NewVideoRecord(ctx context.Context, data *dao.VideoInfo) error {
 	return nil
 }
 
-func (r *Dao) DelVideoRecord(ctx context.Context, rvid int64) error {
+func (r *Dao) DelVideoRecord(ctx context.Context, rvid int64) (*gorm.DB, error) {
 	tx := r.pgdb.Begin()
 	ok, err := r.checkIfRecordExist(tx, rvid)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return tx, err
 	}
 	if !ok {
 		tx.Rollback()
-		return errors.New("record not exists")
+		return tx, errors.New("record not exists")
 	}
 	err = r.delARecord(tx, rvid)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return tx, err
 	}
 
-	tx.Commit()
-	return nil
+	//tx.Commit()
+	return tx, nil
 }
 
 func (r *Dao) GetVideoInfo(ctx context.Context, rvid int64) (*dao.VideoInfo, error) {

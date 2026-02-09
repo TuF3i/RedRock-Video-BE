@@ -8,6 +8,7 @@ var (
 	InvalidDescription = Response{Status: 50004, Info: "Invalid Description"}
 	InvalidAuthorID    = Response{Status: 50005, Info: "Invalid AuthorID"}
 	InvalidAuthorName  = Response{Status: 50006, Info: "Invalid AuthorName"}
+	NoPermission       = Response{Status: 50007, Info: "No Permission"}
 )
 
 // Response 业务层错误封装
@@ -17,6 +18,14 @@ type Response struct {
 }
 
 func (r Response) Error() string {
+	return r.Info
+}
+
+func (r Response) GetStatus() uint {
+	return r.Status
+}
+
+func (r Response) GetInfo() string {
 	return r.Info
 }
 

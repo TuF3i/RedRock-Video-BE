@@ -10,8 +10,7 @@ type VideoSvrImpl struct{}
 
 // AddVideo implements the VideoSvrImpl interface.
 func (s *VideoSvrImpl) AddVideo(ctx context.Context, req *videosvr.AddVideoReq) (resp *videosvr.AddVideoResp, err error) {
-	// TODO: Your code here...
-	return
+	AddVideo(ctx, req)
 }
 
 // DelVideo implements the VideoSvrImpl interface.

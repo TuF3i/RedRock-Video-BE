@@ -460,7 +460,7 @@ var fieldIDToName_GetVideoListResp = map[int16]string{
 }
 
 type GetPreSignedUrlReq struct {
-	Rvid string `thrift:"rvid,1,required" frugal:"1,required,string" json:"rvid"`
+	Rvid int64  `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
 	Uid  int64  `thrift:"uid,2,required" frugal:"2,required,i64" json:"uid"`
 	Role string `thrift:"role,3,required" frugal:"3,required,string" json:"role"`
 }
@@ -472,7 +472,7 @@ func NewGetPreSignedUrlReq() *GetPreSignedUrlReq {
 func (p *GetPreSignedUrlReq) InitDefault() {
 }
 
-func (p *GetPreSignedUrlReq) GetRvid() (v string) {
+func (p *GetPreSignedUrlReq) GetRvid() (v int64) {
 	return p.Rvid
 }
 
@@ -483,7 +483,7 @@ func (p *GetPreSignedUrlReq) GetUid() (v int64) {
 func (p *GetPreSignedUrlReq) GetRole() (v string) {
 	return p.Role
 }
-func (p *GetPreSignedUrlReq) SetRvid(val string) {
+func (p *GetPreSignedUrlReq) SetRvid(val int64) {
 	p.Rvid = val
 }
 func (p *GetPreSignedUrlReq) SetUid(val int64) {
