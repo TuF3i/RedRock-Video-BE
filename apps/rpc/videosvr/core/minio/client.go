@@ -34,14 +34,6 @@ func (r *Minio) initMinioClient() error {
 		return errors.New("blanket not exists")
 	}
 
-	exists, err = client.BucketExists(context.Background(), r.conf.Minio.PicBlanketName)
-	if err != nil {
-		return err
-	}
-	if !exists {
-		return errors.New("blanket not exists")
-	}
-
 	// 将连接写入结构体
 	r.MClient = client
 	return nil

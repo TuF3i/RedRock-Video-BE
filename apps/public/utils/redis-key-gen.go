@@ -27,3 +27,7 @@ func GenAccessTokenKey(token string) string {
 func GenRefreshTokenKey(token string) string {
 	return fmt.Sprintf("auth:token:refresh:%v", token)
 }
+
+func GenPreSignedUrlKey(uid int64, rvid int64) string {
+	return fmt.Sprintf("minio:presigenedurl:%v:%v", uid, rvid)
+}

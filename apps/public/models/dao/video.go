@@ -13,7 +13,7 @@ type VideoInfo struct {
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 	// 数据段
-	RVID        int64  `gorm:"column:rvid;primaryKey;autoIncrement" json:"rvid"`
+	RVID        int64  `gorm:"column:rvid" json:"rvid"`
 	FaceUrl     string `gorm:"column:face_url;size:512" json:"face_url"`
 	MinioKey    string `gorm:"column:minio_key;size:512" json:"minio_key"`
 	Title       string `gorm:"column:title;size:255" json:"title"`
@@ -22,4 +22,11 @@ type VideoInfo struct {
 	// 属性段
 	UseFace bool `gorm:"column:use_face;default:false" json:"use_face"`
 	InJudge bool `gorm:"column:in_judge;default:true" json:"in_judge"`
+	// 用户段
+	AuthorID   int64  `gorm:"column:author_id" json:"author_id"`
+	AuthorName string `gorm:"column:author_name" json:"author_name"`
+}
+
+func (VideoInfo) TableName() string {
+	return "video_info_table"
 }

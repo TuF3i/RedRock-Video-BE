@@ -10,6 +10,9 @@ struct VideoInfo {
 
   7: required bool use_face
   8: required bool in_judge
+
+  9: required i64 author_id
+  10: required string author_name
 }
 
 // 添加视频

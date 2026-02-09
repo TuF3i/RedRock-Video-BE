@@ -18,3 +18,7 @@ type DanmuData struct {
 	Color   string `json:"color" binding:"omitempty,hexcolor" gorm:"column:color;size:20;default:'#FFFFFF';comment:弹幕颜色"`
 	Ts      int64  `json:"ts" gorm:"column:ts;index:idx_room_time,priority:2;not null;comment:发送时间戳(ms)"`
 }
+
+func (DanmuData) TableName() string {
+	return "danmu_data_table"
+}

@@ -26,6 +26,7 @@ func setDefaultForVideoRpc(v *viper.Viper) {
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_ACCESSKEY, "minioadmin")
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_SECRETKEY, "minioadmin")
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_BLANKETNAME, "video")
+	v.SetDefault(config_template.VIDEO_RPC_MINIO_PICBLANKETNAME, "videoface")
 	v.SetDefault(config_template.VIDEO_RPC_PGSQL_SERVICENAME, "pgpool")
 	v.SetDefault(config_template.VIDEO_RPC_PGSQL_NAMESPACE, "dao")
 	v.SetDefault(config_template.VIDEO_RPC_PGSQL_USER, "root")

@@ -32,13 +32,14 @@ type EtcdForVideoRpc struct {
 }
 
 type MinioForVideoRpc struct {
-	ServiceName string
-	Namespace   string
-	Urls        []string
-	UseSSL      bool
-	AccessKey   string
-	SecretKey   string
-	BlanketName string
+	ServiceName    string
+	Namespace      string
+	Urls           []string
+	UseSSL         bool
+	AccessKey      string
+	SecretKey      string
+	BlanketName    string
+	PicBlanketName string
 }
 
 type PostgresForVideoRpc struct {

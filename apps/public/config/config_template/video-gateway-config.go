@@ -38,11 +38,12 @@ type EtcdForVideoGateway struct {
 }
 
 type MinioForVideoGateway struct {
-	ServiceName string
-	Namespace   string
-	Urls        []string
-	UseSSL      bool
-	AccessKey   string
-	SecretKey   string
-	BlanketName string
+	ServiceName    string
+	Namespace      string
+	Urls           []string
+	UseSSL         bool
+	AccessKey      string
+	SecretKey      string
+	BlanketName    string
+	PicBlanketName string
 }

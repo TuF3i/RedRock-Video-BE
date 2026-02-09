@@ -16,6 +16,8 @@ type VideoInfo struct {
 	ViewNum     int64  `thrift:"view_num,6,required" frugal:"6,required,i64" json:"view_num"`
 	UseFace     bool   `thrift:"use_face,7,required" frugal:"7,required,bool" json:"use_face"`
 	InJudge     bool   `thrift:"in_judge,8,required" frugal:"8,required,bool" json:"in_judge"`
+	AuthorId    int64  `thrift:"author_id,9,required" frugal:"9,required,i64" json:"author_id"`
+	AuthorName  string `thrift:"author_name,10,required" frugal:"10,required,string" json:"author_name"`
 }
 
 func NewVideoInfo() *VideoInfo {
@@ -56,6 +58,14 @@ func (p *VideoInfo) GetUseFace() (v bool) {
 func (p *VideoInfo) GetInJudge() (v bool) {
 	return p.InJudge
 }
+
+func (p *VideoInfo) GetAuthorId() (v int64) {
+	return p.AuthorId
+}
+
+func (p *VideoInfo) GetAuthorName() (v string) {
+	return p.AuthorName
+}
 func (p *VideoInfo) SetRvid(val int64) {
 	p.Rvid = val
 }
@@ -80,6 +90,12 @@ func (p *VideoInfo) SetUseFace(val bool) {
 func (p *VideoInfo) SetInJudge(val bool) {
 	p.InJudge = val
 }
+func (p *VideoInfo) SetAuthorId(val int64) {
+	p.AuthorId = val
+}
+func (p *VideoInfo) SetAuthorName(val string) {
+	p.AuthorName = val
+}
 
 func (p *VideoInfo) String() string {
 	if p == nil {
@@ -89,14 +105,16 @@ func (p *VideoInfo) String() string {
 }
 
 var fieldIDToName_VideoInfo = map[int16]string{
-	1: "rvid",
-	2: "face_url",
-	3: "minio_key",
-	4: "title",
-	5: "description",
-	6: "view_num",
-	7: "use_face",
-	8: "in_judge",
+	1:  "rvid",
+	2:  "face_url",
+	3:  "minio_key",
+	4:  "title",
+	5:  "description",
+	6:  "view_num",
+	7:  "use_face",
+	8:  "in_judge",
+	9:  "author_id",
+	10: "author_name",
 }
 
 type AddVideoReq struct {
