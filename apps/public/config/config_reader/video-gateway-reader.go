@@ -28,6 +28,7 @@ func setDefaultForVideoGatewayGateway(v *viper.Viper) {
 	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_USESSL, false)
 	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_ACCESSKEY, "minioadmin")
 	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_SECRETKEY, "minioadmin")
+	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_BLANKETNAME, "video")
 }
 
 func VideoGatewayConfigLoader() (*config_template.VideoGatewayConfig, error) {

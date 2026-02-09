@@ -175,3 +175,43 @@ func LoadVideoGatewayConfig() (*config_template.VideoGatewayConfig, error) {
 
 	return conf, nil
 }
+
+func LoadVideoRpcConfig() (*config_template.VideoRpcConfig, error) {
+	// 初始化配置文件主体
+	conf, err := config_reader.VideoRpcConfigLoader()
+	if err != nil {
+		return nil, err
+	}
+	// 服务发现
+	addrList, err := dns_lookup.ServiceDiscovery(conf.Minio.ServiceName, conf.Minio.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Minio.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Etcd.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Redis.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.Loki.ServiceName, conf.Loki.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Loki.LokiAddr = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.PgSQL.Urls = addrList
+
+	return conf, nil
+}

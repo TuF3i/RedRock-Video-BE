@@ -7,9 +7,9 @@ import (
 )
 
 type DanmuData struct {
-	ID        uint           `json:"id" gorm:"primarykey"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
+	ID        uint           `json:"-" gorm:"primarykey"`
+	CreatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 
 	RVID    int64  `json:"rv_id" gorm:"column:room_id;index:idx_room_time,priority:1;not null;comment:直播间ID"`

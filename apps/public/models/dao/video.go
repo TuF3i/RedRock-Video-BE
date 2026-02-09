@@ -15,14 +15,11 @@ type VideoInfo struct {
 	// 数据段
 	RVID        int64  `gorm:"column:rvid;primaryKey;autoIncrement" json:"rvid"`
 	FaceUrl     string `gorm:"column:face_url;size:512" json:"face_url"`
-	M3u8Url     string `gorm:"column:m3u8_url;size:512" json:"m3u8_url"`
-	Mp4TempUrl  string `gorm:"column:mp4_temp_url;size:512" json:"mp4_temp_url"`
+	MinioKey    string `gorm:"column:minio_key;size:512" json:"minio_key"`
 	Title       string `gorm:"column:title;size:255" json:"title"`
 	Description string `gorm:"column:description;type:text" json:"description"`
 	ViewNum     int64  `gorm:"column:view_num;default:0" json:"view_num"`
-	TimeLength  string `gorm:"column:time_length;size:20" json:"time_length"`
 	// 属性段
-	UseFace bool   `gorm:"column:use_face;default:false" json:"use_face"`
-	InJudge bool   `gorm:"column:in_judge;default:true" json:"in_judge"`
-	Status  string `gorm:"column:status;size:20;default:'waiting'" json:"status"`
+	UseFace bool `gorm:"column:use_face;default:false" json:"use_face"`
+	InJudge bool `gorm:"column:in_judge;default:true" json:"in_judge"`
 }

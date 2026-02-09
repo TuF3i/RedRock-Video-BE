@@ -1,28 +1,22 @@
 package config_template
 
-type VideoGatewayConfig struct {
+type VideoRpcConfig struct {
 	PodUID string
-	Hertz  HertzForVideoGateway
-	Redis  RedisForVideoGateway
-	Etcd   EtcdForVideoGateway
-	Loki   LokiConfigForVideoGateway
-	Minio  MinioForVideoGateway
+	Redis  RedisForVideoRpc
+	PgSQL  PostgresForVideoRpc
+	Loki   LokiConfigForVideoRpc
+	Etcd   EtcdForVideoRpc
+	Minio  MinioForVideoRpc
 }
 
-type HertzForVideoGateway struct {
-	ListenAddr     string
-	ListenPort     string
-	MonitoringPort string
-}
-
-type RedisForVideoGateway struct {
+type RedisForVideoRpc struct {
 	Password    string
 	ServiceName string
 	Namespace   string
 	Urls        []string
 }
 
-type LokiConfigForVideoGateway struct {
+type LokiConfigForVideoRpc struct {
 	ServiceName string
 	Namespace   string
 	LokiAddr    []string `mapstructure:"loki_addr"` // Loki地址，如http://127.0.0.1:3100
@@ -31,13 +25,13 @@ type LokiConfigForVideoGateway struct {
 	Level       string   `mapstructure:"level"`     // 日志级别，如debug/info/error
 }
 
-type EtcdForVideoGateway struct {
+type EtcdForVideoRpc struct {
 	ServiceName string
 	Namespace   string
 	Urls        []string
 }
 
-type MinioForVideoGateway struct {
+type MinioForVideoRpc struct {
 	ServiceName string
 	Namespace   string
 	Urls        []string
@@ -45,4 +39,13 @@ type MinioForVideoGateway struct {
 	AccessKey   string
 	SecretKey   string
 	BlanketName string
+}
+
+type PostgresForVideoRpc struct {
+	User        string
+	Password    string
+	DBName      string
+	ServiceName string
+	Namespace   string
+	Urls        []string
 }
