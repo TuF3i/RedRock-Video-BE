@@ -79,6 +79,6 @@ service VideoSvr {
   AddVideoResp AddVideo(1: AddVideoReq req)
   DelVideoResp DelVideo(1: DelVideoReq req)
   JudgeAccessResp JudgeAccess(1: JudgeAccessReq req)
-  GetVideoListResp GetVideoList(1: GetPreSignedUrlReq req)
+  GetVideoListResp GetVideoList(1: GetVideoListReq req)
   GetPreSignedUrlResp GetPreSignedUrl(1: GetPreSignedUrlReq req)
 }

@@ -60,3 +60,11 @@ func (r *Dao) getRecordList(tx *gorm.DB, page int32, pageSize int32) ([]*dao.Vid
 
 	return dataSet, total, nil
 }
+
+func (r *Dao) setRecordColumn(tx *gorm.DB, rvid int64, column string, value interface{}) error {
+	err := tx.Model(&dao.VideoInfo{}).Where("rvid = ?", rvid).Update(column, value).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

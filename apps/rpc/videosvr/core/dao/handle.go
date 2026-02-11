@@ -95,9 +95,11 @@ func (r *Dao) GetVideoInfo(ctx context.Context, rvid int64) (*dao.VideoInfo, err
 	}
 	data, err := r.getDetailOfARecord(tx, rvid)
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 
+	tx.Commit()
 	return data, nil
 }
 
@@ -105,8 +107,22 @@ func (r *Dao) GetVideoList(ctx context.Context, page int32, pageSize int32) ([]*
 	tx := r.pgdb.Begin()
 	dataSet, total, err := r.getRecordList(tx, page, pageSize)
 	if err != nil {
+		tx.Rollback()
 		return nil, 0, err
 	}
 
+	tx.Commit()
 	return dataSet, total, nil
+}
+
+func (r *Dao) JudgeAccess(ctx context.Context, rvid int64) error {
+	tx := r.pgdb.Begin()
+	err := r.setRecordColumn(tx, rvid, "in_judge", false)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+	return nil
 }

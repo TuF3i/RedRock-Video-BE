@@ -13,7 +13,7 @@ var (
 
 // Response 业务层错误封装
 type Response struct {
-	Status uint   `json:"status"`
+	Status int64  `json:"status"`
 	Info   string `json:"info"`
 }
 
@@ -21,7 +21,7 @@ func (r Response) Error() string {
 	return r.Info
 }
 
-func (r Response) GetStatus() uint {
+func (r Response) GetStatus() int64 {
 	return r.Status
 }
 

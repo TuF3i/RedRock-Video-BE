@@ -560,7 +560,7 @@ type VideoSvr interface {
 
 	JudgeAccess(ctx context.Context, req *JudgeAccessReq) (r *JudgeAccessResp, err error)
 
-	GetVideoList(ctx context.Context, req *GetPreSignedUrlReq) (r *GetVideoListResp, err error)
+	GetVideoList(ctx context.Context, req *GetVideoListReq) (r *GetVideoListResp, err error)
 
 	GetPreSignedUrl(ctx context.Context, req *GetPreSignedUrlReq) (r *GetPreSignedUrlResp, err error)
 }
@@ -794,7 +794,7 @@ var fieldIDToName_VideoSvrJudgeAccessResult = map[int16]string{
 }
 
 type VideoSvrGetVideoListArgs struct {
-	Req *GetPreSignedUrlReq `thrift:"req,1" frugal:"1,default,GetPreSignedUrlReq" json:"req"`
+	Req *GetVideoListReq `thrift:"req,1" frugal:"1,default,GetVideoListReq" json:"req"`
 }
 
 func NewVideoSvrGetVideoListArgs() *VideoSvrGetVideoListArgs {
@@ -804,15 +804,15 @@ func NewVideoSvrGetVideoListArgs() *VideoSvrGetVideoListArgs {
 func (p *VideoSvrGetVideoListArgs) InitDefault() {
 }
 
-var VideoSvrGetVideoListArgs_Req_DEFAULT *GetPreSignedUrlReq
+var VideoSvrGetVideoListArgs_Req_DEFAULT *GetVideoListReq
 
-func (p *VideoSvrGetVideoListArgs) GetReq() (v *GetPreSignedUrlReq) {
+func (p *VideoSvrGetVideoListArgs) GetReq() (v *GetVideoListReq) {
 	if !p.IsSetReq() {
 		return VideoSvrGetVideoListArgs_Req_DEFAULT
 	}
 	return p.Req
 }
-func (p *VideoSvrGetVideoListArgs) SetReq(val *GetPreSignedUrlReq) {
+func (p *VideoSvrGetVideoListArgs) SetReq(val *GetVideoListReq) {
 	p.Req = val
 }
 
