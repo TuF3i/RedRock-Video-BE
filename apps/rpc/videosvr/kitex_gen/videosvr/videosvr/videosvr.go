@@ -34,6 +34,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"GetJudgeList": kitex.NewMethodInfo(
+		getJudgeListHandler,
+		newVideoSvrGetJudgeListArgs,
+		newVideoSvrGetJudgeListResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 	"GetVideoList": kitex.NewMethodInfo(
 		getVideoListHandler,
 		newVideoSvrGetVideoListArgs,
@@ -168,6 +175,24 @@ func newVideoSvrJudgeAccessResult() interface{} {
 	return videosvr.NewVideoSvrJudgeAccessResult()
 }
 
+func getJudgeListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*videosvr.VideoSvrGetJudgeListArgs)
+	realResult := result.(*videosvr.VideoSvrGetJudgeListResult)
+	success, err := handler.(videosvr.VideoSvr).GetJudgeList(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newVideoSvrGetJudgeListArgs() interface{} {
+	return videosvr.NewVideoSvrGetJudgeListArgs()
+}
+
+func newVideoSvrGetJudgeListResult() interface{} {
+	return videosvr.NewVideoSvrGetJudgeListResult()
+}
+
 func getVideoListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*videosvr.VideoSvrGetVideoListArgs)
 	realResult := result.(*videosvr.VideoSvrGetVideoListResult)
@@ -239,6 +264,16 @@ func (p *kClient) JudgeAccess(ctx context.Context, req *videosvr.JudgeAccessReq)
 	_args.Req = req
 	var _result videosvr.VideoSvrJudgeAccessResult
 	if err = p.c.Call(ctx, "JudgeAccess", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetJudgeList(ctx context.Context, req *videosvr.GetJudgeListReq) (r *videosvr.GetJudgeListResp, err error) {
+	var _args videosvr.VideoSvrGetJudgeListArgs
+	_args.Req = req
+	var _result videosvr.VideoSvrGetJudgeListResult
+	if err = p.c.Call(ctx, "GetJudgeList", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

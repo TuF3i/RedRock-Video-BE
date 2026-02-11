@@ -14,6 +14,7 @@ type Client interface {
 	AddVideo(ctx context.Context, req *videosvr.AddVideoReq, callOptions ...callopt.Option) (r *videosvr.AddVideoResp, err error)
 	DelVideo(ctx context.Context, req *videosvr.DelVideoReq, callOptions ...callopt.Option) (r *videosvr.DelVideoResp, err error)
 	JudgeAccess(ctx context.Context, req *videosvr.JudgeAccessReq, callOptions ...callopt.Option) (r *videosvr.JudgeAccessResp, err error)
+	GetJudgeList(ctx context.Context, req *videosvr.GetJudgeListReq, callOptions ...callopt.Option) (r *videosvr.GetJudgeListResp, err error)
 	GetVideoList(ctx context.Context, req *videosvr.GetVideoListReq, callOptions ...callopt.Option) (r *videosvr.GetVideoListResp, err error)
 	GetPreSignedUrl(ctx context.Context, req *videosvr.GetPreSignedUrlReq, callOptions ...callopt.Option) (r *videosvr.GetPreSignedUrlResp, err error)
 }
@@ -60,6 +61,11 @@ func (p *kVideoSvrClient) DelVideo(ctx context.Context, req *videosvr.DelVideoRe
 func (p *kVideoSvrClient) JudgeAccess(ctx context.Context, req *videosvr.JudgeAccessReq, callOptions ...callopt.Option) (r *videosvr.JudgeAccessResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.JudgeAccess(ctx, req)
+}
+
+func (p *kVideoSvrClient) GetJudgeList(ctx context.Context, req *videosvr.GetJudgeListReq, callOptions ...callopt.Option) (r *videosvr.GetJudgeListResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetJudgeList(ctx, req)
 }
 
 func (p *kVideoSvrClient) GetVideoList(ctx context.Context, req *videosvr.GetVideoListReq, callOptions ...callopt.Option) (r *videosvr.GetVideoListResp, err error) {

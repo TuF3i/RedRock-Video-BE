@@ -21,7 +21,7 @@ func GenPubReq(raw dao.DanmuData) *danmusvr.PubReq {
 
 func GenFinalResponseForPubReq(raw *danmusvr.PubResp) response.FinalResponse {
 	return response.FinalResponse{
-		Status: uint(raw.Status),
+		Status: raw.Status,
 		Info:   raw.Info,
 		Data:   nil,
 	}
@@ -41,7 +41,7 @@ func GenPubLiveReq(raw dao.DanmuData) *danmusvr.PubLiveReq {
 
 func GenFinalResponseForPubLive(raw *danmusvr.PubLiveResp) response.FinalResponse {
 	return response.FinalResponse{
-		Status: uint(raw.Status),
+		Status: raw.Status,
 		Info:   raw.Info,
 		Data:   nil,
 	}
@@ -54,7 +54,7 @@ func GenGetTopReq(rvid int64) *danmusvr.GetTopReq {
 
 func GenFinalResponseForGetTopReq(raw *danmusvr.GetTopResp) response.FinalResponse {
 	return response.FinalResponse{
-		Status: uint(raw.Status),
+		Status: raw.Status,
 		Info:   raw.Info,
 		Data:   raw.Data,
 	}
@@ -67,7 +67,7 @@ func GenGetDanmuReq(rvid int64) *danmusvr.GetReq {
 
 func GenFinalResponseForGetDanmuReq(raw *danmusvr.GetResp) response.FinalResponse {
 	return response.FinalResponse{
-		Status: uint(raw.Status),
+		Status: raw.Status,
 		Info:   raw.Info,
 		Data:   raw.Data,
 	}
@@ -111,7 +111,7 @@ func GenDelLiveReq(raw dao.DanmuData) *danmusvr.DelLiveReq {
 
 func GenFinalResponseForDelLiveReq(raw *danmusvr.DelLiveResp) response.FinalResponse {
 	return response.FinalResponse{
-		Status: uint(raw.Status),
+		Status: raw.Status,
 		Info:   raw.Info,
 		Data:   nil,
 	}
@@ -130,7 +130,7 @@ func GenDelReq(raw dao.DanmuData) *danmusvr.DelReq {
 
 func GenFinalResponseForDelReq(raw *danmusvr.DelResp) response.FinalResponse {
 	return response.FinalResponse{
-		Status: uint(raw.Status),
+		Status: raw.Status,
 		Info:   raw.Info,
 		Data:   nil,
 	}

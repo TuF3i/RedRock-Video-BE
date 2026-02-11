@@ -49,6 +49,22 @@ func GetVideoList(ctx context.Context, req *videosvr.GetVideoListReq) (dto.Respo
 	return dto.OperationSuccess, data
 }
 
+func GetJudgeList(ctx context.Context, req *videosvr.GetJudgeListReq) (dto.Response, *videosvr.GetVideoListData) {
+	// 调用dao层
+	dataSet, total, err := core.Dao.GetJudgingVideoList(ctx, req.Page, req.PageSize)
+	if err != nil {
+		return dto.ServerInternalError(err), nil
+	}
+
+	// 组装结构体
+	data := &videosvr.GetVideoListData{
+		Total:  total,
+		Videos: batchDaoToKitex(dataSet),
+	}
+
+	return dto.OperationSuccess, data
+}
+
 func GetPreSignedUrl(ctx context.Context, req *videosvr.GetPreSignedUrlReq) (dto.Response, string) {
 	// 在数据库中查询视频信息
 	vInfo, err := core.Dao.GetVideoInfo(ctx, req.GetRvid())
@@ -60,6 +76,15 @@ func GetPreSignedUrl(ctx context.Context, req *videosvr.GetPreSignedUrlReq) (dto
 		if req.GetRole() != union_var.JWT_ROLE_ADMIN && req.GetUid() != vInfo.AuthorID {
 			return dto.NoPermission, ""
 		}
+	}
+	// 游客单独处理
+	if req.GetRole() == union_var.JWT_ROLE_GUEST {
+		url, err := core.Minio.GetSignedUrl(ctx, utils.RVIDEncoder(req.Rvid))
+		if err != nil {
+			return dto.ServerInternalError(err), ""
+		}
+
+		return dto.OperationSuccess, url
 	}
 	// 查询Url
 	ok, err := core.Dao.IfNeedToGenNewPreSignedUrl(ctx, req.GetUid(), req.GetRvid())

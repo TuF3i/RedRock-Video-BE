@@ -115,6 +115,18 @@ func (r *Dao) GetVideoList(ctx context.Context, page int32, pageSize int32) ([]*
 	return dataSet, total, nil
 }
 
+func (r *Dao) GetJudgingVideoList(ctx context.Context, page int32, pageSize int32) ([]*dao.VideoInfo, int64, error) {
+	tx := r.pgdb.Begin()
+	dataSet, total, err := r.getJudgingRecordList(tx, page, pageSize)
+	if err != nil {
+		tx.Rollback()
+		return nil, 0, err
+	}
+
+	tx.Commit()
+	return dataSet, total, nil
+}
+
 func (r *Dao) JudgeAccess(ctx context.Context, rvid int64) error {
 	tx := r.pgdb.Begin()
 	err := r.setRecordColumn(tx, rvid, "in_judge", false)

@@ -53,7 +53,25 @@ func (r *Dao) getRecordList(tx *gorm.DB, page int32, pageSize int32) ([]*dao.Vid
 		return nil, 0, err
 	}
 
-	err = tx.Offset(int(offset)).Limit(int(pageSize)).Find(&dataSet).Error
+	err = tx.Offset(int(offset)).Limit(int(pageSize)).Where("in_judge = ?", false).Find(&dataSet).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return dataSet, total, nil
+}
+
+func (r *Dao) getJudgingRecordList(tx *gorm.DB, page int32, pageSize int32) ([]*dao.VideoInfo, int64, error) {
+	var dataSet []*dao.VideoInfo
+	var total int64
+
+	offset := (page - 1) * pageSize
+	err := tx.Model(&dao.VideoInfo{}).Count(&total).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	err = tx.Offset(int(offset)).Limit(int(pageSize)).Where("in_judge = ?", true).Find(&dataSet).Error
 	if err != nil {
 		return nil, 0, err
 	}

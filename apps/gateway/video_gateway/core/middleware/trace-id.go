@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"LiveDanmu/apps/gateway/danmu_gateway/core"
+	"LiveDanmu/apps/gateway/video_gateway/core"
 	"LiveDanmu/apps/public/union_var"
 	"context"
 

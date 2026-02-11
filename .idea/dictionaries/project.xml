@@ -6,9 +6,11 @@
       <w>hlog</w>
       <w>kitex</w>
       <w>kmsg</w>
+      <w>kresp</w>
       <w>listenaddr</w>
       <w>mapstructure</w>
       <w>pgdb</w>
+      <w>resps</w>
       <w>rvid</w>
       <w>videosvr</w>
     </words>

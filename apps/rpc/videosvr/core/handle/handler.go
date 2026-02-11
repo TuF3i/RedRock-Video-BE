@@ -75,3 +75,16 @@ func (s *VideoSvrImpl) GetPreSignedUrl(ctx context.Context, req *videosvr.GetPre
 
 	return resp, nil
 }
+
+// GetJudgeList implements the VideoSvrImpl interface.
+func (s *VideoSvrImpl) GetJudgeList(ctx context.Context, req *videosvr.GetJudgeListReq) (resp *videosvr.GetJudgeListResp, err error) {
+	// 调用方法
+	rawResp, data := GetJudgeList(ctx, req)
+	resp = dto.GenKitexResp[*videosvr.GetJudgeListResp](rawResp, data)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
+}

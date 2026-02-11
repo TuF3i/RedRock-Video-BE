@@ -33,6 +33,8 @@ struct AddVideoResp {
 // 删除视频
 struct DelVideoReq {
   1: required i64 rvid
+  2: required i64 uid
+  3: required string role
 }
 
 struct DelVideoResp {
@@ -75,10 +77,23 @@ struct GetPreSignedUrlResp {
   3: required string data
 }
 
+// 获取审核列表
+struct GetJudgeListReq {
+  1: required i32 page
+  2: required i32 page_size
+}
+
+struct GetJudgeListResp {
+  1: required i64 status
+  2: required string info
+  3: required GetVideoListData data
+}
+
 service VideoSvr {
   AddVideoResp AddVideo(1: AddVideoReq req)
   DelVideoResp DelVideo(1: DelVideoReq req)
   JudgeAccessResp JudgeAccess(1: JudgeAccessReq req)
+  GetJudgeListResp GetJudgeList(1: GetJudgeListReq req)
   GetVideoListResp GetVideoList(1: GetVideoListReq req)
   GetPreSignedUrlResp GetPreSignedUrl(1: GetPreSignedUrlReq req)
 }

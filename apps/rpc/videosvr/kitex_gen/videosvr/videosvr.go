@@ -232,7 +232,9 @@ var fieldIDToName_AddVideoResp = map[int16]string{
 }
 
 type DelVideoReq struct {
-	Rvid int64 `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+	Rvid int64  `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+	Uid  int64  `thrift:"uid,2,required" frugal:"2,required,i64" json:"uid"`
+	Role string `thrift:"role,3,required" frugal:"3,required,string" json:"role"`
 }
 
 func NewDelVideoReq() *DelVideoReq {
@@ -245,8 +247,22 @@ func (p *DelVideoReq) InitDefault() {
 func (p *DelVideoReq) GetRvid() (v int64) {
 	return p.Rvid
 }
+
+func (p *DelVideoReq) GetUid() (v int64) {
+	return p.Uid
+}
+
+func (p *DelVideoReq) GetRole() (v string) {
+	return p.Role
+}
 func (p *DelVideoReq) SetRvid(val int64) {
 	p.Rvid = val
+}
+func (p *DelVideoReq) SetUid(val int64) {
+	p.Uid = val
+}
+func (p *DelVideoReq) SetRole(val string) {
+	p.Role = val
 }
 
 func (p *DelVideoReq) String() string {
@@ -258,6 +274,8 @@ func (p *DelVideoReq) String() string {
 
 var fieldIDToName_DelVideoReq = map[int16]string{
 	1: "rvid",
+	2: "uid",
+	3: "role",
 }
 
 type DelVideoResp struct {
@@ -553,12 +571,108 @@ var fieldIDToName_GetPreSignedUrlResp = map[int16]string{
 	3: "data",
 }
 
+type GetJudgeListReq struct {
+	Page     int32 `thrift:"page,1,required" frugal:"1,required,i32" json:"page"`
+	PageSize int32 `thrift:"page_size,2,required" frugal:"2,required,i32" json:"page_size"`
+}
+
+func NewGetJudgeListReq() *GetJudgeListReq {
+	return &GetJudgeListReq{}
+}
+
+func (p *GetJudgeListReq) InitDefault() {
+}
+
+func (p *GetJudgeListReq) GetPage() (v int32) {
+	return p.Page
+}
+
+func (p *GetJudgeListReq) GetPageSize() (v int32) {
+	return p.PageSize
+}
+func (p *GetJudgeListReq) SetPage(val int32) {
+	p.Page = val
+}
+func (p *GetJudgeListReq) SetPageSize(val int32) {
+	p.PageSize = val
+}
+
+func (p *GetJudgeListReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetJudgeListReq(%+v)", *p)
+}
+
+var fieldIDToName_GetJudgeListReq = map[int16]string{
+	1: "page",
+	2: "page_size",
+}
+
+type GetJudgeListResp struct {
+	Status int64             `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string            `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *GetVideoListData `thrift:"data,3,required" frugal:"3,required,GetVideoListData" json:"data"`
+}
+
+func NewGetJudgeListResp() *GetJudgeListResp {
+	return &GetJudgeListResp{}
+}
+
+func (p *GetJudgeListResp) InitDefault() {
+}
+
+func (p *GetJudgeListResp) GetStatus() (v int64) {
+	return p.Status
+}
+
+func (p *GetJudgeListResp) GetInfo() (v string) {
+	return p.Info
+}
+
+var GetJudgeListResp_Data_DEFAULT *GetVideoListData
+
+func (p *GetJudgeListResp) GetData() (v *GetVideoListData) {
+	if !p.IsSetData() {
+		return GetJudgeListResp_Data_DEFAULT
+	}
+	return p.Data
+}
+func (p *GetJudgeListResp) SetStatus(val int64) {
+	p.Status = val
+}
+func (p *GetJudgeListResp) SetInfo(val string) {
+	p.Info = val
+}
+func (p *GetJudgeListResp) SetData(val *GetVideoListData) {
+	p.Data = val
+}
+
+func (p *GetJudgeListResp) IsSetData() bool {
+	return p.Data != nil
+}
+
+func (p *GetJudgeListResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetJudgeListResp(%+v)", *p)
+}
+
+var fieldIDToName_GetJudgeListResp = map[int16]string{
+	1: "status",
+	2: "info",
+	3: "data",
+}
+
 type VideoSvr interface {
 	AddVideo(ctx context.Context, req *AddVideoReq) (r *AddVideoResp, err error)
 
 	DelVideo(ctx context.Context, req *DelVideoReq) (r *DelVideoResp, err error)
 
 	JudgeAccess(ctx context.Context, req *JudgeAccessReq) (r *JudgeAccessResp, err error)
+
+	GetJudgeList(ctx context.Context, req *GetJudgeListReq) (r *GetJudgeListResp, err error)
 
 	GetVideoList(ctx context.Context, req *GetVideoListReq) (r *GetVideoListResp, err error)
 
@@ -790,6 +904,82 @@ func (p *VideoSvrJudgeAccessResult) String() string {
 }
 
 var fieldIDToName_VideoSvrJudgeAccessResult = map[int16]string{
+	0: "success",
+}
+
+type VideoSvrGetJudgeListArgs struct {
+	Req *GetJudgeListReq `thrift:"req,1" frugal:"1,default,GetJudgeListReq" json:"req"`
+}
+
+func NewVideoSvrGetJudgeListArgs() *VideoSvrGetJudgeListArgs {
+	return &VideoSvrGetJudgeListArgs{}
+}
+
+func (p *VideoSvrGetJudgeListArgs) InitDefault() {
+}
+
+var VideoSvrGetJudgeListArgs_Req_DEFAULT *GetJudgeListReq
+
+func (p *VideoSvrGetJudgeListArgs) GetReq() (v *GetJudgeListReq) {
+	if !p.IsSetReq() {
+		return VideoSvrGetJudgeListArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *VideoSvrGetJudgeListArgs) SetReq(val *GetJudgeListReq) {
+	p.Req = val
+}
+
+func (p *VideoSvrGetJudgeListArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VideoSvrGetJudgeListArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoSvrGetJudgeListArgs(%+v)", *p)
+}
+
+var fieldIDToName_VideoSvrGetJudgeListArgs = map[int16]string{
+	1: "req",
+}
+
+type VideoSvrGetJudgeListResult struct {
+	Success *GetJudgeListResp `thrift:"success,0,optional" frugal:"0,optional,GetJudgeListResp" json:"success,omitempty"`
+}
+
+func NewVideoSvrGetJudgeListResult() *VideoSvrGetJudgeListResult {
+	return &VideoSvrGetJudgeListResult{}
+}
+
+func (p *VideoSvrGetJudgeListResult) InitDefault() {
+}
+
+var VideoSvrGetJudgeListResult_Success_DEFAULT *GetJudgeListResp
+
+func (p *VideoSvrGetJudgeListResult) GetSuccess() (v *GetJudgeListResp) {
+	if !p.IsSetSuccess() {
+		return VideoSvrGetJudgeListResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *VideoSvrGetJudgeListResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetJudgeListResp)
+}
+
+func (p *VideoSvrGetJudgeListResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VideoSvrGetJudgeListResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoSvrGetJudgeListResult(%+v)", *p)
+}
+
+var fieldIDToName_VideoSvrGetJudgeListResult = map[int16]string{
 	0: "success",
 }
 

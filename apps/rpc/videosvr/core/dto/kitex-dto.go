@@ -10,7 +10,7 @@ type DtoResp interface {
 
 // KitexResp KitexResponse泛型接口
 type KitexResp interface {
-	*videosvr.AddVideoResp | *videosvr.DelVideoResp | *videosvr.JudgeAccessResp | *videosvr.GetVideoListResp | *videosvr.GetPreSignedUrlResp
+	*videosvr.AddVideoResp | *videosvr.DelVideoResp | *videosvr.JudgeAccessResp | *videosvr.GetVideoListResp | *videosvr.GetPreSignedUrlResp | *videosvr.GetJudgeListResp
 }
 
 // GenKitexResp 生成Kitex响应
@@ -45,6 +45,12 @@ func GenKitexResp[T KitexResp](resp DtoResp, data interface{}) T {
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
 		v.SetData(data.(string))
+		res = any(v).(T)
+	case *videosvr.GetJudgeListResp:
+		v = new(videosvr.GetJudgeListResp)
+		v.SetStatus(resp.GetStatus())
+		v.SetInfo(resp.GetInfo())
+		v.SetData(data.(*videosvr.GetVideoListData))
 		res = any(v).(T)
 	}
 	return res
