@@ -278,3 +278,59 @@ func LoadUserRpcConfig() (*config_template.UserRpcConfig, error) {
 
 	return conf, nil
 }
+
+func LoadLiveGatewayConfig() (*config_template.LiveGatewayConfig, error) {
+	// 初始化配置文件主体
+	conf, err := config_reader.LiveGatewayConfigLoader()
+	if err != nil {
+		return nil, err
+	}
+	// 服务发现
+	addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Etcd.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.Loki.ServiceName, conf.Loki.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Loki.LokiAddr = addrList
+
+	return conf, nil
+}
+
+func LoadLiveRpcConfig() (*config_template.LiveRpcConfig, error) {
+	// 初始化配置文件主体
+	conf, err := config_reader.LiveRpcConfigLoader()
+	if err != nil {
+		return nil, err
+	}
+	// 服务发现
+	addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Etcd.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.PgSQL.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Redis.Urls = addrList
+
+	addrList, err = dns_lookup.ServiceDiscovery(conf.Loki.ServiceName, conf.Loki.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Loki.LokiAddr = addrList
+
+	return conf, nil
+}
