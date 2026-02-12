@@ -7,7 +7,7 @@ import (
 	"errors"
 )
 
-// DanmuSvrImpl implements the last handle interface defined in the IDL.
+// DanmuSvrImpl implements the last handler interface defined in the IDL.
 type DanmuSvrImpl struct{}
 
 // PubDanmu implements the DanmuSvrImpl interface.
