@@ -26,6 +26,7 @@ type RvUser struct {
 	Login     string `json:"login" gorm:"column:github_login;type:varchar(64);not null;comment:GitHub用户名"`
 	AvatarURL string `json:"avatar_url" gorm:"column:avatar_url;type:varchar(255);comment:GitHub用户头像地址"`
 	Bio       string `json:"bio" gorm:"column:bio;type:text;comment:GitHub用户个人简介"`
+	Role      string `json:"role" gorm:"column:role;type:text;comment:用户"`
 }
 
 func (RvUser) TableName() string {

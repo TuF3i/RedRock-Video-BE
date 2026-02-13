@@ -20,12 +20,12 @@ func GenFullDanmuCounterKey(vid int64) string {
 	return fmt.Sprintf("dm:counter:full:%v", vid)
 }
 
-func GenAccessTokenKey(token string) string {
-	return fmt.Sprintf("auth:token:access:%v", token)
+func GenAccessTokenKey(uid int64) string {
+	return fmt.Sprintf("auth:token:%v:access", uid)
 }
 
-func GenRefreshTokenKey(token string) string {
-	return fmt.Sprintf("auth:token:refresh:%v", token)
+func GenRefreshTokenKey(uid int64) string {
+	return fmt.Sprintf("auth:token:%v:refresh", uid)
 }
 
 func GenPreSignedUrlKey(uid int64, rvid int64) string {

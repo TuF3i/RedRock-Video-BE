@@ -149,6 +149,7 @@ const (
 	USER_RPC_LOKI_SERVICE      = "loki.service_tag.yaml"
 	USER_RPC_LOKI_ENV          = "loki.env"
 	USER_RPC_LOKI_LEVEL        = "loki.level"
+	USER_RPC_ADMIN             = "adminid"
 	USER_RPC_POD_UID           = "poduid"
 
 	LIVE_GATEWAY_HERTZ_LISTENADDR     = "hertz.listenaddr"

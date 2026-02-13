@@ -2,6 +2,8 @@ package dao
 
 import (
 	"LiveDanmu/apps/public/models/dao"
+	"LiveDanmu/apps/public/union_var"
+	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -31,5 +33,10 @@ func (r *Dao) getRecordDetail(tx *gorm.DB, uid int64) (*dao.RvUser, error) {
 }
 
 func (r *Dao) newRecord(tx *gorm.DB, data *dao.RvUser) error {
+	if strconv.FormatInt(data.Uid, 10) == r.conf.AdminId {
+		data.Role = union_var.JWT_ROLE_ADMIN
+	} else {
+		data.Role = union_var.JWT_ROLE_USER
+	}
 	return tx.Create(data).Error
 }

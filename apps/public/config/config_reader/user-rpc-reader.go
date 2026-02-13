@@ -25,6 +25,7 @@ func setDefaultForUserRpc(v *viper.Viper) {
 	v.SetDefault(config_template.USER_RPC_LOKI_SERVICE, "USER_RPC")
 	v.SetDefault(config_template.USER_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.USER_RPC_LOKI_ENV, "proc")
+	v.SetDefault(config_template.USER_RPC_ADMINS, "")
 }
 
 func UserRpcConfigLoader() (*config_template.UserRpcConfig, error) {

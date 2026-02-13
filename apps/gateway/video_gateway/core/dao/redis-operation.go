@@ -17,3 +17,12 @@ func (r *Dao) checkKeyExistence(ctx context.Context, key string) (bool, error) {
 	}
 	return true, nil
 }
+
+func (r *Dao) getKeyValue(ctx context.Context, key string) (string, error) {
+	val, err := r.rdb.Get(ctx, key).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return val, nil
+}

@@ -25,3 +25,15 @@ func (s *UserSvrImpl) GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoR
 	// TODO: Your code here...
 	return
 }
+
+// SetAdminRole implements the UserSvrImpl interface.
+func (s *UserSvrImpl) SetAdminRole(ctx context.Context, req *usersvr.SetAdminRoleReq) (resp *usersvr.SetAdminRoleResp, err error) {
+	// TODO: Your code here...
+	return
+}
+
+// GetAdminer implements the UserSvrImpl interface.
+func (s *UserSvrImpl) GetAdminer(ctx context.Context) (resp *usersvr.GetAdminerResp, err error) {
+	// TODO: Your code here...
+	return
+}

@@ -14,6 +14,8 @@ type Client interface {
 	UserLogin(ctx context.Context, req *usersvr.LoginReq, callOptions ...callopt.Option) (r *usersvr.LoginResp, err error)
 	RefreshToken(ctx context.Context, req *usersvr.RefreshReq, callOptions ...callopt.Option) (r *usersvr.RefreshResp, err error)
 	GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoReq, callOptions ...callopt.Option) (r *usersvr.GetUserInfoResp, err error)
+	SetAdminRole(ctx context.Context, req *usersvr.SetAdminRoleReq, callOptions ...callopt.Option) (r *usersvr.SetAdminRoleResp, err error)
+	GetAdminer(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetAdminerResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -58,4 +60,14 @@ func (p *kUserSvrClient) RefreshToken(ctx context.Context, req *usersvr.RefreshR
 func (p *kUserSvrClient) GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoReq, callOptions ...callopt.Option) (r *usersvr.GetUserInfoResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetUserInfo(ctx, req)
+}
+
+func (p *kUserSvrClient) SetAdminRole(ctx context.Context, req *usersvr.SetAdminRoleReq, callOptions ...callopt.Option) (r *usersvr.SetAdminRoleResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.SetAdminRole(ctx, req)
+}
+
+func (p *kUserSvrClient) GetAdminer(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetAdminerResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetAdminer(ctx)
 }

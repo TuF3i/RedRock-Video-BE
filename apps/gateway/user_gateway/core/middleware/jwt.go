@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"LiveDanmu/apps/gateway/video_gateway/core"
+	"LiveDanmu/apps/gateway/user_gateway/core"
 	"LiveDanmu/apps/public/jwt"
 	"LiveDanmu/apps/public/response"
 	"LiveDanmu/apps/public/union_var"

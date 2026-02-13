@@ -12,6 +12,7 @@ type RvUserInfo struct {
 	UserName  string `thrift:"user_name,2,required" frugal:"2,required,string" json:"user_name"`
 	AvatarUrl string `thrift:"avatar_url,3,required" frugal:"3,required,string" json:"avatar_url"`
 	Bio       string `thrift:"bio,4,required" frugal:"4,required,string" json:"bio"`
+	Role      string `thrift:"role,5,required" frugal:"5,required,string" json:"role"`
 }
 
 func NewRvUserInfo() *RvUserInfo {
@@ -36,6 +37,10 @@ func (p *RvUserInfo) GetAvatarUrl() (v string) {
 func (p *RvUserInfo) GetBio() (v string) {
 	return p.Bio
 }
+
+func (p *RvUserInfo) GetRole() (v string) {
+	return p.Role
+}
 func (p *RvUserInfo) SetUid(val int64) {
 	p.Uid = val
 }
@@ -47,6 +52,9 @@ func (p *RvUserInfo) SetAvatarUrl(val string) {
 }
 func (p *RvUserInfo) SetBio(val string) {
 	p.Bio = val
+}
+func (p *RvUserInfo) SetRole(val string) {
+	p.Role = val
 }
 
 func (p *RvUserInfo) String() string {
@@ -61,6 +69,7 @@ var fieldIDToName_RvUserInfo = map[int16]string{
 	2: "user_name",
 	3: "avatar_url",
 	4: "bio",
+	5: "role",
 }
 
 type LoginData struct {
@@ -365,12 +374,139 @@ var fieldIDToName_GetUserInfoResp = map[int16]string{
 	3: "data",
 }
 
+type SetAdminRoleReq struct {
+	Uid int64 `thrift:"uid,1,required" frugal:"1,required,i64" json:"uid"`
+}
+
+func NewSetAdminRoleReq() *SetAdminRoleReq {
+	return &SetAdminRoleReq{}
+}
+
+func (p *SetAdminRoleReq) InitDefault() {
+}
+
+func (p *SetAdminRoleReq) GetUid() (v int64) {
+	return p.Uid
+}
+func (p *SetAdminRoleReq) SetUid(val int64) {
+	p.Uid = val
+}
+
+func (p *SetAdminRoleReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SetAdminRoleReq(%+v)", *p)
+}
+
+var fieldIDToName_SetAdminRoleReq = map[int16]string{
+	1: "uid",
+}
+
+type SetAdminRoleResp struct {
+	Status int64  `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+}
+
+func NewSetAdminRoleResp() *SetAdminRoleResp {
+	return &SetAdminRoleResp{}
+}
+
+func (p *SetAdminRoleResp) InitDefault() {
+}
+
+func (p *SetAdminRoleResp) GetStatus() (v int64) {
+	return p.Status
+}
+
+func (p *SetAdminRoleResp) GetInfo() (v string) {
+	return p.Info
+}
+func (p *SetAdminRoleResp) SetStatus(val int64) {
+	p.Status = val
+}
+func (p *SetAdminRoleResp) SetInfo(val string) {
+	p.Info = val
+}
+
+func (p *SetAdminRoleResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SetAdminRoleResp(%+v)", *p)
+}
+
+var fieldIDToName_SetAdminRoleResp = map[int16]string{
+	1: "status",
+	2: "info",
+}
+
+type GetAdminerResp struct {
+	Status int64       `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string      `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *RvUserInfo `thrift:"data,3,optional" frugal:"3,optional,RvUserInfo" json:"data,omitempty"`
+}
+
+func NewGetAdminerResp() *GetAdminerResp {
+	return &GetAdminerResp{}
+}
+
+func (p *GetAdminerResp) InitDefault() {
+}
+
+func (p *GetAdminerResp) GetStatus() (v int64) {
+	return p.Status
+}
+
+func (p *GetAdminerResp) GetInfo() (v string) {
+	return p.Info
+}
+
+var GetAdminerResp_Data_DEFAULT *RvUserInfo
+
+func (p *GetAdminerResp) GetData() (v *RvUserInfo) {
+	if !p.IsSetData() {
+		return GetAdminerResp_Data_DEFAULT
+	}
+	return p.Data
+}
+func (p *GetAdminerResp) SetStatus(val int64) {
+	p.Status = val
+}
+func (p *GetAdminerResp) SetInfo(val string) {
+	p.Info = val
+}
+func (p *GetAdminerResp) SetData(val *RvUserInfo) {
+	p.Data = val
+}
+
+func (p *GetAdminerResp) IsSetData() bool {
+	return p.Data != nil
+}
+
+func (p *GetAdminerResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetAdminerResp(%+v)", *p)
+}
+
+var fieldIDToName_GetAdminerResp = map[int16]string{
+	1: "status",
+	2: "info",
+	3: "data",
+}
+
 type UserSvr interface {
 	UserLogin(ctx context.Context, req *LoginReq) (r *LoginResp, err error)
 
 	RefreshToken(ctx context.Context, req *RefreshReq) (r *RefreshResp, err error)
 
 	GetUserInfo(ctx context.Context, req *GetUserInfoReq) (r *GetUserInfoResp, err error)
+
+	SetAdminRole(ctx context.Context, req *SetAdminRoleReq) (r *SetAdminRoleResp, err error)
+
+	GetAdminer(ctx context.Context) (r *GetAdminerResp, err error)
 }
 
 type UserSvrUserLoginArgs struct {
@@ -598,5 +734,138 @@ func (p *UserSvrGetUserInfoResult) String() string {
 }
 
 var fieldIDToName_UserSvrGetUserInfoResult = map[int16]string{
+	0: "success",
+}
+
+type UserSvrSetAdminRoleArgs struct {
+	Req *SetAdminRoleReq `thrift:"req,1" frugal:"1,default,SetAdminRoleReq" json:"req"`
+}
+
+func NewUserSvrSetAdminRoleArgs() *UserSvrSetAdminRoleArgs {
+	return &UserSvrSetAdminRoleArgs{}
+}
+
+func (p *UserSvrSetAdminRoleArgs) InitDefault() {
+}
+
+var UserSvrSetAdminRoleArgs_Req_DEFAULT *SetAdminRoleReq
+
+func (p *UserSvrSetAdminRoleArgs) GetReq() (v *SetAdminRoleReq) {
+	if !p.IsSetReq() {
+		return UserSvrSetAdminRoleArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserSvrSetAdminRoleArgs) SetReq(val *SetAdminRoleReq) {
+	p.Req = val
+}
+
+func (p *UserSvrSetAdminRoleArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UserSvrSetAdminRoleArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserSvrSetAdminRoleArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserSvrSetAdminRoleArgs = map[int16]string{
+	1: "req",
+}
+
+type UserSvrSetAdminRoleResult struct {
+	Success *SetAdminRoleResp `thrift:"success,0,optional" frugal:"0,optional,SetAdminRoleResp" json:"success,omitempty"`
+}
+
+func NewUserSvrSetAdminRoleResult() *UserSvrSetAdminRoleResult {
+	return &UserSvrSetAdminRoleResult{}
+}
+
+func (p *UserSvrSetAdminRoleResult) InitDefault() {
+}
+
+var UserSvrSetAdminRoleResult_Success_DEFAULT *SetAdminRoleResp
+
+func (p *UserSvrSetAdminRoleResult) GetSuccess() (v *SetAdminRoleResp) {
+	if !p.IsSetSuccess() {
+		return UserSvrSetAdminRoleResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserSvrSetAdminRoleResult) SetSuccess(x interface{}) {
+	p.Success = x.(*SetAdminRoleResp)
+}
+
+func (p *UserSvrSetAdminRoleResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserSvrSetAdminRoleResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserSvrSetAdminRoleResult(%+v)", *p)
+}
+
+var fieldIDToName_UserSvrSetAdminRoleResult = map[int16]string{
+	0: "success",
+}
+
+type UserSvrGetAdminerArgs struct {
+}
+
+func NewUserSvrGetAdminerArgs() *UserSvrGetAdminerArgs {
+	return &UserSvrGetAdminerArgs{}
+}
+
+func (p *UserSvrGetAdminerArgs) InitDefault() {
+}
+
+func (p *UserSvrGetAdminerArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserSvrGetAdminerArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserSvrGetAdminerArgs = map[int16]string{}
+
+type UserSvrGetAdminerResult struct {
+	Success *GetAdminerResp `thrift:"success,0,optional" frugal:"0,optional,GetAdminerResp" json:"success,omitempty"`
+}
+
+func NewUserSvrGetAdminerResult() *UserSvrGetAdminerResult {
+	return &UserSvrGetAdminerResult{}
+}
+
+func (p *UserSvrGetAdminerResult) InitDefault() {
+}
+
+var UserSvrGetAdminerResult_Success_DEFAULT *GetAdminerResp
+
+func (p *UserSvrGetAdminerResult) GetSuccess() (v *GetAdminerResp) {
+	if !p.IsSetSuccess() {
+		return UserSvrGetAdminerResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserSvrGetAdminerResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetAdminerResp)
+}
+
+func (p *UserSvrGetAdminerResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserSvrGetAdminerResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserSvrGetAdminerResult(%+v)", *p)
+}
+
+var fieldIDToName_UserSvrGetAdminerResult = map[int16]string{
 	0: "success",
 }

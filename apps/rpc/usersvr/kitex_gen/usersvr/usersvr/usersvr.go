@@ -34,6 +34,20 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"SetAdminRole": kitex.NewMethodInfo(
+		setAdminRoleHandler,
+		newUserSvrSetAdminRoleArgs,
+		newUserSvrSetAdminRoleResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
+	"GetAdminer": kitex.NewMethodInfo(
+		getAdminerHandler,
+		newUserSvrGetAdminerArgs,
+		newUserSvrGetAdminerResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 }
 
 var (
@@ -154,6 +168,42 @@ func newUserSvrGetUserInfoResult() interface{} {
 	return usersvr.NewUserSvrGetUserInfoResult()
 }
 
+func setAdminRoleHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*usersvr.UserSvrSetAdminRoleArgs)
+	realResult := result.(*usersvr.UserSvrSetAdminRoleResult)
+	success, err := handler.(usersvr.UserSvr).SetAdminRole(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserSvrSetAdminRoleArgs() interface{} {
+	return usersvr.NewUserSvrSetAdminRoleArgs()
+}
+
+func newUserSvrSetAdminRoleResult() interface{} {
+	return usersvr.NewUserSvrSetAdminRoleResult()
+}
+
+func getAdminerHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	_ = arg.(*usersvr.UserSvrGetAdminerArgs)
+	realResult := result.(*usersvr.UserSvrGetAdminerResult)
+	success, err := handler.(usersvr.UserSvr).GetAdminer(ctx)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserSvrGetAdminerArgs() interface{} {
+	return usersvr.NewUserSvrGetAdminerArgs()
+}
+
+func newUserSvrGetAdminerResult() interface{} {
+	return usersvr.NewUserSvrGetAdminerResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -189,6 +239,25 @@ func (p *kClient) GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoReq) 
 	_args.Req = req
 	var _result usersvr.UserSvrGetUserInfoResult
 	if err = p.c.Call(ctx, "GetUserInfo", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) SetAdminRole(ctx context.Context, req *usersvr.SetAdminRoleReq) (r *usersvr.SetAdminRoleResp, err error) {
+	var _args usersvr.UserSvrSetAdminRoleArgs
+	_args.Req = req
+	var _result usersvr.UserSvrSetAdminRoleResult
+	if err = p.c.Call(ctx, "SetAdminRole", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetAdminer(ctx context.Context) (r *usersvr.GetAdminerResp, err error) {
+	var _args usersvr.UserSvrGetAdminerArgs
+	var _result usersvr.UserSvrGetAdminerResult
+	if err = p.c.Call(ctx, "GetAdminer", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

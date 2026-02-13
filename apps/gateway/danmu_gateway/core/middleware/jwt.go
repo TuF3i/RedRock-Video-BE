@@ -21,21 +21,21 @@ func JWTMiddleware() app.HandlerFunc {
 		}
 		// 提取AccessToken
 		token := jwt.StripBearer(authHeader)
-		// 在Redis中校验Token
-		ok, err := core.Dao.CheckIfAccessTokenExist(ctx, token)
-		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
-			c.Abort()
-		}
-		// 判断Token是否存在
-		if !ok {
-			c.JSON(consts.StatusOK, response.JWTNotRegisteredInRedis)
-			c.Abort()
-		}
 		// 验证并解析JWT
 		claims, err := jwt.VerifyAccessToken(token)
 		if err != nil {
 			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.Abort()
+		}
+		// 在Redis中校验Token
+		ok, err := core.Dao.CheckIfAccessTokenExist(ctx, claims.Uid, token)
+		if err != nil {
+			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.Abort()
+		}
+		// 判断Token是否正确
+		if !ok {
+			c.JSON(consts.StatusOK, response.JWTNotRegisteredInRedis)
 			c.Abort()
 		}
 		// 将claims写入上下文

@@ -1,11 +1,12 @@
 package config_template
 
 type UserRpcConfig struct {
-	PodUID string
-	Etcd   EtcdForUserRpc
-	PgSQL  PostgresForUserRpc
-	Redis  RedisForUserRpc
-	Loki   LokiConfigForUserRpc
+	PodUID  string
+	AdminId string
+	Etcd    EtcdForUserRpc
+	PgSQL   PostgresForUserRpc
+	Redis   RedisForUserRpc
+	Loki    LokiConfigForUserRpc
 }
 
 type EtcdForUserRpc struct {
