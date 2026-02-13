@@ -38,19 +38,31 @@ func GenKitexResp[T KitexResp](resp DtoResp, data interface{}) T {
 		v = new(videosvr.GetVideoListResp)
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
-		v.SetData(data.(*videosvr.GetVideoListData))
+		// 类型断言
+		val, ok := data.(*videosvr.GetVideoListData)
+		if ok {
+			v.SetData(val)
+		}
 		res = any(v).(T)
 	case *videosvr.GetPreSignedUrlResp:
 		v = new(videosvr.GetPreSignedUrlResp)
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
-		v.SetData(data.(string))
+		// 类型断言
+		val, ok := data.(*string)
+		if ok {
+			v.SetData(val)
+		}
 		res = any(v).(T)
 	case *videosvr.GetJudgeListResp:
 		v = new(videosvr.GetJudgeListResp)
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
-		v.SetData(data.(*videosvr.GetVideoListData))
+		// 类型断言
+		val, ok := data.(*videosvr.GetVideoListData)
+		if ok {
+			v.SetData(val)
+		}
 		res = any(v).(T)
 	}
 	return res

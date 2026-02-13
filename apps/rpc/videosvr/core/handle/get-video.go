@@ -65,50 +65,50 @@ func GetJudgeList(ctx context.Context, req *videosvr.GetJudgeListReq) (dto.Respo
 	return dto.OperationSuccess, data
 }
 
-func GetPreSignedUrl(ctx context.Context, req *videosvr.GetPreSignedUrlReq) (dto.Response, string) {
+func GetPreSignedUrl(ctx context.Context, req *videosvr.GetPreSignedUrlReq) (dto.Response, *string) {
 	// 在数据库中查询视频信息
 	vInfo, err := core.Dao.GetVideoInfo(ctx, req.GetRvid())
 	if err != nil {
-		return dto.ServerInternalError(err), ""
+		return dto.ServerInternalError(err), nil
 	}
 	// 权限判断
 	if vInfo.InJudge {
 		if req.GetRole() != union_var.JWT_ROLE_ADMIN && req.GetUid() != vInfo.AuthorID {
-			return dto.NoPermission, ""
+			return dto.NoPermission, nil
 		}
 	}
 	// 游客单独处理
 	if req.GetRole() == union_var.JWT_ROLE_GUEST {
 		url, err := core.Minio.GetSignedUrl(ctx, utils.RVIDEncoder(req.Rvid))
 		if err != nil {
-			return dto.ServerInternalError(err), ""
+			return dto.ServerInternalError(err), nil
 		}
 
-		return dto.OperationSuccess, url
+		return dto.OperationSuccess, &url
 	}
 	// 查询Url
 	ok, err := core.Dao.IfNeedToGenNewPreSignedUrl(ctx, req.GetUid(), req.GetRvid())
 	if err != nil {
-		return dto.ServerInternalError(err), ""
+		return dto.ServerInternalError(err), nil
 	}
 	// 需要续期
 	if ok {
 		url, err := core.Minio.GetSignedUrl(ctx, utils.RVIDEncoder(req.Rvid))
 		if err != nil {
-			return dto.ServerInternalError(err), ""
+			return dto.ServerInternalError(err), nil
 		}
 		err = core.Dao.SetPreSignedUrlToRedis(ctx, url, req.GetUid(), req.GetRvid())
 		if err != nil {
-			return dto.ServerInternalError(err), ""
+			return dto.ServerInternalError(err), nil
 		}
 
-		return dto.OperationSuccess, url
+		return dto.OperationSuccess, &url
 	}
 	// 不需续期
 	url, err := core.Dao.GetPreSignedUrlFromRedis(ctx, req.GetUid(), req.GetRvid())
 	if err != nil {
-		return dto.ServerInternalError(err), ""
+		return dto.ServerInternalError(err), nil
 	}
 
-	return dto.OperationSuccess, url
+	return dto.OperationSuccess, &url
 }

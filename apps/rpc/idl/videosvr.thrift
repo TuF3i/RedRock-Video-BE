@@ -61,7 +61,7 @@ struct GetVideoListReq {
 struct GetVideoListResp {
   1: required i64 status
   2: required string info
-  3: required GetVideoListData data
+  3: optional GetVideoListData data
 }
 
 // 获取预签名链接
@@ -74,7 +74,7 @@ struct GetPreSignedUrlReq {
 struct GetPreSignedUrlResp {
   1: required i64 status
   2: required string info
-  3: required string data
+  3: optional string data
 }
 
 // 获取审核列表
@@ -86,7 +86,7 @@ struct GetJudgeListReq {
 struct GetJudgeListResp {
   1: required i64 status
   2: required string info
-  3: required GetVideoListData data
+  3: optional GetVideoListData data
 }
 
 service VideoSvr {

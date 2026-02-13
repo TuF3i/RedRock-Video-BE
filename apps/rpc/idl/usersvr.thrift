@@ -60,7 +60,14 @@ struct SetAdminRoleResp {
 struct GetAdminerResp {
   1: required i64 status
   2: required string info
-  3: optional RvUserInfo data
+  3: optional list<RvUserInfo> data
+}
+
+// 获取普通用户
+struct GetUsersResp {
+  1: required i64 status
+  2: required string info
+  3: optional list<RvUserInfo> data
 }
 
 // 登出账号
@@ -80,5 +87,6 @@ service UserSvr {
   GetUserInfoResp GetUserInfo(1: GetUserInfoReq req)
   SetAdminRoleResp SetAdminRole(1: SetAdminRoleReq req)
   GetAdminerResp GetAdminer()
+  GetUsersResp GetUsers()
   LogoutResp Logout(1: LoginReq req)
 }

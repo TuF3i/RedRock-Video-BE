@@ -424,7 +424,7 @@ var fieldIDToName_GetVideoListReq = map[int16]string{
 type GetVideoListResp struct {
 	Status int64             `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
 	Info   string            `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   *GetVideoListData `thrift:"data,3,required" frugal:"3,required,GetVideoListData" json:"data"`
+	Data   *GetVideoListData `thrift:"data,3,optional" frugal:"3,optional,GetVideoListData" json:"data,omitempty"`
 }
 
 func NewGetVideoListResp() *GetVideoListResp {
@@ -525,9 +525,9 @@ var fieldIDToName_GetPreSignedUrlReq = map[int16]string{
 }
 
 type GetPreSignedUrlResp struct {
-	Status int64  `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   string `thrift:"data,3,required" frugal:"3,required,string" json:"data"`
+	Status int64   `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string  `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *string `thrift:"data,3,optional" frugal:"3,optional,string" json:"data,omitempty"`
 }
 
 func NewGetPreSignedUrlResp() *GetPreSignedUrlResp {
@@ -545,8 +545,13 @@ func (p *GetPreSignedUrlResp) GetInfo() (v string) {
 	return p.Info
 }
 
+var GetPreSignedUrlResp_Data_DEFAULT string
+
 func (p *GetPreSignedUrlResp) GetData() (v string) {
-	return p.Data
+	if !p.IsSetData() {
+		return GetPreSignedUrlResp_Data_DEFAULT
+	}
+	return *p.Data
 }
 func (p *GetPreSignedUrlResp) SetStatus(val int64) {
 	p.Status = val
@@ -554,8 +559,12 @@ func (p *GetPreSignedUrlResp) SetStatus(val int64) {
 func (p *GetPreSignedUrlResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *GetPreSignedUrlResp) SetData(val string) {
+func (p *GetPreSignedUrlResp) SetData(val *string) {
 	p.Data = val
+}
+
+func (p *GetPreSignedUrlResp) IsSetData() bool {
+	return p.Data != nil
 }
 
 func (p *GetPreSignedUrlResp) String() string {
@@ -612,7 +621,7 @@ var fieldIDToName_GetJudgeListReq = map[int16]string{
 type GetJudgeListResp struct {
 	Status int64             `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
 	Info   string            `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   *GetVideoListData `thrift:"data,3,required" frugal:"3,required,GetVideoListData" json:"data"`
+	Data   *GetVideoListData `thrift:"data,3,optional" frugal:"3,optional,GetVideoListData" json:"data,omitempty"`
 }
 
 func NewGetJudgeListResp() *GetJudgeListResp {
