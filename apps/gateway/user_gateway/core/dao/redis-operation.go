@@ -1,0 +1,19 @@
+package dao
+
+import (
+	"context"
+	"errors"
+
+	"github.com/redis/go-redis/v9"
+)
+
+func (r *Dao) checkKeyExistence(ctx context.Context, key string) (bool, error) {
+	_, err := r.rdb.Get(ctx, key).Result()
+	if err != nil {
+		if errors.Is(err, redis.Nil) {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}

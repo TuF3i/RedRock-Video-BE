@@ -63,6 +63,44 @@ var fieldIDToName_RvUserInfo = map[int16]string{
 	4: "bio",
 }
 
+type LoginData struct {
+	AccessToken  string `thrift:"accessToken,1,required" frugal:"1,required,string" json:"accessToken"`
+	RefreshToken string `thrift:"refreshToken,2,required" frugal:"2,required,string" json:"refreshToken"`
+}
+
+func NewLoginData() *LoginData {
+	return &LoginData{}
+}
+
+func (p *LoginData) InitDefault() {
+}
+
+func (p *LoginData) GetAccessToken() (v string) {
+	return p.AccessToken
+}
+
+func (p *LoginData) GetRefreshToken() (v string) {
+	return p.RefreshToken
+}
+func (p *LoginData) SetAccessToken(val string) {
+	p.AccessToken = val
+}
+func (p *LoginData) SetRefreshToken(val string) {
+	p.RefreshToken = val
+}
+
+func (p *LoginData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("LoginData(%+v)", *p)
+}
+
+var fieldIDToName_LoginData = map[int16]string{
+	1: "accessToken",
+	2: "refreshToken",
+}
+
 type LoginReq struct {
 	UserInfo *RvUserInfo `thrift:"user_info,1,required" frugal:"1,required,RvUserInfo" json:"user_info"`
 }
@@ -102,9 +140,9 @@ var fieldIDToName_LoginReq = map[int16]string{
 }
 
 type LoginResp struct {
-	Status int64   `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string  `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   *string `thrift:"data,3,optional" frugal:"3,optional,string" json:"data,omitempty"`
+	Status int64      `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string     `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *LoginData `thrift:"data,3,optional" frugal:"3,optional,LoginData" json:"data,omitempty"`
 }
 
 func NewLoginResp() *LoginResp {
@@ -122,13 +160,13 @@ func (p *LoginResp) GetInfo() (v string) {
 	return p.Info
 }
 
-var LoginResp_Data_DEFAULT string
+var LoginResp_Data_DEFAULT *LoginData
 
-func (p *LoginResp) GetData() (v string) {
+func (p *LoginResp) GetData() (v *LoginData) {
 	if !p.IsSetData() {
 		return LoginResp_Data_DEFAULT
 	}
-	return *p.Data
+	return p.Data
 }
 func (p *LoginResp) SetStatus(val int64) {
 	p.Status = val
@@ -136,7 +174,7 @@ func (p *LoginResp) SetStatus(val int64) {
 func (p *LoginResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *LoginResp) SetData(val *string) {
+func (p *LoginResp) SetData(val *LoginData) {
 	p.Data = val
 }
 
