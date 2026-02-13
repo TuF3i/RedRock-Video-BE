@@ -442,9 +442,9 @@ var fieldIDToName_SetAdminRoleResp = map[int16]string{
 }
 
 type GetAdminerResp struct {
-	Status int64       `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string      `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   *RvUserInfo `thrift:"data,3,optional" frugal:"3,optional,RvUserInfo" json:"data,omitempty"`
+	Status int64         `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string        `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   []*RvUserInfo `thrift:"data,3,optional" frugal:"3,optional,list<RvUserInfo>" json:"data,omitempty"`
 }
 
 func NewGetAdminerResp() *GetAdminerResp {
@@ -462,9 +462,9 @@ func (p *GetAdminerResp) GetInfo() (v string) {
 	return p.Info
 }
 
-var GetAdminerResp_Data_DEFAULT *RvUserInfo
+var GetAdminerResp_Data_DEFAULT []*RvUserInfo
 
-func (p *GetAdminerResp) GetData() (v *RvUserInfo) {
+func (p *GetAdminerResp) GetData() (v []*RvUserInfo) {
 	if !p.IsSetData() {
 		return GetAdminerResp_Data_DEFAULT
 	}
@@ -476,7 +476,7 @@ func (p *GetAdminerResp) SetStatus(val int64) {
 func (p *GetAdminerResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *GetAdminerResp) SetData(val *RvUserInfo) {
+func (p *GetAdminerResp) SetData(val []*RvUserInfo) {
 	p.Data = val
 }
 
@@ -497,6 +497,129 @@ var fieldIDToName_GetAdminerResp = map[int16]string{
 	3: "data",
 }
 
+type GetUsersResp struct {
+	Status int64         `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string        `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   []*RvUserInfo `thrift:"data,3,optional" frugal:"3,optional,list<RvUserInfo>" json:"data,omitempty"`
+}
+
+func NewGetUsersResp() *GetUsersResp {
+	return &GetUsersResp{}
+}
+
+func (p *GetUsersResp) InitDefault() {
+}
+
+func (p *GetUsersResp) GetStatus() (v int64) {
+	return p.Status
+}
+
+func (p *GetUsersResp) GetInfo() (v string) {
+	return p.Info
+}
+
+var GetUsersResp_Data_DEFAULT []*RvUserInfo
+
+func (p *GetUsersResp) GetData() (v []*RvUserInfo) {
+	if !p.IsSetData() {
+		return GetUsersResp_Data_DEFAULT
+	}
+	return p.Data
+}
+func (p *GetUsersResp) SetStatus(val int64) {
+	p.Status = val
+}
+func (p *GetUsersResp) SetInfo(val string) {
+	p.Info = val
+}
+func (p *GetUsersResp) SetData(val []*RvUserInfo) {
+	p.Data = val
+}
+
+func (p *GetUsersResp) IsSetData() bool {
+	return p.Data != nil
+}
+
+func (p *GetUsersResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetUsersResp(%+v)", *p)
+}
+
+var fieldIDToName_GetUsersResp = map[int16]string{
+	1: "status",
+	2: "info",
+	3: "data",
+}
+
+type LogoutReq struct {
+	Uid string `thrift:"uid,1,required" frugal:"1,required,string" json:"uid"`
+}
+
+func NewLogoutReq() *LogoutReq {
+	return &LogoutReq{}
+}
+
+func (p *LogoutReq) InitDefault() {
+}
+
+func (p *LogoutReq) GetUid() (v string) {
+	return p.Uid
+}
+func (p *LogoutReq) SetUid(val string) {
+	p.Uid = val
+}
+
+func (p *LogoutReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("LogoutReq(%+v)", *p)
+}
+
+var fieldIDToName_LogoutReq = map[int16]string{
+	1: "uid",
+}
+
+type LogoutResp struct {
+	Status int64  `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+}
+
+func NewLogoutResp() *LogoutResp {
+	return &LogoutResp{}
+}
+
+func (p *LogoutResp) InitDefault() {
+}
+
+func (p *LogoutResp) GetStatus() (v int64) {
+	return p.Status
+}
+
+func (p *LogoutResp) GetInfo() (v string) {
+	return p.Info
+}
+func (p *LogoutResp) SetStatus(val int64) {
+	p.Status = val
+}
+func (p *LogoutResp) SetInfo(val string) {
+	p.Info = val
+}
+
+func (p *LogoutResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("LogoutResp(%+v)", *p)
+}
+
+var fieldIDToName_LogoutResp = map[int16]string{
+	1: "status",
+	2: "info",
+}
+
 type UserSvr interface {
 	UserLogin(ctx context.Context, req *LoginReq) (r *LoginResp, err error)
 
@@ -507,6 +630,10 @@ type UserSvr interface {
 	SetAdminRole(ctx context.Context, req *SetAdminRoleReq) (r *SetAdminRoleResp, err error)
 
 	GetAdminer(ctx context.Context) (r *GetAdminerResp, err error)
+
+	GetUsers(ctx context.Context) (r *GetUsersResp, err error)
+
+	Logout(ctx context.Context, req *LoginReq) (r *LogoutResp, err error)
 }
 
 type UserSvrUserLoginArgs struct {
@@ -867,5 +994,138 @@ func (p *UserSvrGetAdminerResult) String() string {
 }
 
 var fieldIDToName_UserSvrGetAdminerResult = map[int16]string{
+	0: "success",
+}
+
+type UserSvrGetUsersArgs struct {
+}
+
+func NewUserSvrGetUsersArgs() *UserSvrGetUsersArgs {
+	return &UserSvrGetUsersArgs{}
+}
+
+func (p *UserSvrGetUsersArgs) InitDefault() {
+}
+
+func (p *UserSvrGetUsersArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserSvrGetUsersArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserSvrGetUsersArgs = map[int16]string{}
+
+type UserSvrGetUsersResult struct {
+	Success *GetUsersResp `thrift:"success,0,optional" frugal:"0,optional,GetUsersResp" json:"success,omitempty"`
+}
+
+func NewUserSvrGetUsersResult() *UserSvrGetUsersResult {
+	return &UserSvrGetUsersResult{}
+}
+
+func (p *UserSvrGetUsersResult) InitDefault() {
+}
+
+var UserSvrGetUsersResult_Success_DEFAULT *GetUsersResp
+
+func (p *UserSvrGetUsersResult) GetSuccess() (v *GetUsersResp) {
+	if !p.IsSetSuccess() {
+		return UserSvrGetUsersResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserSvrGetUsersResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetUsersResp)
+}
+
+func (p *UserSvrGetUsersResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserSvrGetUsersResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserSvrGetUsersResult(%+v)", *p)
+}
+
+var fieldIDToName_UserSvrGetUsersResult = map[int16]string{
+	0: "success",
+}
+
+type UserSvrLogoutArgs struct {
+	Req *LoginReq `thrift:"req,1" frugal:"1,default,LoginReq" json:"req"`
+}
+
+func NewUserSvrLogoutArgs() *UserSvrLogoutArgs {
+	return &UserSvrLogoutArgs{}
+}
+
+func (p *UserSvrLogoutArgs) InitDefault() {
+}
+
+var UserSvrLogoutArgs_Req_DEFAULT *LoginReq
+
+func (p *UserSvrLogoutArgs) GetReq() (v *LoginReq) {
+	if !p.IsSetReq() {
+		return UserSvrLogoutArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserSvrLogoutArgs) SetReq(val *LoginReq) {
+	p.Req = val
+}
+
+func (p *UserSvrLogoutArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UserSvrLogoutArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserSvrLogoutArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserSvrLogoutArgs = map[int16]string{
+	1: "req",
+}
+
+type UserSvrLogoutResult struct {
+	Success *LogoutResp `thrift:"success,0,optional" frugal:"0,optional,LogoutResp" json:"success,omitempty"`
+}
+
+func NewUserSvrLogoutResult() *UserSvrLogoutResult {
+	return &UserSvrLogoutResult{}
+}
+
+func (p *UserSvrLogoutResult) InitDefault() {
+}
+
+var UserSvrLogoutResult_Success_DEFAULT *LogoutResp
+
+func (p *UserSvrLogoutResult) GetSuccess() (v *LogoutResp) {
+	if !p.IsSetSuccess() {
+		return UserSvrLogoutResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserSvrLogoutResult) SetSuccess(x interface{}) {
+	p.Success = x.(*LogoutResp)
+}
+
+func (p *UserSvrLogoutResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserSvrLogoutResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserSvrLogoutResult(%+v)", *p)
+}
+
+var fieldIDToName_UserSvrLogoutResult = map[int16]string{
 	0: "success",
 }

@@ -1,8 +1,10 @@
 package handle
 
 import (
+	"LiveDanmu/apps/rpc/usersvr/core/dto"
 	usersvr "LiveDanmu/apps/rpc/usersvr/kitex_gen/usersvr"
 	"context"
+	"errors"
 )
 
 // UserSvrImpl implements the last service interface defined in the IDL.
@@ -10,20 +12,41 @@ type UserSvrImpl struct{}
 
 // UserLogin implements the UserSvrImpl interface.
 func (s *UserSvrImpl) UserLogin(ctx context.Context, req *usersvr.LoginReq) (resp *usersvr.LoginResp, err error) {
-	// TODO: Your code here...
-	return
+	// 调用方法
+	rawResp, data := UserLogin(ctx, req)
+	resp = dto.GenKitexResp[*usersvr.LoginResp](rawResp, data)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
 }
 
 // RefreshToken implements the UserSvrImpl interface.
 func (s *UserSvrImpl) RefreshToken(ctx context.Context, req *usersvr.RefreshReq) (resp *usersvr.RefreshResp, err error) {
-	// TODO: Your code here...
-	return
+	// 调用方法
+	rawResp, data := GetRefreshToken(ctx, req)
+	resp = dto.GenKitexResp[*usersvr.RefreshResp](rawResp, data)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
 }
 
 // GetUserInfo implements the UserSvrImpl interface.
 func (s *UserSvrImpl) GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoReq) (resp *usersvr.GetUserInfoResp, err error) {
-	// TODO: Your code here...
-	return
+	// 调用方法
+	rawResp, data := GetUserInfo(ctx, req)
+	resp = dto.GenKitexResp[*usersvr.GetUserInfoResp](rawResp, data)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
 }
 
 // SetAdminRole implements the UserSvrImpl interface.
@@ -34,6 +57,18 @@ func (s *UserSvrImpl) SetAdminRole(ctx context.Context, req *usersvr.SetAdminRol
 
 // GetAdminer implements the UserSvrImpl interface.
 func (s *UserSvrImpl) GetAdminer(ctx context.Context) (resp *usersvr.GetAdminerResp, err error) {
+	// TODO: Your code here...
+	return
+}
+
+// GetUsers implements the UserSvrImpl interface.
+func (s *UserSvrImpl) GetUsers(ctx context.Context) (resp *usersvr.GetUsersResp, err error) {
+	// TODO: Your code here...
+	return
+}
+
+// Logout implements the UserSvrImpl interface.
+func (s *UserSvrImpl) Logout(ctx context.Context, req *usersvr.LoginReq) (resp *usersvr.LogoutResp, err error) {
 	// TODO: Your code here...
 	return
 }

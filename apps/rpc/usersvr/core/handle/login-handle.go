@@ -57,11 +57,11 @@ func UserLogin(ctx context.Context, req *usersvr.LoginReq) (dto.Response, *users
 	}
 
 	// 写入redis
-	err = core.Dao.SetNewAccessToken(ctx, accessToken)
+	err = core.Dao.SetNewAccessToken(ctx, uid, accessToken)
 	if err != nil {
 		return dto.ServerInternalError(err), nil
 	}
-	err = core.Dao.SetNewRefreshToken(ctx, refreshToken)
+	err = core.Dao.SetNewRefreshToken(ctx, uid, refreshToken)
 	if err != nil {
 		return dto.ServerInternalError(err), nil
 	}

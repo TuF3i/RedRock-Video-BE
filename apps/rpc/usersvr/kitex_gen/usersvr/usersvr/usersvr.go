@@ -48,6 +48,20 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"GetUsers": kitex.NewMethodInfo(
+		getUsersHandler,
+		newUserSvrGetUsersArgs,
+		newUserSvrGetUsersResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
+	"Logout": kitex.NewMethodInfo(
+		logoutHandler,
+		newUserSvrLogoutArgs,
+		newUserSvrLogoutResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 }
 
 var (
@@ -204,6 +218,42 @@ func newUserSvrGetAdminerResult() interface{} {
 	return usersvr.NewUserSvrGetAdminerResult()
 }
 
+func getUsersHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	_ = arg.(*usersvr.UserSvrGetUsersArgs)
+	realResult := result.(*usersvr.UserSvrGetUsersResult)
+	success, err := handler.(usersvr.UserSvr).GetUsers(ctx)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserSvrGetUsersArgs() interface{} {
+	return usersvr.NewUserSvrGetUsersArgs()
+}
+
+func newUserSvrGetUsersResult() interface{} {
+	return usersvr.NewUserSvrGetUsersResult()
+}
+
+func logoutHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*usersvr.UserSvrLogoutArgs)
+	realResult := result.(*usersvr.UserSvrLogoutResult)
+	success, err := handler.(usersvr.UserSvr).Logout(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserSvrLogoutArgs() interface{} {
+	return usersvr.NewUserSvrLogoutArgs()
+}
+
+func newUserSvrLogoutResult() interface{} {
+	return usersvr.NewUserSvrLogoutResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -258,6 +308,25 @@ func (p *kClient) GetAdminer(ctx context.Context) (r *usersvr.GetAdminerResp, er
 	var _args usersvr.UserSvrGetAdminerArgs
 	var _result usersvr.UserSvrGetAdminerResult
 	if err = p.c.Call(ctx, "GetAdminer", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetUsers(ctx context.Context) (r *usersvr.GetUsersResp, err error) {
+	var _args usersvr.UserSvrGetUsersArgs
+	var _result usersvr.UserSvrGetUsersResult
+	if err = p.c.Call(ctx, "GetUsers", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) Logout(ctx context.Context, req *usersvr.LoginReq) (r *usersvr.LogoutResp, err error) {
+	var _args usersvr.UserSvrLogoutArgs
+	_args.Req = req
+	var _result usersvr.UserSvrLogoutResult
+	if err = p.c.Call(ctx, "Logout", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

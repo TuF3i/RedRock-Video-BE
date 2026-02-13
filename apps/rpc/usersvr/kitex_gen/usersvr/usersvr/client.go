@@ -16,6 +16,8 @@ type Client interface {
 	GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoReq, callOptions ...callopt.Option) (r *usersvr.GetUserInfoResp, err error)
 	SetAdminRole(ctx context.Context, req *usersvr.SetAdminRoleReq, callOptions ...callopt.Option) (r *usersvr.SetAdminRoleResp, err error)
 	GetAdminer(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetAdminerResp, err error)
+	GetUsers(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetUsersResp, err error)
+	Logout(ctx context.Context, req *usersvr.LoginReq, callOptions ...callopt.Option) (r *usersvr.LogoutResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -70,4 +72,14 @@ func (p *kUserSvrClient) SetAdminRole(ctx context.Context, req *usersvr.SetAdmin
 func (p *kUserSvrClient) GetAdminer(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetAdminerResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetAdminer(ctx)
+}
+
+func (p *kUserSvrClient) GetUsers(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetUsersResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetUsers(ctx)
+}
+
+func (p *kUserSvrClient) Logout(ctx context.Context, req *usersvr.LoginReq, callOptions ...callopt.Option) (r *usersvr.LogoutResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.Logout(ctx, req)
 }

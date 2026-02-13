@@ -61,8 +61,8 @@ func (r *Dao) GetUserInfo(uid int64) (*dao.RvUser, error) {
 	return data, nil
 }
 
-func (r *Dao) SetNewAccessToken(ctx context.Context, token string) error {
-	key := utils.GenAccessTokenKey(token)
+func (r *Dao) SetNewAccessToken(ctx context.Context, uid int64, token string) error {
+	key := utils.GenAccessTokenKey(uid)
 	err := r.setNewValue(ctx, key, token, jwt.GetAccessTokenExpireTime())
 	if err != nil {
 		return err
@@ -71,8 +71,8 @@ func (r *Dao) SetNewAccessToken(ctx context.Context, token string) error {
 	return nil
 }
 
-func (r *Dao) SetNewRefreshToken(ctx context.Context, token string) error {
-	key := utils.GenRefreshTokenKey(token)
+func (r *Dao) SetNewRefreshToken(ctx context.Context, uid int64, token string) error {
+	key := utils.GenRefreshTokenKey(uid)
 	err := r.setNewValue(ctx, key, token, jwt.GetRefreshTokenExpireTime())
 	if err != nil {
 		return err
@@ -81,8 +81,8 @@ func (r *Dao) SetNewRefreshToken(ctx context.Context, token string) error {
 	return nil
 }
 
-func (r *Dao) VerifyRefreshToken(ctx context.Context, token string) (bool, error) {
-	key := utils.GenRefreshTokenKey(token)
+func (r *Dao) VerifyRefreshToken(ctx context.Context, uid int64, token string) (bool, error) {
+	key := utils.GenRefreshTokenKey(uid)
 	data, err := r.getKeyValue(ctx, key)
 	if err != nil {
 		return false, err
