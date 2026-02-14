@@ -101,7 +101,7 @@ func AddVideoHandleFunc() app.HandlerFunc {
 			return
 		}
 
-		c.JSON(consts.StatusOK, dto.GenFinalResponse(response.OperationSuccess))
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
 		return
 	}
 }
@@ -131,7 +131,7 @@ func DelVideoHandleFunc() app.HandlerFunc {
 			return
 		}
 
-		c.JSON(consts.StatusOK, dto.GenFinalResponse(response.OperationSuccess))
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
 		return
 	}
 }
@@ -167,7 +167,7 @@ func JudgeAccessHandleFunc() app.HandlerFunc {
 			return
 		}
 
-		c.JSON(consts.StatusOK, dto.GenFinalResponse(response.OperationSuccess))
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
 		return
 	}
 }
@@ -211,7 +211,7 @@ func GetJudgeListHandleFunc() app.HandlerFunc {
 			return
 		}
 
-		c.JSON(consts.StatusOK, dto.GenFinalResponse(response.OperationSuccess))
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
 		return
 	}
 }
@@ -246,7 +246,7 @@ func GetVideoListHandleFunc() app.HandlerFunc {
 			return
 		}
 
-		c.JSON(consts.StatusOK, dto.GenFinalResponse(response.OperationSuccess))
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
 		return
 	}
 }
@@ -276,7 +276,7 @@ func GetPreSignedUrlHandleFunc() app.HandlerFunc {
 				return
 			}
 
-			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.OperationSuccess))
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
 			return
 		}
 		// 类型断言
@@ -292,7 +292,7 @@ func GetPreSignedUrlHandleFunc() app.HandlerFunc {
 			return
 		}
 
-		c.JSON(consts.StatusOK, dto.GenFinalResponse(response.OperationSuccess))
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
 		return
 	}
 }

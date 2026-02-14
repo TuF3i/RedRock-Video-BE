@@ -1,7 +1,7 @@
 package dto
 
 var (
-	OperationSuccess   = Response{Status: 50200, Info: "Operation Success"}
+	OperationSuccess   = Response{Status: 0, Info: "Operation Success"}
 	InvalidRVID        = Response{Status: 50001, Info: "Invalid RVID"}
 	InvalidFaceUrl     = Response{Status: 50002, Info: "Invalid FaceUrl"}
 	InvalidMinioKey    = Response{Status: 50003, Info: "Invalid MinioKey"}

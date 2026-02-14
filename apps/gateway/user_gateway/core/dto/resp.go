@@ -26,30 +26,15 @@ func GenFinalResponse[T KitexResps](resp T) response.FinalResponse {
 	switch v := any(resp).(type) {
 	// 微服务响应
 	case *videosvr.AddVideoResp:
-		if v.GetStatus() == 0 {
-			return genFinalResp(response.OperationSuccess, nil)
-		}
 		return genFinalResp(v, nil)
 	case *videosvr.DelVideoResp:
-		if v.GetStatus() == 0 {
-			return genFinalResp(response.OperationSuccess, nil)
-		}
 		return genFinalResp(v, nil)
 	case *videosvr.JudgeAccessResp:
-		if v.GetStatus() == 0 {
-			return genFinalResp(response.OperationSuccess, nil)
-		}
 		return genFinalResp(v, nil)
 	case *videosvr.GetVideoListResp:
-		if v.GetStatus() == 0 {
-			return genFinalResp(response.OperationSuccess, v.GetData())
-		}
-		return genFinalResp(v, nil)
+		return genFinalResp(v, v.GetData())
 	case *videosvr.GetPreSignedUrlResp:
-		if v.GetStatus() == 0 {
-			return genFinalResp(response.OperationSuccess, v.GetData())
-		}
-		return genFinalResp(v, nil)
+		return genFinalResp(v, v.GetData())
 	case response.Response:
 		return genFinalResp(v, nil)
 	}
