@@ -45,3 +45,39 @@ func JWTMiddleware() app.HandlerFunc {
 		return
 	}
 }
+
+func JWTRefreshMiddleware() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// 从请求头提取Authorization-Header
+		authHeader := string(c.GetHeader("Authorization"))
+		if authHeader == "" {
+			c.JSON(consts.StatusOK, response.EmptyJWTString)
+			c.Abort()
+		}
+		// 提取AccessToken
+		token := jwt.StripBearer(authHeader)
+		// 验证并解析JWT
+		claims, err := jwt.VerifyRefreshToken(token)
+		if err != nil {
+			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.Abort()
+		}
+		// 在Redis中校验Token
+		ok, err := core.Dao.CheckIfRefreshTokenExist(ctx, claims.Uid, token)
+		if err != nil {
+			c.JSON(consts.StatusOK, response.InternalError(err))
+			c.Abort()
+		}
+		// 判断Token是否正确
+		if !ok {
+			c.JSON(consts.StatusOK, response.JWTNotRegisteredInRedis)
+			c.Abort()
+		}
+		// 将claims写入上下文
+		c.Set(union_var.JWT_CONTEXT_KEY, claims)
+		c.Set(union_var.JWT_REFRESH_KEY, token)
+		c.Next(ctx)
+
+		return
+	}
+}
