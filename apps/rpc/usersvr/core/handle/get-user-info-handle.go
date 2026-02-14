@@ -18,6 +18,14 @@ func convertRvUser2RvUserInfo(raw *dao.RvUser) *usersvr.RvUserInfo {
 	}
 }
 
+func batchRvUser2RvUserInfo(raw []*dao.RvUser) []*usersvr.RvUserInfo {
+	dataSet := make([]*usersvr.RvUserInfo, 0, len(raw))
+	for i, v := range raw {
+		dataSet[i] = convertRvUser2RvUserInfo(v)
+	}
+	return dataSet
+}
+
 func GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoReq) (dto.Response, *usersvr.RvUserInfo) {
 	// 获取UID
 	uid := req.GetUid()
@@ -39,4 +47,28 @@ func GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoReq) (dto.Response
 	uInfo := convertRvUser2RvUserInfo(data)
 
 	return dto.OperationSuccess, uInfo
+}
+
+func GetUserList(ctx context.Context) (dto.Response, []*usersvr.RvUserInfo) {
+	// 获取数据
+	rawData, err := core.Dao.GetUserList(ctx)
+	if err != nil {
+		return dto.ServerInternalError(err), nil
+	}
+	// 转换结构体
+	data := batchRvUser2RvUserInfo(rawData)
+
+	return dto.OperationSuccess, data
+}
+
+func GetAdminList(ctx context.Context) (dto.Response, []*usersvr.RvUserInfo) {
+	// 获取数据
+	rawData, err := core.Dao.GetAdminerList(ctx)
+	if err != nil {
+		return dto.ServerInternalError(err), nil
+	}
+	// 转换结构体
+	data := batchRvUser2RvUserInfo(rawData)
+
+	return dto.OperationSuccess, data
 }

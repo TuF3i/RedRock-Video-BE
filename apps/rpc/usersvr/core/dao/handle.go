@@ -3,6 +3,7 @@ package dao
 import (
 	"LiveDanmu/apps/public/jwt"
 	"LiveDanmu/apps/public/models/dao"
+	"LiveDanmu/apps/public/union_var"
 	"LiveDanmu/apps/public/utils"
 	"context"
 )
@@ -93,4 +94,63 @@ func (r *Dao) VerifyRefreshToken(ctx context.Context, uid int64, token string) (
 	}
 
 	return false, nil
+}
+
+func (r *Dao) SetAdminRole(ctx context.Context, uid int64) error {
+	tx := r.pgdb.Begin()
+	err := r.setColumnValue(tx, uid, "role", union_var.JWT_ROLE_ADMIN)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+	return nil
+}
+
+func (r *Dao) GetAdminerList(ctx context.Context) ([]*dao.RvUser, error) {
+	tx := r.pgdb.Begin()
+	dataSet, err := r.getRecordDetails(tx, union_var.JWT_ROLE_ADMIN)
+	if err != nil {
+		return nil, err
+	}
+
+	return dataSet, nil
+}
+
+func (r *Dao) GetUserList(ctx context.Context) ([]*dao.RvUser, error) {
+	tx := r.pgdb.Begin()
+	dataSet, err := r.getRecordDetails(tx, union_var.JWT_ROLE_USER)
+	if err != nil {
+		return nil, err
+	}
+
+	return dataSet, nil
+}
+
+func (r *Dao) Logout(ctx context.Context, uid int64) error {
+	keyForAccessToken := utils.GenAccessTokenKey(uid)
+	keyForRefreshToken := utils.GenRefreshTokenKey(uid)
+
+	ok, err := r.ifKeyExist(ctx, keyForAccessToken)
+	if err != nil {
+		return err
+	}
+	if ok {
+		if err := r.delKeyValue(ctx, keyForAccessToken); err != nil {
+			return err
+		}
+	}
+
+	ok, err = r.ifKeyExist(ctx, keyForRefreshToken)
+	if err != nil {
+		return err
+	}
+	if ok {
+		if err := r.delKeyValue(ctx, keyForRefreshToken); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

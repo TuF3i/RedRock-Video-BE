@@ -4,6 +4,10 @@ var (
 	OperationSuccess    = Response{Status: 80200, Info: "Operation Success"}
 	NoUserExist         = Response{Status: 80001, Info: "No User Exist"}
 	InvalidRefreshToken = Response{Status: 80002, Info: "Invalid RefreshToken"}
+	InvalidUID          = Response{Status: 80003, Info: "Invalid UID"}
+	InvalidUserName     = Response{Status: 80004, Info: "Invalid User Name"}
+	InvalidAvatarURL    = Response{Status: 80005, Info: "Invalid AvatarURL"}
+	InvalidBio          = Response{Status: 80006, Info: "Invalid Bio"}
 )
 
 // Response 业务层错误封装

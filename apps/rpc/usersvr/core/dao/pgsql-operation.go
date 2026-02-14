@@ -40,3 +40,22 @@ func (r *Dao) newRecord(tx *gorm.DB, data *dao.RvUser) error {
 	}
 	return tx.Create(data).Error
 }
+
+func (r *Dao) getRecordDetails(tx *gorm.DB, role string) ([]*dao.RvUser, error) {
+	var dataSet []*dao.RvUser
+	err := tx.Where("role = ?", role).Find(&dataSet).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return dataSet, nil
+}
+
+func (r *Dao) setColumnValue(tx *gorm.DB, uid int64, column string, value interface{}) error {
+	err := tx.Model(&dao.RvUser{}).Where("uid = ?", uid).Update(column, value).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

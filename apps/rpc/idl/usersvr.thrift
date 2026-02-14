@@ -72,7 +72,7 @@ struct GetUsersResp {
 
 // 登出账号
 struct LogoutReq {
-  1: required string uid
+  1: required i64 uid
 }
 
 struct LogoutResp {
@@ -88,5 +88,5 @@ service UserSvr {
   SetAdminRoleResp SetAdminRole(1: SetAdminRoleReq req)
   GetAdminerResp GetAdminer()
   GetUsersResp GetUsers()
-  LogoutResp Logout(1: LoginReq req)
+  LogoutResp Logout(1: LogoutReq req)
 }

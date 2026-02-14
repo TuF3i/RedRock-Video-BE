@@ -51,24 +51,52 @@ func (s *UserSvrImpl) GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoR
 
 // SetAdminRole implements the UserSvrImpl interface.
 func (s *UserSvrImpl) SetAdminRole(ctx context.Context, req *usersvr.SetAdminRoleReq) (resp *usersvr.SetAdminRoleResp, err error) {
-	// TODO: Your code here...
-	return
+	// 调用方法
+	rawResp := SetAdminRole(ctx, req)
+	resp = dto.GenKitexResp[*usersvr.SetAdminRoleResp](rawResp, nil)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
 }
 
 // GetAdminer implements the UserSvrImpl interface.
 func (s *UserSvrImpl) GetAdminer(ctx context.Context) (resp *usersvr.GetAdminerResp, err error) {
-	// TODO: Your code here...
-	return
+	// 调用方法
+	rawResp, data := GetAdminList(ctx)
+	resp = dto.GenKitexResp[*usersvr.GetAdminerResp](rawResp, data)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
 }
 
 // GetUsers implements the UserSvrImpl interface.
 func (s *UserSvrImpl) GetUsers(ctx context.Context) (resp *usersvr.GetUsersResp, err error) {
-	// TODO: Your code here...
-	return
+	// 调用方法
+	rawResp, data := GetUserList(ctx)
+	resp = dto.GenKitexResp[*usersvr.GetUsersResp](rawResp, data)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
 }
 
 // Logout implements the UserSvrImpl interface.
-func (s *UserSvrImpl) Logout(ctx context.Context, req *usersvr.LoginReq) (resp *usersvr.LogoutResp, err error) {
-	// TODO: Your code here...
-	return
+func (s *UserSvrImpl) Logout(ctx context.Context, req *usersvr.LogoutReq) (resp *usersvr.LogoutResp, err error) {
+	// 调用方法
+	rawResp := UserLogout(ctx, req)
+	resp = dto.GenKitexResp[*usersvr.LogoutResp](rawResp, nil)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
 }

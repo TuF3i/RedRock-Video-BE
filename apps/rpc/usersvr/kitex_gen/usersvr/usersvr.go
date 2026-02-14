@@ -554,7 +554,7 @@ var fieldIDToName_GetUsersResp = map[int16]string{
 }
 
 type LogoutReq struct {
-	Uid string `thrift:"uid,1,required" frugal:"1,required,string" json:"uid"`
+	Uid int64 `thrift:"uid,1,required" frugal:"1,required,i64" json:"uid"`
 }
 
 func NewLogoutReq() *LogoutReq {
@@ -564,10 +564,10 @@ func NewLogoutReq() *LogoutReq {
 func (p *LogoutReq) InitDefault() {
 }
 
-func (p *LogoutReq) GetUid() (v string) {
+func (p *LogoutReq) GetUid() (v int64) {
 	return p.Uid
 }
-func (p *LogoutReq) SetUid(val string) {
+func (p *LogoutReq) SetUid(val int64) {
 	p.Uid = val
 }
 
@@ -633,7 +633,7 @@ type UserSvr interface {
 
 	GetUsers(ctx context.Context) (r *GetUsersResp, err error)
 
-	Logout(ctx context.Context, req *LoginReq) (r *LogoutResp, err error)
+	Logout(ctx context.Context, req *LogoutReq) (r *LogoutResp, err error)
 }
 
 type UserSvrUserLoginArgs struct {
@@ -1055,7 +1055,7 @@ var fieldIDToName_UserSvrGetUsersResult = map[int16]string{
 }
 
 type UserSvrLogoutArgs struct {
-	Req *LoginReq `thrift:"req,1" frugal:"1,default,LoginReq" json:"req"`
+	Req *LogoutReq `thrift:"req,1" frugal:"1,default,LogoutReq" json:"req"`
 }
 
 func NewUserSvrLogoutArgs() *UserSvrLogoutArgs {
@@ -1065,15 +1065,15 @@ func NewUserSvrLogoutArgs() *UserSvrLogoutArgs {
 func (p *UserSvrLogoutArgs) InitDefault() {
 }
 
-var UserSvrLogoutArgs_Req_DEFAULT *LoginReq
+var UserSvrLogoutArgs_Req_DEFAULT *LogoutReq
 
-func (p *UserSvrLogoutArgs) GetReq() (v *LoginReq) {
+func (p *UserSvrLogoutArgs) GetReq() (v *LogoutReq) {
 	if !p.IsSetReq() {
 		return UserSvrLogoutArgs_Req_DEFAULT
 	}
 	return p.Req
 }
-func (p *UserSvrLogoutArgs) SetReq(val *LoginReq) {
+func (p *UserSvrLogoutArgs) SetReq(val *LogoutReq) {
 	p.Req = val
 }
 

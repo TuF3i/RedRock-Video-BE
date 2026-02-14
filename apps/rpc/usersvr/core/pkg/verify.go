@@ -16,20 +16,10 @@ func ValidateGitHubUserID(id int64) bool {
 var loginRegex = regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$`)
 
 func ValidateGitHubUserLogin(login string) bool {
-	if len(login) < 3 || len(login) > 39 {
+	if len(login) > 39 {
 		return false
 	}
 	return loginRegex.MatchString(login)
-}
-
-// 3. 校验Name字段：可选字段（可空），非空时长度1-100字符
-func ValidateGitHubUserName(name string) bool {
-	// 空值合法（很多用户未设置昵称）
-	if name == "" {
-		return true
-	}
-	// 非空时长度限制1-100字符
-	return len(name) >= 1 && len(name) <= 100
 }
 
 // 4. 校验AvatarURL字段：非空且为有效的URL格式

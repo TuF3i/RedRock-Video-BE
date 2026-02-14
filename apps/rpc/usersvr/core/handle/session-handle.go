@@ -5,6 +5,7 @@ import (
 	"LiveDanmu/apps/public/models/dao"
 	"LiveDanmu/apps/rpc/usersvr/core"
 	"LiveDanmu/apps/rpc/usersvr/core/dto"
+	"LiveDanmu/apps/rpc/usersvr/core/pkg"
 	"LiveDanmu/apps/rpc/usersvr/kitex_gen/usersvr"
 	"context"
 )
@@ -28,6 +29,19 @@ func genLoginData(accessToken string, refreshToken string) *usersvr.LoginData {
 func UserLogin(ctx context.Context, req *usersvr.LoginReq) (dto.Response, *usersvr.LoginData) {
 	// 获取UserInfo
 	uInfo := req.GetUserInfo()
+	// 校验字段
+	if !pkg.ValidateGitHubUserID(uInfo.GetUid()) {
+		return dto.InvalidUID, nil
+	}
+	if !pkg.ValidateGitHubUserLogin(uInfo.GetUserName()) {
+		return dto.InvalidUserName, nil
+	}
+	if !pkg.ValidateGitHubUserAvatarURL(uInfo.GetAvatarUrl()) {
+		return dto.InvalidAvatarURL, nil
+	}
+	if !pkg.ValidateGitHubUserBio(uInfo.GetBio()) {
+		return dto.InvalidBio, nil
+	}
 	// 转换结构体
 	data := convertRvUserInfo2RvUser(uInfo)
 	// 将用户写入数据库
@@ -70,4 +84,14 @@ func UserLogin(ctx context.Context, req *usersvr.LoginReq) (dto.Response, *users
 	loginData := genLoginData(accessToken, refreshToken)
 
 	return dto.OperationSuccess, loginData
+}
+
+func UserLogout(ctx context.Context, req *usersvr.LogoutReq) dto.Response {
+	uid := req.GetUid()
+	err := core.Dao.Logout(ctx, uid)
+	if err != nil {
+		return dto.ServerInternalError(err)
+	}
+
+	return dto.OperationSuccess
 }

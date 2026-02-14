@@ -31,3 +31,8 @@ func (r *Dao) ifKeyExist(ctx context.Context, key string) (bool, error) {
 
 	return false, nil
 }
+
+func (r *Dao) delKeyValue(ctx context.Context, key string) error {
+	err := r.rdb.Del(ctx, key).Err()
+	return err
+}

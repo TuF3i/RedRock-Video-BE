@@ -322,7 +322,7 @@ func (p *kClient) GetUsers(ctx context.Context) (r *usersvr.GetUsersResp, err er
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) Logout(ctx context.Context, req *usersvr.LoginReq) (r *usersvr.LogoutResp, err error) {
+func (p *kClient) Logout(ctx context.Context, req *usersvr.LogoutReq) (r *usersvr.LogoutResp, err error) {
 	var _args usersvr.UserSvrLogoutArgs
 	_args.Req = req
 	var _result usersvr.UserSvrLogoutResult
