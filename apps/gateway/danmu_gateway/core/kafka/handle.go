@@ -14,19 +14,24 @@ import (
 
 const RETRY_COUNT = 5
 
-func boardCastNewDanmu(dataStruct kafkaMsg.DanmuKMsg) {
+func boardCastNewDanmu(ctx context.Context, dataStruct kafkaMsg.DanmuKMsg) {
+	if !core.PoolGroup.IfPoolExist(dataStruct.RVID) {
+		core.PoolGroup.NewPool(ctx, dataStruct.RVID)
+	}
 	core.PoolGroup.BoardCastMsg(dataStruct.RVID, dto.GenAddDanmuWMsg(&dataStruct.Data))
 }
 
-func delNewDanmu(dataStruct kafkaMsg.DanmuKMsg) {
+func delNewDanmu(ctx context.Context, dataStruct kafkaMsg.DanmuKMsg) {
+	if !core.PoolGroup.IfPoolExist(dataStruct.RVID) {
+		core.PoolGroup.NewPool(ctx, dataStruct.RVID)
+	}
 	core.PoolGroup.BoardCastMsg(dataStruct.RVID, dto.GenRemoveDanmuWMsg(&dataStruct.Data))
 }
 
-func openLive(ctx context.Context, dataStruct kafkaMsg.DanmuKMsg) {
-	core.PoolGroup.NewPool(ctx, dataStruct.RVID)
-}
-
 func closeLive(dataStruct kafkaMsg.DanmuKMsg) {
+	if !core.PoolGroup.IfPoolExist(dataStruct.RVID) {
+		return
+	}
 	core.PoolGroup.BoardCastMsg(dataStruct.RVID, dto.GenLiveOffWMsg())
 	core.PoolGroup.CancelPool(dataStruct.RVID)
 }
@@ -42,14 +47,12 @@ func process(ctx context.Context, m kafka.Message) error {
 
 	// 提取操作
 	switch dataStruct.OP {
-	case kafkaMsg.OPEN_LIVE:
-		openLive(ctx, dataStruct)
 	case kafkaMsg.CLOSE_LIVE:
 		closeLive(dataStruct)
 	case kafkaMsg.PUB_LIVE_DANMU:
-		boardCastNewDanmu(dataStruct)
+		boardCastNewDanmu(ctx, dataStruct)
 	case kafkaMsg.DEL_LIVE_DANMU:
-		delNewDanmu(dataStruct)
+		delNewDanmu(ctx, dataStruct)
 	}
 
 	return nil

@@ -30,6 +30,21 @@ func (r *KClient) genDanmuKMsg(msg *danmusvr.DanmuMsg) KMsg.DanmuKMsg {
 	}
 }
 
+func (r *KClient) genDelDanmuKMsg(msg *danmusvr.DanmuMsg) KMsg.DanmuKMsg {
+	// 结构体转换
+	return KMsg.DanmuKMsg{
+		RVID: msg.RoomId,
+		OP:   KMsg.DEL_LIVE_DANMU,
+		Data: dao.DanmuData{
+			RVID:    msg.RoomId,
+			UserId:  msg.UserId,
+			Content: msg.Content,
+			Color:   msg.Color,
+			Ts:      msg.Ts,
+		},
+	}
+}
+
 func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.DanmuMsg, writer *kafka.Writer) dto.Response {
 	// 生成KMsg
 	source := r.genDanmuKMsg(data)
@@ -58,7 +73,7 @@ func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.DanmuMsg,
 
 func (r *KClient) produceDelDanmuKMsg(ctx context.Context, msg *danmusvr.DanmuMsg, writer *kafka.Writer) dto.Response {
 	// 生成KMsg
-	source := KMsg.DanmuKMsg{RVID: msg.RoomId, OP: KMsg.DEL_LIVE_DANMU, Data: dao.DanmuData{}}
+	source := r.genDelDanmuKMsg(msg)
 	// 序列化Json
 	m, err := jsoniter.ConfigCompatibleWithStandardLibrary.Marshal(source)
 	if err != nil {

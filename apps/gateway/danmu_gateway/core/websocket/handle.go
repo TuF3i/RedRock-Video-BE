@@ -77,3 +77,8 @@ func (r *PoolGroup) BoardCastMsg(rvid int64, msg models.WebsocketMsg) {
 
 	r.Pools[rvid].broadcast <- msg
 }
+
+func (r *PoolGroup) IfPoolExist(rvid int64) bool {
+	_, ok := r.Pools[rvid]
+	return ok
+}
