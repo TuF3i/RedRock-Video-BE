@@ -1,9 +1,12 @@
 package dao
 
 import (
+	"LiveDanmu/apps/public/models/dao"
 	"LiveDanmu/apps/public/union_var"
 	"context"
 	"time"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
 func (r *Dao) checkIfKeyExist(ctx context.Context, key string) (bool, error) {
@@ -40,4 +43,72 @@ func (r *Dao) getValueInKey(ctx context.Context, key string) (string, error) {
 		return "", err
 	}
 	return value, nil
+}
+
+func (r *Dao) newField(ctx context.Context, key string, field string, data *dao.VideoInfo) error {
+	// 序列化
+	raw, err := jsoniter.ConfigCompatibleWithStandardLibrary.Marshal(data)
+	if err != nil {
+		return err
+	}
+	// 存如Redis
+	err = r.rdb.HSet(ctx, key, field, raw).Err()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Dao) delKey(ctx context.Context, key string) error {
+	err := r.rdb.Del(ctx, key).Err()
+	return err
+}
+
+func (r *Dao) getFields(ctx context.Context, key string, page int32, pageSize int32) ([]*dao.VideoInfo, int64, error) {
+	var dataSet []*dao.VideoInfo
+
+	rawList, err := r.rdb.HGetAll(ctx, key).Result()
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if len(rawList) == 0 {
+		return nil, 0, nil
+	}
+
+	var rawValues []string
+	for _, v := range rawList {
+		rawValues = append(rawValues, v)
+	}
+
+	total := len(rawList)
+	offset := (page - 1) * pageSize
+	end := offset + pageSize
+
+	for i := offset; i < end; i++ {
+		videoInfo := &dao.VideoInfo{}
+		if err := jsoniter.ConfigCompatibleWithStandardLibrary.Unmarshal([]byte(rawValues[i]), videoInfo); err != nil {
+			continue
+		}
+		dataSet = append(dataSet, videoInfo)
+	}
+
+	return dataSet, int64(total), nil
+}
+
+func (r *Dao) getFieldDetail(ctx context.Context, key string, field string) (*dao.VideoInfo, error) {
+	data := &dao.VideoInfo{}
+
+	raw, err := r.rdb.HGet(ctx, key, field).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	err = jsoniter.ConfigCompatibleWithStandardLibrary.Unmarshal([]byte(raw), data)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }

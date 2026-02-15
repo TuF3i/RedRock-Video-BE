@@ -6,6 +6,7 @@ import (
 	"LiveDanmu/apps/public/utils"
 	"context"
 	"errors"
+	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -42,6 +43,7 @@ func (r *Dao) GetPreSignedUrlFromRedis(ctx context.Context, uid int64, rvid int6
 
 func (r *Dao) NewVideoRecord(ctx context.Context, data *dao.VideoInfo) error {
 	tx := r.pgdb.Begin()
+	key := utils.GenVideoListKey()
 	ok, err := r.checkIfRecordExist(tx, data.RVID)
 	if err != nil {
 		tx.Rollback()
@@ -57,12 +59,19 @@ func (r *Dao) NewVideoRecord(ctx context.Context, data *dao.VideoInfo) error {
 		return err
 	}
 
+	err = r.delKey(ctx, key)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	tx.Commit()
 	return nil
 }
 
 func (r *Dao) DelVideoRecord(ctx context.Context, rvid int64) (*gorm.DB, error) {
 	tx := r.pgdb.Begin()
+	key := utils.GenVideoListKey()
 	ok, err := r.checkIfRecordExist(tx, rvid)
 	if err != nil {
 		tx.Rollback()
@@ -78,12 +87,26 @@ func (r *Dao) DelVideoRecord(ctx context.Context, rvid int64) (*gorm.DB, error) 
 		return tx, err
 	}
 
+	_ = r.delKey(ctx, key)
+
 	//tx.Commit()
 	return tx, nil
 }
 
 func (r *Dao) GetVideoInfo(ctx context.Context, rvid int64) (*dao.VideoInfo, error) {
 	tx := r.pgdb.Begin()
+	key := utils.GenVideoListKey()
+
+	data, err := r.getFieldDetail(ctx, key, strconv.FormatInt(rvid, 10))
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	if data != nil {
+		tx.Rollback()
+		return data, nil
+	}
+
 	ok, err := r.checkIfRecordExist(tx, rvid)
 	if err != nil {
 		tx.Rollback()
@@ -93,11 +116,13 @@ func (r *Dao) GetVideoInfo(ctx context.Context, rvid int64) (*dao.VideoInfo, err
 		tx.Rollback()
 		return nil, errors.New("record not exists")
 	}
-	data, err := r.getDetailOfARecord(tx, rvid)
+	data, err = r.getDetailOfARecord(tx, rvid)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
+
+	_ = r.newField(ctx, key, strconv.FormatInt(rvid, 10), data)
 
 	tx.Commit()
 	return data, nil
@@ -105,10 +130,35 @@ func (r *Dao) GetVideoInfo(ctx context.Context, rvid int64) (*dao.VideoInfo, err
 
 func (r *Dao) GetVideoList(ctx context.Context, page int32, pageSize int32) ([]*dao.VideoInfo, int64, error) {
 	tx := r.pgdb.Begin()
-	dataSet, total, err := r.getRecordList(tx, page, pageSize)
+	key := utils.GenVideoListKey()
+
+	dataSet, total, err := r.getFields(ctx, key, page, pageSize)
 	if err != nil {
 		tx.Rollback()
 		return nil, 0, err
+	}
+
+	if dataSet != nil {
+		tx.Rollback()
+		return dataSet, total, nil
+	}
+
+	dataSet, total, err = r.getRecordList(tx, page, pageSize)
+	if err != nil {
+		tx.Rollback()
+		return nil, 0, err
+	}
+
+	// 异步更新
+	if !r.isSyncRunning.Load() {
+		go func(data []*dao.VideoInfo, r *Dao) {
+			r.isSyncRunning.Store(true)
+			ctx := context.Background()
+			for _, v := range data {
+				_ = r.newField(ctx, key, strconv.FormatInt(v.RVID, 10), v)
+			}
+			r.isSyncRunning.Store(false)
+		}(dataSet, r)
 	}
 
 	tx.Commit()
@@ -129,11 +179,14 @@ func (r *Dao) GetJudgingVideoList(ctx context.Context, page int32, pageSize int3
 
 func (r *Dao) JudgeAccess(ctx context.Context, rvid int64) error {
 	tx := r.pgdb.Begin()
+	key := utils.GenVideoListKey()
 	err := r.setRecordColumn(tx, rvid, "in_judge", false)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
+
+	_ = r.delKey(ctx, key)
 
 	tx.Commit()
 	return nil
