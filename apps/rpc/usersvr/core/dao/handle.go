@@ -108,24 +108,24 @@ func (r *Dao) SetAdminRole(ctx context.Context, uid int64) error {
 	return nil
 }
 
-func (r *Dao) GetAdminerList(ctx context.Context) ([]*dao.RvUser, error) {
+func (r *Dao) GetAdminerList(ctx context.Context, page int32, pageSize int32) ([]*dao.RvUser, int64, error) {
 	tx := r.pgdb.Begin()
-	dataSet, err := r.getRecordDetails(tx, union_var.JWT_ROLE_ADMIN)
+	dataSet, total, err := r.getRecordDetails(tx, page, pageSize, union_var.JWT_ROLE_ADMIN)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return dataSet, nil
+	return dataSet, total, nil
 }
 
-func (r *Dao) GetUserList(ctx context.Context) ([]*dao.RvUser, error) {
+func (r *Dao) GetUserList(ctx context.Context, page int32, pageSize int32) ([]*dao.RvUser, int64, error) {
 	tx := r.pgdb.Begin()
-	dataSet, err := r.getRecordDetails(tx, union_var.JWT_ROLE_USER)
+	dataSet, total, err := r.getRecordDetails(tx, page, pageSize, union_var.JWT_ROLE_USER)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return dataSet, nil
+	return dataSet, total, nil
 }
 
 func (r *Dao) Logout(ctx context.Context, uid int64) error {

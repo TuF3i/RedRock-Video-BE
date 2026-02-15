@@ -56,7 +56,7 @@ func GenKitexResp[T KitexResp](resp DtoResp, data interface{}) T {
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
 		// 类型断言
-		val, ok := data.([]*usersvr.RvUserInfo)
+		val, ok := data.(*usersvr.GetUserListData)
 		if ok {
 			v.SetData(val)
 		}
@@ -76,7 +76,7 @@ func GenKitexResp[T KitexResp](resp DtoResp, data interface{}) T {
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
 		// 类型断言
-		val, ok := data.([]*usersvr.RvUserInfo)
+		val, ok := data.(*usersvr.GetUserListData)
 		if ok {
 			v.SetData(val)
 		}

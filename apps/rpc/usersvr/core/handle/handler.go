@@ -63,9 +63,9 @@ func (s *UserSvrImpl) SetAdminRole(ctx context.Context, req *usersvr.SetAdminRol
 }
 
 // GetAdminer implements the UserSvrImpl interface.
-func (s *UserSvrImpl) GetAdminer(ctx context.Context) (resp *usersvr.GetAdminerResp, err error) {
+func (s *UserSvrImpl) GetAdminer(ctx context.Context, req *usersvr.GetAdminerReq) (resp *usersvr.GetAdminerResp, err error) {
 	// 调用方法
-	rawResp, data := GetAdminList(ctx)
+	rawResp, data := GetAdminList(ctx, req)
 	resp = dto.GenKitexResp[*usersvr.GetAdminerResp](rawResp, data)
 	// 判断响应
 	if !errors.Is(rawResp, dto.OperationSuccess) {
@@ -76,9 +76,9 @@ func (s *UserSvrImpl) GetAdminer(ctx context.Context) (resp *usersvr.GetAdminerR
 }
 
 // GetUsers implements the UserSvrImpl interface.
-func (s *UserSvrImpl) GetUsers(ctx context.Context) (resp *usersvr.GetUsersResp, err error) {
+func (s *UserSvrImpl) GetUsers(ctx context.Context, req *usersvr.GetUsersReq) (resp *usersvr.GetUsersResp, err error) {
 	// 调用方法
-	rawResp, data := GetUserList(ctx)
+	rawResp, data := GetUserList(ctx, req)
 	resp = dto.GenKitexResp[*usersvr.GetUsersResp](rawResp, data)
 	// 判断响应
 	if !errors.Is(rawResp, dto.OperationSuccess) {

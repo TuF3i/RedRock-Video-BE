@@ -201,9 +201,9 @@ func newUserSvrSetAdminRoleResult() interface{} {
 }
 
 func getAdminerHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	_ = arg.(*usersvr.UserSvrGetAdminerArgs)
+	realArg := arg.(*usersvr.UserSvrGetAdminerArgs)
 	realResult := result.(*usersvr.UserSvrGetAdminerResult)
-	success, err := handler.(usersvr.UserSvr).GetAdminer(ctx)
+	success, err := handler.(usersvr.UserSvr).GetAdminer(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
@@ -219,9 +219,9 @@ func newUserSvrGetAdminerResult() interface{} {
 }
 
 func getUsersHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	_ = arg.(*usersvr.UserSvrGetUsersArgs)
+	realArg := arg.(*usersvr.UserSvrGetUsersArgs)
 	realResult := result.(*usersvr.UserSvrGetUsersResult)
-	success, err := handler.(usersvr.UserSvr).GetUsers(ctx)
+	success, err := handler.(usersvr.UserSvr).GetUsers(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
@@ -304,8 +304,9 @@ func (p *kClient) SetAdminRole(ctx context.Context, req *usersvr.SetAdminRoleReq
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetAdminer(ctx context.Context) (r *usersvr.GetAdminerResp, err error) {
+func (p *kClient) GetAdminer(ctx context.Context, req *usersvr.GetAdminerReq) (r *usersvr.GetAdminerResp, err error) {
 	var _args usersvr.UserSvrGetAdminerArgs
+	_args.Req = req
 	var _result usersvr.UserSvrGetAdminerResult
 	if err = p.c.Call(ctx, "GetAdminer", &_args, &_result); err != nil {
 		return
@@ -313,8 +314,9 @@ func (p *kClient) GetAdminer(ctx context.Context) (r *usersvr.GetAdminerResp, er
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetUsers(ctx context.Context) (r *usersvr.GetUsersResp, err error) {
+func (p *kClient) GetUsers(ctx context.Context, req *usersvr.GetUsersReq) (r *usersvr.GetUsersResp, err error) {
 	var _args usersvr.UserSvrGetUsersArgs
+	_args.Req = req
 	var _result usersvr.UserSvrGetUsersResult
 	if err = p.c.Call(ctx, "GetUsers", &_args, &_result); err != nil {
 		return

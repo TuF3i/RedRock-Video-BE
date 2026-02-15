@@ -15,8 +15,8 @@ type Client interface {
 	RefreshToken(ctx context.Context, req *usersvr.RefreshReq, callOptions ...callopt.Option) (r *usersvr.RefreshResp, err error)
 	GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoReq, callOptions ...callopt.Option) (r *usersvr.GetUserInfoResp, err error)
 	SetAdminRole(ctx context.Context, req *usersvr.SetAdminRoleReq, callOptions ...callopt.Option) (r *usersvr.SetAdminRoleResp, err error)
-	GetAdminer(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetAdminerResp, err error)
-	GetUsers(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetUsersResp, err error)
+	GetAdminer(ctx context.Context, req *usersvr.GetAdminerReq, callOptions ...callopt.Option) (r *usersvr.GetAdminerResp, err error)
+	GetUsers(ctx context.Context, req *usersvr.GetUsersReq, callOptions ...callopt.Option) (r *usersvr.GetUsersResp, err error)
 	Logout(ctx context.Context, req *usersvr.LogoutReq, callOptions ...callopt.Option) (r *usersvr.LogoutResp, err error)
 }
 
@@ -69,14 +69,14 @@ func (p *kUserSvrClient) SetAdminRole(ctx context.Context, req *usersvr.SetAdmin
 	return p.kClient.SetAdminRole(ctx, req)
 }
 
-func (p *kUserSvrClient) GetAdminer(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetAdminerResp, err error) {
+func (p *kUserSvrClient) GetAdminer(ctx context.Context, req *usersvr.GetAdminerReq, callOptions ...callopt.Option) (r *usersvr.GetAdminerResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GetAdminer(ctx)
+	return p.kClient.GetAdminer(ctx, req)
 }
 
-func (p *kUserSvrClient) GetUsers(ctx context.Context, callOptions ...callopt.Option) (r *usersvr.GetUsersResp, err error) {
+func (p *kUserSvrClient) GetUsers(ctx context.Context, req *usersvr.GetUsersReq, callOptions ...callopt.Option) (r *usersvr.GetUsersResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GetUsers(ctx)
+	return p.kClient.GetUsers(ctx, req)
 }
 
 func (p *kUserSvrClient) Logout(ctx context.Context, req *usersvr.LogoutReq, callOptions ...callopt.Option) (r *usersvr.LogoutResp, err error) {

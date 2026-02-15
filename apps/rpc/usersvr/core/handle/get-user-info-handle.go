@@ -49,26 +49,42 @@ func GetUserInfo(ctx context.Context, req *usersvr.GetUserInfoReq) (dto.Response
 	return dto.OperationSuccess, uInfo
 }
 
-func GetUserList(ctx context.Context) (dto.Response, []*usersvr.RvUserInfo) {
+func GetUserList(ctx context.Context, req *usersvr.GetUsersReq) (dto.Response, *usersvr.GetUserListData) {
+	page := req.GetPage()
+	pageSize := req.GetPageSize()
 	// 获取数据
-	rawData, err := core.Dao.GetUserList(ctx)
+	rawData, total, err := core.Dao.GetUserList(ctx, page, pageSize)
 	if err != nil {
 		return dto.ServerInternalError(err), nil
 	}
 	// 转换结构体
-	data := batchRvUser2RvUserInfo(rawData)
+	users := batchRvUser2RvUserInfo(rawData)
+
+	// 组装GetUserListData
+	data := &usersvr.GetUserListData{
+		Total: total,
+		Users: users,
+	}
 
 	return dto.OperationSuccess, data
 }
 
-func GetAdminList(ctx context.Context) (dto.Response, []*usersvr.RvUserInfo) {
+func GetAdminList(ctx context.Context, req *usersvr.GetAdminerReq) (dto.Response, *usersvr.GetUserListData) {
+	page := req.GetPage()
+	pageSize := req.GetPageSize()
 	// 获取数据
-	rawData, err := core.Dao.GetAdminerList(ctx)
+	rawData, total, err := core.Dao.GetAdminerList(ctx, page, pageSize)
 	if err != nil {
 		return dto.ServerInternalError(err), nil
 	}
 	// 转换结构体
-	data := batchRvUser2RvUserInfo(rawData)
+	users := batchRvUser2RvUserInfo(rawData)
+
+	// 组装GetUserListData
+	data := &usersvr.GetUserListData{
+		Total: total,
+		Users: users,
+	}
 
 	return dto.OperationSuccess, data
 }

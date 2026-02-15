@@ -110,6 +110,44 @@ var fieldIDToName_LoginData = map[int16]string{
 	2: "refreshToken",
 }
 
+type GetUserListData struct {
+	Total int64         `thrift:"total,1,required" frugal:"1,required,i64" json:"total"`
+	Users []*RvUserInfo `thrift:"users,2,required" frugal:"2,required,list<RvUserInfo>" json:"users"`
+}
+
+func NewGetUserListData() *GetUserListData {
+	return &GetUserListData{}
+}
+
+func (p *GetUserListData) InitDefault() {
+}
+
+func (p *GetUserListData) GetTotal() (v int64) {
+	return p.Total
+}
+
+func (p *GetUserListData) GetUsers() (v []*RvUserInfo) {
+	return p.Users
+}
+func (p *GetUserListData) SetTotal(val int64) {
+	p.Total = val
+}
+func (p *GetUserListData) SetUsers(val []*RvUserInfo) {
+	p.Users = val
+}
+
+func (p *GetUserListData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetUserListData(%+v)", *p)
+}
+
+var fieldIDToName_GetUserListData = map[int16]string{
+	1: "total",
+	2: "users",
+}
+
 type LoginReq struct {
 	UserInfo *RvUserInfo `thrift:"user_info,1,required" frugal:"1,required,RvUserInfo" json:"user_info"`
 }
@@ -441,10 +479,48 @@ var fieldIDToName_SetAdminRoleResp = map[int16]string{
 	2: "info",
 }
 
+type GetAdminerReq struct {
+	Page     int32 `thrift:"page,1,required" frugal:"1,required,i32" json:"page"`
+	PageSize int32 `thrift:"page_size,2,required" frugal:"2,required,i32" json:"page_size"`
+}
+
+func NewGetAdminerReq() *GetAdminerReq {
+	return &GetAdminerReq{}
+}
+
+func (p *GetAdminerReq) InitDefault() {
+}
+
+func (p *GetAdminerReq) GetPage() (v int32) {
+	return p.Page
+}
+
+func (p *GetAdminerReq) GetPageSize() (v int32) {
+	return p.PageSize
+}
+func (p *GetAdminerReq) SetPage(val int32) {
+	p.Page = val
+}
+func (p *GetAdminerReq) SetPageSize(val int32) {
+	p.PageSize = val
+}
+
+func (p *GetAdminerReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetAdminerReq(%+v)", *p)
+}
+
+var fieldIDToName_GetAdminerReq = map[int16]string{
+	1: "page",
+	2: "page_size",
+}
+
 type GetAdminerResp struct {
-	Status int64         `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string        `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   []*RvUserInfo `thrift:"data,3,optional" frugal:"3,optional,list<RvUserInfo>" json:"data,omitempty"`
+	Status int64            `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string           `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *GetUserListData `thrift:"data,3,optional" frugal:"3,optional,GetUserListData" json:"data,omitempty"`
 }
 
 func NewGetAdminerResp() *GetAdminerResp {
@@ -462,9 +538,9 @@ func (p *GetAdminerResp) GetInfo() (v string) {
 	return p.Info
 }
 
-var GetAdminerResp_Data_DEFAULT []*RvUserInfo
+var GetAdminerResp_Data_DEFAULT *GetUserListData
 
-func (p *GetAdminerResp) GetData() (v []*RvUserInfo) {
+func (p *GetAdminerResp) GetData() (v *GetUserListData) {
 	if !p.IsSetData() {
 		return GetAdminerResp_Data_DEFAULT
 	}
@@ -476,7 +552,7 @@ func (p *GetAdminerResp) SetStatus(val int64) {
 func (p *GetAdminerResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *GetAdminerResp) SetData(val []*RvUserInfo) {
+func (p *GetAdminerResp) SetData(val *GetUserListData) {
 	p.Data = val
 }
 
@@ -497,10 +573,48 @@ var fieldIDToName_GetAdminerResp = map[int16]string{
 	3: "data",
 }
 
+type GetUsersReq struct {
+	Page     int32 `thrift:"page,1,required" frugal:"1,required,i32" json:"page"`
+	PageSize int32 `thrift:"page_size,2,required" frugal:"2,required,i32" json:"page_size"`
+}
+
+func NewGetUsersReq() *GetUsersReq {
+	return &GetUsersReq{}
+}
+
+func (p *GetUsersReq) InitDefault() {
+}
+
+func (p *GetUsersReq) GetPage() (v int32) {
+	return p.Page
+}
+
+func (p *GetUsersReq) GetPageSize() (v int32) {
+	return p.PageSize
+}
+func (p *GetUsersReq) SetPage(val int32) {
+	p.Page = val
+}
+func (p *GetUsersReq) SetPageSize(val int32) {
+	p.PageSize = val
+}
+
+func (p *GetUsersReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetUsersReq(%+v)", *p)
+}
+
+var fieldIDToName_GetUsersReq = map[int16]string{
+	1: "page",
+	2: "page_size",
+}
+
 type GetUsersResp struct {
-	Status int64         `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string        `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   []*RvUserInfo `thrift:"data,3,optional" frugal:"3,optional,list<RvUserInfo>" json:"data,omitempty"`
+	Status int64            `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string           `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *GetUserListData `thrift:"data,3,optional" frugal:"3,optional,GetUserListData" json:"data,omitempty"`
 }
 
 func NewGetUsersResp() *GetUsersResp {
@@ -518,9 +632,9 @@ func (p *GetUsersResp) GetInfo() (v string) {
 	return p.Info
 }
 
-var GetUsersResp_Data_DEFAULT []*RvUserInfo
+var GetUsersResp_Data_DEFAULT *GetUserListData
 
-func (p *GetUsersResp) GetData() (v []*RvUserInfo) {
+func (p *GetUsersResp) GetData() (v *GetUserListData) {
 	if !p.IsSetData() {
 		return GetUsersResp_Data_DEFAULT
 	}
@@ -532,7 +646,7 @@ func (p *GetUsersResp) SetStatus(val int64) {
 func (p *GetUsersResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *GetUsersResp) SetData(val []*RvUserInfo) {
+func (p *GetUsersResp) SetData(val *GetUserListData) {
 	p.Data = val
 }
 
@@ -629,9 +743,9 @@ type UserSvr interface {
 
 	SetAdminRole(ctx context.Context, req *SetAdminRoleReq) (r *SetAdminRoleResp, err error)
 
-	GetAdminer(ctx context.Context) (r *GetAdminerResp, err error)
+	GetAdminer(ctx context.Context, req *GetAdminerReq) (r *GetAdminerResp, err error)
 
-	GetUsers(ctx context.Context) (r *GetUsersResp, err error)
+	GetUsers(ctx context.Context, req *GetUsersReq) (r *GetUsersResp, err error)
 
 	Logout(ctx context.Context, req *LogoutReq) (r *LogoutResp, err error)
 }
@@ -941,6 +1055,7 @@ var fieldIDToName_UserSvrSetAdminRoleResult = map[int16]string{
 }
 
 type UserSvrGetAdminerArgs struct {
+	Req *GetAdminerReq `thrift:"req,1" frugal:"1,default,GetAdminerReq" json:"req"`
 }
 
 func NewUserSvrGetAdminerArgs() *UserSvrGetAdminerArgs {
@@ -950,6 +1065,22 @@ func NewUserSvrGetAdminerArgs() *UserSvrGetAdminerArgs {
 func (p *UserSvrGetAdminerArgs) InitDefault() {
 }
 
+var UserSvrGetAdminerArgs_Req_DEFAULT *GetAdminerReq
+
+func (p *UserSvrGetAdminerArgs) GetReq() (v *GetAdminerReq) {
+	if !p.IsSetReq() {
+		return UserSvrGetAdminerArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserSvrGetAdminerArgs) SetReq(val *GetAdminerReq) {
+	p.Req = val
+}
+
+func (p *UserSvrGetAdminerArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
 func (p *UserSvrGetAdminerArgs) String() string {
 	if p == nil {
 		return "<nil>"
@@ -957,7 +1088,9 @@ func (p *UserSvrGetAdminerArgs) String() string {
 	return fmt.Sprintf("UserSvrGetAdminerArgs(%+v)", *p)
 }
 
-var fieldIDToName_UserSvrGetAdminerArgs = map[int16]string{}
+var fieldIDToName_UserSvrGetAdminerArgs = map[int16]string{
+	1: "req",
+}
 
 type UserSvrGetAdminerResult struct {
 	Success *GetAdminerResp `thrift:"success,0,optional" frugal:"0,optional,GetAdminerResp" json:"success,omitempty"`
@@ -998,6 +1131,7 @@ var fieldIDToName_UserSvrGetAdminerResult = map[int16]string{
 }
 
 type UserSvrGetUsersArgs struct {
+	Req *GetUsersReq `thrift:"req,1" frugal:"1,default,GetUsersReq" json:"req"`
 }
 
 func NewUserSvrGetUsersArgs() *UserSvrGetUsersArgs {
@@ -1007,6 +1141,22 @@ func NewUserSvrGetUsersArgs() *UserSvrGetUsersArgs {
 func (p *UserSvrGetUsersArgs) InitDefault() {
 }
 
+var UserSvrGetUsersArgs_Req_DEFAULT *GetUsersReq
+
+func (p *UserSvrGetUsersArgs) GetReq() (v *GetUsersReq) {
+	if !p.IsSetReq() {
+		return UserSvrGetUsersArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserSvrGetUsersArgs) SetReq(val *GetUsersReq) {
+	p.Req = val
+}
+
+func (p *UserSvrGetUsersArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
 func (p *UserSvrGetUsersArgs) String() string {
 	if p == nil {
 		return "<nil>"
@@ -1014,7 +1164,9 @@ func (p *UserSvrGetUsersArgs) String() string {
 	return fmt.Sprintf("UserSvrGetUsersArgs(%+v)", *p)
 }
 
-var fieldIDToName_UserSvrGetUsersArgs = map[int16]string{}
+var fieldIDToName_UserSvrGetUsersArgs = map[int16]string{
+	1: "req",
+}
 
 type UserSvrGetUsersResult struct {
 	Success *GetUsersResp `thrift:"success,0,optional" frugal:"0,optional,GetUsersResp" json:"success,omitempty"`

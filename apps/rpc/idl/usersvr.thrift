@@ -13,6 +13,11 @@ struct LoginData {
   2: required string refreshToken
 }
 
+struct GetUserListData {
+  1: required i64 total
+  2: required list<RvUserInfo> users
+}
+
 // 登录
 struct LoginReq {
   1: required RvUserInfo user_info
@@ -57,17 +62,27 @@ struct SetAdminRoleResp {
 }
 
 // 获取ADMIN用户
+struct GetAdminerReq {
+  1: required i32 page
+  2: required i32 page_size
+}
+
 struct GetAdminerResp {
   1: required i64 status
   2: required string info
-  3: optional list<RvUserInfo> data
+  3: optional GetUserListData data
 }
 
 // 获取普通用户
+struct GetUsersReq {
+  1: required i32 page
+  2: required i32 page_size
+}
+
 struct GetUsersResp {
   1: required i64 status
   2: required string info
-  3: optional list<RvUserInfo> data
+  3: optional GetUserListData data
 }
 
 // 登出账号
@@ -86,7 +101,7 @@ service UserSvr {
   RefreshResp RefreshToken(1: RefreshReq req)
   GetUserInfoResp GetUserInfo(1: GetUserInfoReq req)
   SetAdminRoleResp SetAdminRole(1: SetAdminRoleReq req)
-  GetAdminerResp GetAdminer()
-  GetUsersResp GetUsers()
+  GetAdminerResp GetAdminer(1: GetAdminerReq req)
+  GetUsersResp GetUsers(1: GetUsersReq req)
   LogoutResp Logout(1: LogoutReq req)
 }

@@ -41,14 +41,22 @@ func (r *Dao) newRecord(tx *gorm.DB, data *dao.RvUser) error {
 	return tx.Create(data).Error
 }
 
-func (r *Dao) getRecordDetails(tx *gorm.DB, role string) ([]*dao.RvUser, error) {
+func (r *Dao) getRecordDetails(tx *gorm.DB, page int32, pageSize int32, role string) ([]*dao.RvUser, int64, error) {
 	var dataSet []*dao.RvUser
-	err := tx.Where("role = ?", role).Find(&dataSet).Error
+	var total int64
+
+	offset := (page - 1) * pageSize
+	err := tx.Model(&dao.RvUser{}).Count(&total).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return dataSet, nil
+	err = tx.Offset(int(offset)).Limit(int(pageSize)).Where("role = ?", role).Find(&dataSet).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return dataSet, total, nil
 }
 
 func (r *Dao) setColumnValue(tx *gorm.DB, uid int64, column string, value interface{}) error {
