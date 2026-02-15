@@ -31,3 +31,11 @@ func GenRefreshTokenKey(uid int64) string {
 func GenPreSignedUrlKey(uid int64, rvid int64) string {
 	return fmt.Sprintf("minio:presigenedurl:%v:%v", uid, rvid)
 }
+
+func GenLiveListKey() string {
+	return fmt.Sprintf("live:list")
+}
+
+func GenVideoListKey() string {
+	return fmt.Sprintf("video:list")
+}
