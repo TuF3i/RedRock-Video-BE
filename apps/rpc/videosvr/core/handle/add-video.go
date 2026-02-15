@@ -16,11 +16,13 @@ func genVideoInfoS(data *videosvr.VideoInfo) *dao.VideoInfo {
 		MinioKey:    data.MinioKey,
 		Title:       data.Title,
 		Description: data.Description,
-		ViewNum:     data.ViewNum,
 		UseFace:     data.UseFace,
-		InJudge:     data.InJudge,
 		AuthorID:    data.AuthorId,
 		AuthorName:  data.AuthorName,
+
+		// 设置字段默认值
+		InJudge: true,
+		ViewNum: 0,
 	}
 }
 
@@ -42,13 +44,22 @@ func AddVideo(ctx context.Context, req *videosvr.AddVideoReq) dto.Response {
 	if !pkg.ValidateAuthorID(data.AuthorId) {
 		return dto.InvalidAuthorID
 	}
+
+	// 从UserSvr获取用户名
+	req_ := dto.GenGetUserInfoReq(data.AuthorId)
+	resp, err := core.UserSvr.GetUserInfo(ctx, req_)
+	if err != nil {
+		return dto.ServerInternalError(err)
+	}
 	if pkg.ValidateAuthorName(data.AuthorName) {
 		return dto.InvalidAuthorName
 	}
+	data.AuthorName = resp.GetData().GetUserName()
+
 	// 转换结构体
 	videoData := genVideoInfoS(data)
 	// 调用dao层
-	err := core.Dao.NewVideoRecord(ctx, videoData)
+	err = core.Dao.NewVideoRecord(ctx, videoData)
 	if err != nil {
 		return dto.ServerInternalError(err)
 	}

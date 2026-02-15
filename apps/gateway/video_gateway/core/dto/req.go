@@ -12,11 +12,12 @@ func GenAddVideoReq(data *dao.VideoInfo) *videosvr.AddVideoReq {
 		MinioKey:    data.MinioKey,
 		Title:       data.Title,
 		Description: data.Description,
-		ViewNum:     0,
 		UseFace:     data.UseFace,
-		InJudge:     true,
 		AuthorId:    data.AuthorID,
-		AuthorName:  "",
+		// 默认字段
+		AuthorName: "",
+		InJudge:    true,
+		ViewNum:    0,
 	}}
 }
 

@@ -4,6 +4,7 @@
     <inspection_tool class="GoDfaErrorMayBeNotNil" enabled="true" level="WARNING" enabled_by_default="true">
       <methods>
         <method importPath="net/http" receiver="*Client" name="Get" />
+        <method importPath="LiveDanmu/apps/rpc/usersvr/kitex_gen/usersvr/usersvr" receiver="Client" name="GetUserInfo" />
       </methods>
     </inspection_tool>
   </profile>
