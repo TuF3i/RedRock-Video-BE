@@ -131,8 +131,26 @@ func GetAdminerHandleFunc() app.HandlerFunc {
 			c.JSON(consts.StatusOK, resp)
 			return
 		}
+		// 获取page和pageSize
+		page_ := c.Query("page")
+		pageSize_ := c.Query("pageSize")
+		// 类型转换
+		page, err := strconv.Atoi(page_)
+		if err != nil {
+			resp := response.InternalError(err)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](resp))
+			return
+		}
+		pageSize, err := strconv.Atoi(pageSize_)
+		if err != nil {
+			resp := response.InternalError(err)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](resp))
+			return
+		}
+		// 构造req
+		req := dto.GenGetAdminerReq(int32(page), int32(pageSize))
 		// 发起调用
-		rawResp, err := core.UserSvr.GetAdminer(ctx)
+		rawResp, err := core.UserSvr.GetAdminer(ctx, req)
 		// 生成最终响应
 		if err != nil {
 			resp := dto.GenFinalResponse(rawResp)
@@ -156,8 +174,26 @@ func GetUsersHandleFunc() app.HandlerFunc {
 			c.JSON(consts.StatusOK, resp)
 			return
 		}
+		// 获取page和pageSize
+		page_ := c.Query("page")
+		pageSize_ := c.Query("pageSize")
+		// 类型转换
+		page, err := strconv.Atoi(page_)
+		if err != nil {
+			resp := response.InternalError(err)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](resp))
+			return
+		}
+		pageSize, err := strconv.Atoi(pageSize_)
+		if err != nil {
+			resp := response.InternalError(err)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](resp))
+			return
+		}
+		// 构造req
+		req := dto.GenGetUsersReq(int32(page), int32(pageSize))
 		// 发起调用
-		rawResp, err := core.UserSvr.GetUsers(ctx)
+		rawResp, err := core.UserSvr.GetUsers(ctx, req)
 		// 生成最终响应
 		if err != nil {
 			resp := dto.GenFinalResponse(rawResp)

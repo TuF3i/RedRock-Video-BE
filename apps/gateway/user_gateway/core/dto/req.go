@@ -23,3 +23,17 @@ func GenSetAdminRoleReq(uid int64) *usersvr.SetAdminRoleReq {
 func GenLogoutReq(uid int64) *usersvr.LogoutReq {
 	return &usersvr.LogoutReq{Uid: uid}
 }
+
+func GenGetAdminerReq(page int32, pageSize int32) *usersvr.GetAdminerReq {
+	return &usersvr.GetAdminerReq{
+		Page:     page,
+		PageSize: pageSize,
+	}
+}
+
+func GenGetUsersReq(page int32, pageSize int32) *usersvr.GetUsersReq {
+	return &usersvr.GetUsersReq{
+		Page:     page,
+		PageSize: pageSize,
+	}
+}
