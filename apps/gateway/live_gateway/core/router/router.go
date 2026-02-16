@@ -1,8 +1,9 @@
 package router
 
 import (
-	"LiveDanmu/apps/gateway/danmu_gateway/core"
-	"LiveDanmu/apps/gateway/danmu_gateway/core/middleware"
+	"LiveDanmu/apps/gateway/live_gateway/core"
+	"LiveDanmu/apps/gateway/live_gateway/core/handle"
+	"LiveDanmu/apps/gateway/live_gateway/core/middleware"
 	"LiveDanmu/apps/public/config/config_template"
 	"LiveDanmu/apps/public/logger/adapter"
 	"context"
@@ -42,5 +43,12 @@ func HertzApi(conf *config_template.DanmuGatewayConfig) {
 }
 
 func initRouter(h *server.Hertz) {
-	
+	g := h.Group("/live")
+	{
+		g.GET("/info", middleware.JWTMiddleware(), handle.GetLiveInfoHandleFunc())
+		g.GET("/list", handle.GetLiveListHandleFunc())
+		g.POST("/start", middleware.JWTMiddleware(), handle.StartLiveHandleFunc())
+		g.GET("/stop", middleware.JWTMiddleware(), handle.StopLiveHandleFunc())
+		g.POST("/srs/auth", handle.SRSAuthHandleFunc())
+	}
 }

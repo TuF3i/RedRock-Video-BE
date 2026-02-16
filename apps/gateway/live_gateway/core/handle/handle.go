@@ -71,25 +71,67 @@ func GetLiveListHandleFunc() app.HandlerFunc {
 
 func StartLiveHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
+		data := new(dto.HStartLiveRequest)
 		// 获取上下文中的claims
 		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
 		// 类型断言
 		claim := claims.(*dao.MainClaims)
-		// TODO 获取title
-		title :=
+		// 获取标题
+		err := c.BindAndValidate(data)
+		if err != nil {
+			rawResp := response.InternalError(err)
+			resp := dto.GenFinalResponse(rawResp)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 构造请求
-		req := dto.GenStartLiveReq()
+		req := dto.GenStartLiveReq(claim.Uid, data.Title)
+		// 发起调用
+		rawResp, err := core.LiveSvr.StartLive(ctx, req)
+		if err != nil {
+			resp := dto.GenFinalResponse(rawResp)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
+		resp := dto.GenFinalResponse(rawResp)
+		c.JSON(consts.StatusOK, resp)
 	}
 }
 
 func StopLiveHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-
+		// 获取上下文中的claims
+		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		// 类型断言
+		claim := claims.(*dao.MainClaims)
+		// 获取rvid
+		rvid_ := c.Query("rvid")
+		rvid := utils.RVIDDecoder(rvid_)
+		// 构造请求
+		req := dto.GenStopLiveReq(rvid, claim.Uid)
+		// 发起请求
+		rawResp, err := core.LiveSvr.StopLive(ctx, req)
+		if err != nil {
+			resp := dto.GenFinalResponse(rawResp)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
+		resp := dto.GenFinalResponse(rawResp)
+		c.JSON(consts.StatusOK, resp)
 	}
 }
 
 func SRSAuthHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
+		// 获取字段
+		streamName := c.Query("stream")
+		key := c.Query("key")
+		rvid := utils.RVIDDecoder(streamName)
+		// 构造请求
+		req := dto.GenSRSAuthReq(rvid, key)
+		// 发起调用
+		resp, _ := core.LiveSvr.SRSAuth(ctx, req)
 
+		c.JSON(consts.StatusOK, map[string]int{"code": int(resp.Ok)})
 	}
 }

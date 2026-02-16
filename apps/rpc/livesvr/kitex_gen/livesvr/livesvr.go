@@ -3,16 +3,18 @@
 package livesvr
 
 import (
+	"LiveDanmu/apps/rpc/livesvr/kitex_gen/usersvr"
 	"context"
 	"fmt"
 )
 
 type LiveInfo struct {
-	Rvid             int64  `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
-	OwerId           int64  `thrift:"ower_id,2,required" frugal:"2,required,i64" json:"ower_id"`
-	Title            string `thrift:"title,3,required" frugal:"3,required,string" json:"title"`
-	StreamName       string `thrift:"stream_name,4,required" frugal:"4,required,string" json:"stream_name"`
-	UpstreamPassword string `thrift:"upstream_password,5,required" frugal:"5,required,string" json:"upstream_password"`
+	Rvid             int64               `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+	OwerId           int64               `thrift:"ower_id,2,required" frugal:"2,required,i64" json:"ower_id"`
+	Title            string              `thrift:"title,3,required" frugal:"3,required,string" json:"title"`
+	StreamName       string              `thrift:"stream_name,4,required" frugal:"4,required,string" json:"stream_name"`
+	UpstreamPassword *string             `thrift:"upstream_password,5,optional" frugal:"5,optional,string" json:"upstream_password,omitempty"`
+	UserInfo         *usersvr.RvUserInfo `thrift:"user_info,6,optional" frugal:"6,optional,usersvr.RvUserInfo" json:"user_info,omitempty"`
 }
 
 func NewLiveInfo() *LiveInfo {
@@ -38,8 +40,22 @@ func (p *LiveInfo) GetStreamName() (v string) {
 	return p.StreamName
 }
 
+var LiveInfo_UpstreamPassword_DEFAULT string
+
 func (p *LiveInfo) GetUpstreamPassword() (v string) {
-	return p.UpstreamPassword
+	if !p.IsSetUpstreamPassword() {
+		return LiveInfo_UpstreamPassword_DEFAULT
+	}
+	return *p.UpstreamPassword
+}
+
+var LiveInfo_UserInfo_DEFAULT *usersvr.RvUserInfo
+
+func (p *LiveInfo) GetUserInfo() (v *usersvr.RvUserInfo) {
+	if !p.IsSetUserInfo() {
+		return LiveInfo_UserInfo_DEFAULT
+	}
+	return p.UserInfo
 }
 func (p *LiveInfo) SetRvid(val int64) {
 	p.Rvid = val
@@ -53,8 +69,19 @@ func (p *LiveInfo) SetTitle(val string) {
 func (p *LiveInfo) SetStreamName(val string) {
 	p.StreamName = val
 }
-func (p *LiveInfo) SetUpstreamPassword(val string) {
+func (p *LiveInfo) SetUpstreamPassword(val *string) {
 	p.UpstreamPassword = val
+}
+func (p *LiveInfo) SetUserInfo(val *usersvr.RvUserInfo) {
+	p.UserInfo = val
+}
+
+func (p *LiveInfo) IsSetUpstreamPassword() bool {
+	return p.UpstreamPassword != nil
+}
+
+func (p *LiveInfo) IsSetUserInfo() bool {
+	return p.UserInfo != nil
 }
 
 func (p *LiveInfo) String() string {
@@ -70,6 +97,7 @@ var fieldIDToName_LiveInfo = map[int16]string{
 	3: "title",
 	4: "stream_name",
 	5: "upstream_password",
+	6: "user_info",
 }
 
 type GetLiveListData struct {
@@ -468,6 +496,76 @@ var fieldIDToName_StopLiveResp = map[int16]string{
 	2: "info",
 }
 
+type SRSAuthReq struct {
+	Rvid     int64  `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+	Password string `thrift:"password,2,required" frugal:"2,required,string" json:"password"`
+}
+
+func NewSRSAuthReq() *SRSAuthReq {
+	return &SRSAuthReq{}
+}
+
+func (p *SRSAuthReq) InitDefault() {
+}
+
+func (p *SRSAuthReq) GetRvid() (v int64) {
+	return p.Rvid
+}
+
+func (p *SRSAuthReq) GetPassword() (v string) {
+	return p.Password
+}
+func (p *SRSAuthReq) SetRvid(val int64) {
+	p.Rvid = val
+}
+func (p *SRSAuthReq) SetPassword(val string) {
+	p.Password = val
+}
+
+func (p *SRSAuthReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SRSAuthReq(%+v)", *p)
+}
+
+var fieldIDToName_SRSAuthReq = map[int16]string{
+	1: "rvid",
+	2: "password",
+}
+
+type SRSAuthResp struct {
+	Ok int32 `thrift:"ok,1,required" frugal:"1,required,i32" json:"ok"`
+}
+
+func NewSRSAuthResp() *SRSAuthResp {
+	return &SRSAuthResp{
+		Ok: 1,
+	}
+}
+
+func (p *SRSAuthResp) InitDefault() {
+	p.Ok = 1
+}
+
+func (p *SRSAuthResp) GetOk() (v int32) {
+	return p.Ok
+}
+func (p *SRSAuthResp) SetOk(val int32) {
+	p.Ok = val
+}
+
+func (p *SRSAuthResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SRSAuthResp(%+v)", *p)
+}
+
+var fieldIDToName_SRSAuthResp = map[int16]string{
+	1: "ok",
+}
+
 type LiveSvr interface {
 	GetLiveInfo(ctx context.Context, req *GetLiveInfoReq) (r *GetLiveInfoResp, err error)
 
@@ -476,6 +574,8 @@ type LiveSvr interface {
 	StartLive(ctx context.Context, req *StartLiveReq) (r *StartLiveResp, err error)
 
 	StopLive(ctx context.Context, req *StopLiveReq) (r *StopLiveResp, err error)
+
+	SRSAuth(ctx context.Context, req *SRSAuthReq) (r *SRSAuthResp, err error)
 }
 
 type LiveSvrGetLiveInfoArgs struct {
@@ -779,5 +879,81 @@ func (p *LiveSvrStopLiveResult) String() string {
 }
 
 var fieldIDToName_LiveSvrStopLiveResult = map[int16]string{
+	0: "success",
+}
+
+type LiveSvrSRSAuthArgs struct {
+	Req *SRSAuthReq `thrift:"req,1" frugal:"1,default,SRSAuthReq" json:"req"`
+}
+
+func NewLiveSvrSRSAuthArgs() *LiveSvrSRSAuthArgs {
+	return &LiveSvrSRSAuthArgs{}
+}
+
+func (p *LiveSvrSRSAuthArgs) InitDefault() {
+}
+
+var LiveSvrSRSAuthArgs_Req_DEFAULT *SRSAuthReq
+
+func (p *LiveSvrSRSAuthArgs) GetReq() (v *SRSAuthReq) {
+	if !p.IsSetReq() {
+		return LiveSvrSRSAuthArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *LiveSvrSRSAuthArgs) SetReq(val *SRSAuthReq) {
+	p.Req = val
+}
+
+func (p *LiveSvrSRSAuthArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *LiveSvrSRSAuthArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("LiveSvrSRSAuthArgs(%+v)", *p)
+}
+
+var fieldIDToName_LiveSvrSRSAuthArgs = map[int16]string{
+	1: "req",
+}
+
+type LiveSvrSRSAuthResult struct {
+	Success *SRSAuthResp `thrift:"success,0,optional" frugal:"0,optional,SRSAuthResp" json:"success,omitempty"`
+}
+
+func NewLiveSvrSRSAuthResult() *LiveSvrSRSAuthResult {
+	return &LiveSvrSRSAuthResult{}
+}
+
+func (p *LiveSvrSRSAuthResult) InitDefault() {
+}
+
+var LiveSvrSRSAuthResult_Success_DEFAULT *SRSAuthResp
+
+func (p *LiveSvrSRSAuthResult) GetSuccess() (v *SRSAuthResp) {
+	if !p.IsSetSuccess() {
+		return LiveSvrSRSAuthResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *LiveSvrSRSAuthResult) SetSuccess(x interface{}) {
+	p.Success = x.(*SRSAuthResp)
+}
+
+func (p *LiveSvrSRSAuthResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *LiveSvrSRSAuthResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("LiveSvrSRSAuthResult(%+v)", *p)
+}
+
+var fieldIDToName_LiveSvrSRSAuthResult = map[int16]string{
 	0: "success",
 }

@@ -63,9 +63,20 @@ struct StopLiveResp {
   2: required string info
 }
 
+// SRS校验
+struct SRSAuthReq {
+  1: required i64 rvid
+  2: required string password
+}
+
+struct SRSAuthResp {
+  1: required i32 ok = 1
+}
+
 service LiveSvr {
   GetLiveInfoResp GetLiveInfo(1: GetLiveInfoReq req)
   GetLiveListResp GetLiveList(1: GetLiveListReq req)
   StartLiveResp StartLive(1: StartLiveReq req)
   StopLiveResp StopLive(1: StopLiveReq req)
+  SRSAuthResp SRSAuth(1: SRSAuthReq req)
 }

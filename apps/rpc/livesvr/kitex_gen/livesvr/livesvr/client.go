@@ -15,6 +15,7 @@ type Client interface {
 	GetLiveList(ctx context.Context, req *livesvr.GetLiveListReq, callOptions ...callopt.Option) (r *livesvr.GetLiveListResp, err error)
 	StartLive(ctx context.Context, req *livesvr.StartLiveReq, callOptions ...callopt.Option) (r *livesvr.StartLiveResp, err error)
 	StopLive(ctx context.Context, req *livesvr.StopLiveReq, callOptions ...callopt.Option) (r *livesvr.StopLiveResp, err error)
+	SRSAuth(ctx context.Context, req *livesvr.SRSAuthReq, callOptions ...callopt.Option) (r *livesvr.SRSAuthResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -64,4 +65,9 @@ func (p *kLiveSvrClient) StartLive(ctx context.Context, req *livesvr.StartLiveRe
 func (p *kLiveSvrClient) StopLive(ctx context.Context, req *livesvr.StopLiveReq, callOptions ...callopt.Option) (r *livesvr.StopLiveResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.StopLive(ctx, req)
+}
+
+func (p *kLiveSvrClient) SRSAuth(ctx context.Context, req *livesvr.SRSAuthReq, callOptions ...callopt.Option) (r *livesvr.SRSAuthResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.SRSAuth(ctx, req)
 }

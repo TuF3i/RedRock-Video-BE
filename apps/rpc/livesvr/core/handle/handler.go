@@ -65,3 +65,9 @@ func (s *LiveSvrImpl) StopLive(ctx context.Context, req *livesvr.StopLiveReq) (r
 
 	return resp, nil
 }
+
+// SRSAuth implements the LiveSvrImpl interface.
+func (s *LiveSvrImpl) SRSAuth(ctx context.Context, req *livesvr.SRSAuthReq) (resp *livesvr.SRSAuthResp, err error) {
+	resp = SRSAuth(ctx, req)
+	return resp, nil
+}

@@ -22,3 +22,17 @@ func GenStartLiveReq(owerID int64, title string) *livesvr.StartLiveReq {
 		Title:  title,
 	}
 }
+
+func GenStopLiveReq(rvid int64, uid int64) *livesvr.StopLiveReq {
+	return &livesvr.StopLiveReq{
+		Rvid: rvid,
+		Uid:  uid,
+	}
+}
+
+func GenSRSAuthReq(rvid int64, key string) *livesvr.SRSAuthReq {
+	return &livesvr.SRSAuthReq{
+		Rvid:     rvid,
+		Password: key,
+	}
+}
