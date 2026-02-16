@@ -126,9 +126,9 @@ func newLiveSvrGetLiveInfoResult() interface{} {
 }
 
 func getLiveListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	_ = arg.(*livesvr.LiveSvrGetLiveListArgs)
+	realArg := arg.(*livesvr.LiveSvrGetLiveListArgs)
 	realResult := result.(*livesvr.LiveSvrGetLiveListResult)
-	success, err := handler.(livesvr.LiveSvr).GetLiveList(ctx)
+	success, err := handler.(livesvr.LiveSvr).GetLiveList(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
@@ -199,8 +199,9 @@ func (p *kClient) GetLiveInfo(ctx context.Context, req *livesvr.GetLiveInfoReq) 
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetLiveList(ctx context.Context) (r *livesvr.GetLiveListResp, err error) {
+func (p *kClient) GetLiveList(ctx context.Context, req *livesvr.GetLiveListReq) (r *livesvr.GetLiveListResp, err error) {
 	var _args livesvr.LiveSvrGetLiveListArgs
+	_args.Req = req
 	var _result livesvr.LiveSvrGetLiveListResult
 	if err = p.c.Call(ctx, "GetLiveList", &_args, &_result); err != nil {
 		return

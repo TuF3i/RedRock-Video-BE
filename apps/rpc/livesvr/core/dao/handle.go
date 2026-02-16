@@ -4,6 +4,7 @@ import (
 	"LiveDanmu/apps/public/models/dao"
 	"LiveDanmu/apps/public/utils"
 	"context"
+	"errors"
 	"strconv"
 )
 
@@ -128,7 +129,7 @@ func (r *Dao) GetLiveInfo(ctx context.Context, rvid int64) (*dao.LiveInfo, error
 	}
 	if !ok {
 		tx.Rollback()
-		return nil, nil
+		return nil, errors.New("live not exists")
 	}
 	// 从pgsql里读取数据
 	data, err = r.getRecordDetail(tx, rvid)

@@ -137,38 +137,6 @@ func GetFullDanmuHandleFunc() app.HandlerFunc {
 	}
 }
 
-func DelLiveDanmuHandleFunc() app.HandlerFunc {
-	return func(ctx context.Context, c *app.RequestContext) {
-		// 弹幕请求
-		var danmuData dao.DanmuData
-		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
-		// 类型断言
-		claim := claims.(*dao.MainClaims)
-		// 提取请求体中的弹幕信息
-		err := c.BindAndValidate(&danmuData)
-		if err != nil {
-			c.JSON(consts.StatusOK, response.ValidateRequestFail)
-			return
-		}
-		// 校验权限
-		if claim.Role != union_var.JWT_ROLE_ADMIN || claim.Uid != danmuData.UserId {
-			c.JSON(consts.StatusOK, response.YouDoNotHaveAccess)
-			return
-		}
-		// 转换结构体
-		delLiveReq := dto.GenDelLiveReq(danmuData)
-		// 调用PubDanmu微服务
-		resp, err := core.DanmuSvr.DelLiveDanmu(ctx, delLiveReq)
-		if err != nil {
-			c.JSON(consts.StatusOK, dto.GenFinalResponseForDelLiveReq(resp))
-			return
-		}
-
-		c.JSON(consts.StatusOK, response.OperationSuccess)
-	}
-}
-
 func DelDanmuHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 弹幕请求

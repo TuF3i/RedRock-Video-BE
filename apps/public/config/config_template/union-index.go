@@ -179,5 +179,7 @@ const (
 	LIVE_RPC_LOKI_SERVICE      = "loki.service_tag.yaml"
 	LIVE_RPC_LOKI_ENV          = "loki.env"
 	LIVE_RPC_LOKI_LEVEL        = "loki.level"
+	LIVE_RPC_KAFKA_NAMESPACE   = "kafka.namespace"
+	LIVE_RPC_KAFKA_SERVICENAME = "kafka.servicename"
 	LIVE_RPC_POD_UID           = "poduid"
 )

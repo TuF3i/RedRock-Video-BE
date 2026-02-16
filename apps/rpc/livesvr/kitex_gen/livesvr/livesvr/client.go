@@ -12,7 +12,7 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	GetLiveInfo(ctx context.Context, req *livesvr.GetLiveInfoReq, callOptions ...callopt.Option) (r *livesvr.GetLiveInfoResp, err error)
-	GetLiveList(ctx context.Context, callOptions ...callopt.Option) (r *livesvr.GetLiveListResp, err error)
+	GetLiveList(ctx context.Context, req *livesvr.GetLiveListReq, callOptions ...callopt.Option) (r *livesvr.GetLiveListResp, err error)
 	StartLive(ctx context.Context, req *livesvr.StartLiveReq, callOptions ...callopt.Option) (r *livesvr.StartLiveResp, err error)
 	StopLive(ctx context.Context, req *livesvr.StopLiveReq, callOptions ...callopt.Option) (r *livesvr.StopLiveResp, err error)
 }
@@ -51,9 +51,9 @@ func (p *kLiveSvrClient) GetLiveInfo(ctx context.Context, req *livesvr.GetLiveIn
 	return p.kClient.GetLiveInfo(ctx, req)
 }
 
-func (p *kLiveSvrClient) GetLiveList(ctx context.Context, callOptions ...callopt.Option) (r *livesvr.GetLiveListResp, err error) {
+func (p *kLiveSvrClient) GetLiveList(ctx context.Context, req *livesvr.GetLiveListReq, callOptions ...callopt.Option) (r *livesvr.GetLiveListResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GetLiveList(ctx)
+	return p.kClient.GetLiveList(ctx, req)
 }
 
 func (p *kLiveSvrClient) StartLive(ctx context.Context, req *livesvr.StartLiveReq, callOptions ...callopt.Option) (r *livesvr.StartLiveResp, err error) {

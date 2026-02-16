@@ -50,8 +50,6 @@ func initRouter(h *server.Hertz) {
 		// 发布直播弹幕
 		g.POST("/live", middleware.JWTMiddleware(), handler.PubLiveDanmuHandleFunc())
 		// 删除直播弹幕
-		g.DELETE("/video", middleware.JWTMiddleware(), handler.DelLiveDanmuHandleFunc())
-		// 删除直播弹幕
 		g.DELETE("/live", middleware.JWTMiddleware(), handler.DelDanmuHandleFunc())
 		// 建立直播实时ws
 		g.GET("/live/:rvid", handler.LiveDanmuHandleFunc())

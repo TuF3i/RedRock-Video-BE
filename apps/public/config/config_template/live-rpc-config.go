@@ -5,6 +5,7 @@ type LiveRpcConfig struct {
 	Etcd   EtcdForLiveRpc
 	PgSQL  PostgresForLiveRpc
 	Redis  RedisForLiveRpc
+	Kafka  KafkaForLiveRpc
 	Loki   LokiConfigForLiveRpc
 }
 
@@ -37,4 +38,10 @@ type LokiConfigForLiveRpc struct {
 	Service     string   `mapstructure:"service_tag.yaml"` // 服务名，作为Loki标签
 	Env         string   `mapstructure:"env"`              // 环境，如dev/test/prod，作为Loki标签
 	Level       string   `mapstructure:"level"`            // 日志级别，如debug/info/error
+}
+
+type KafkaForLiveRpc struct {
+	ServiceName string
+	Namespace   string
+	Urls        []string
 }

@@ -21,13 +21,6 @@ func boardCastNewDanmu(ctx context.Context, dataStruct kafkaMsg.DanmuKMsg) {
 	core.PoolGroup.BoardCastMsg(dataStruct.RVID, dto.GenAddDanmuWMsg(&dataStruct.Data))
 }
 
-func delNewDanmu(ctx context.Context, dataStruct kafkaMsg.DanmuKMsg) {
-	if !core.PoolGroup.IfPoolExist(dataStruct.RVID) {
-		core.PoolGroup.NewPool(ctx, dataStruct.RVID)
-	}
-	core.PoolGroup.BoardCastMsg(dataStruct.RVID, dto.GenRemoveDanmuWMsg(&dataStruct.Data))
-}
-
 func closeLive(dataStruct kafkaMsg.DanmuKMsg) {
 	if !core.PoolGroup.IfPoolExist(dataStruct.RVID) {
 		return
@@ -51,8 +44,6 @@ func process(ctx context.Context, m kafka.Message) error {
 		closeLive(dataStruct)
 	case kafkaMsg.PUB_LIVE_DANMU:
 		boardCastNewDanmu(ctx, dataStruct)
-	case kafkaMsg.DEL_LIVE_DANMU:
-		delNewDanmu(ctx, dataStruct)
 	}
 
 	return nil

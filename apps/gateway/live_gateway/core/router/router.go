@@ -2,7 +2,6 @@ package router
 
 import (
 	"LiveDanmu/apps/gateway/danmu_gateway/core"
-	"LiveDanmu/apps/gateway/danmu_gateway/core/handler"
 	"LiveDanmu/apps/gateway/danmu_gateway/core/middleware"
 	"LiveDanmu/apps/public/config/config_template"
 	"LiveDanmu/apps/public/logger/adapter"
@@ -43,22 +42,5 @@ func HertzApi(conf *config_template.DanmuGatewayConfig) {
 }
 
 func initRouter(h *server.Hertz) {
-	g := h.Group("/danmu")
-	{
-		// 发布视频弹幕
-		g.POST("/video", middleware.JWTMiddleware(), handler.PubDanmuHandleFunc())
-		// 发布直播弹幕
-		g.POST("/live", middleware.JWTMiddleware(), handler.PubLiveDanmuHandleFunc())
-		// 删除直播弹幕
-		g.DELETE("/video", middleware.JWTMiddleware(), handler.DelLiveDanmuHandleFunc())
-		// 删除直播弹幕
-		g.DELETE("/live", middleware.JWTMiddleware(), handler.DelDanmuHandleFunc())
-		// 建立直播实时ws
-		g.GET("/live/:rvid", handler.LiveDanmuHandleFunc())
-		// 获取首屏视频弹幕
-		g.GET("/hot/:rvid", handler.GetHotDanmuHandleFunc())
-		// 获取全量视频弹幕
-		g.GET("/full/:rvid", handler.GetFullDanmuHandleFunc())
-	}
-
+	
 }

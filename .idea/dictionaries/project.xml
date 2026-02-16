@@ -8,6 +8,7 @@
       <w>kmsg</w>
       <w>kresp</w>
       <w>listenaddr</w>
+      <w>livesvr</w>
       <w>mapstructure</w>
       <w>pgdb</w>
       <w>resps</w>

@@ -332,5 +332,11 @@ func LoadLiveRpcConfig() (*config_template.LiveRpcConfig, error) {
 	}
 	conf.Loki.LokiAddr = addrList
 
+	addrList, err = dns_lookup.ServiceDiscovery(conf.Kafka.ServiceName, conf.Kafka.Namespace)
+	if err != nil {
+		return nil, err
+	}
+	conf.Kafka.Urls = addrList
+
 	return conf, nil
 }

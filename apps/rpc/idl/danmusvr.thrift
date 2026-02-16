@@ -5,7 +5,7 @@ struct DanmuMsg { // 弹幕结构体
   2: required i64  user_id
   3: required string content
   4: required string color   = "#FFFFFF"
-  5: required i64  ts        // 毫秒
+  5: required i64  ts
 }
 
 // 发送弹幕

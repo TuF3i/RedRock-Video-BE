@@ -4,7 +4,6 @@ import (
 	"LiveDanmu/apps/public/models/dao"
 	KMsg "LiveDanmu/apps/public/models/kafka"
 	"LiveDanmu/apps/public/union_var"
-	"LiveDanmu/apps/rpc/danmusvr/core/dto"
 	"LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
 	"context"
 	"errors"
@@ -14,24 +13,18 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-func (r *KClient) genDanmuKMsg(msg *danmusvr.DanmuMsg) KMsg.DanmuKMsg {
+func (r *KClient) genDanmuKMsg(rvid int64) KMsg.DanmuKMsg {
 	// 结构体转换
 	return KMsg.DanmuKMsg{
-		RVID: msg.RoomId,
-		OP:   KMsg.PUB_LIVE_DANMU,
-		Data: dao.DanmuData{
-			RVID:    msg.RoomId,
-			UserId:  msg.UserId,
-			Content: msg.Content,
-			Color:   msg.Color,
-			Ts:      msg.Ts,
-		},
+		RVID: rvid,
+		OP:   KMsg.CLOSE_LIVE,
+		Data: dao.DanmuData{},
 	}
 }
 
-func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.DanmuMsg, writer *kafka.Writer) dto.Response {
+func (r *KClient) produceDanmuKMsg(ctx context.Context, rvid int64, writer *kafka.Writer) dto.Response {
 	// 生成KMsg
-	source := r.genDanmuKMsg(data)
+	source := r.genDanmuKMsg(rvid)
 	// 序列化Json
 	msg, err := jsoniter.ConfigCompatibleWithStandardLibrary.Marshal(source)
 	if err != nil {
@@ -55,16 +48,8 @@ func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.DanmuMsg,
 	return dto.OperationSuccess
 }
 
-func (r *KClient) SendVideoDanmuMsg(ctx context.Context, msg *danmusvr.DanmuMsg) dto.Response {
-	resp := r.produceDanmuKMsg(ctx, msg, r.videoDanmuWriter)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return resp
-	}
-	return dto.OperationSuccess
-}
-
-func (r *KClient) SendLiveDanmuMsg(ctx context.Context, msg *danmusvr.DanmuMsg) dto.Response {
-	resp := r.produceDanmuKMsg(ctx, msg, r.liveDanmuWriter)
+func (r *KClient) SendLiveOffMsg(ctx context.Context, rvid int64) dto.Response {
+	resp := r.produceDanmuKMsg(ctx, rvid, r.boardCastController)
 	if !errors.Is(resp, dto.OperationSuccess) {
 		return resp
 	}

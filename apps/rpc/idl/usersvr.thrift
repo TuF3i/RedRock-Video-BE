@@ -4,8 +4,8 @@ struct RvUserInfo {
   1: required i64 uid
   2: required string user_name
   3: required string avatar_url
-  4: required string bio
-  5: required string role
+  4: optional string bio
+  5: optional string role
 }
 
 struct LoginData {

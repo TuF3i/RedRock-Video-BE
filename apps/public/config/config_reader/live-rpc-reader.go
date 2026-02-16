@@ -25,6 +25,8 @@ func setDefaultForLiveRpc(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_RPC_LOKI_SERVICE, "LIVE_RPC")
 	v.SetDefault(config_template.LIVE_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.LIVE_RPC_LOKI_ENV, "proc")
+	v.SetDefault(config_template.LIVE_RPC_KAFKA_NAMESPACE, "middleware")
+	v.SetDefault(config_template.LIVE_RPC_KAFKA_SERVICENAME, "kafka")
 }
 
 func LiveRpcConfigLoader() (*config_template.LiveRpcConfig, error) {
