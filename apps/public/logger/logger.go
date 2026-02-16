@@ -1,8 +1,6 @@
 package logger
 
 import (
-	"errors"
-
 	"go.uber.org/zap"
 )
 
@@ -11,13 +9,9 @@ type NewLogger struct {
 	LokiHook *lokiHook
 }
 
-func GetLogger(v interface{}) (*NewLogger, error) {
+func GetLogger(conf LokiConfig) (*NewLogger, error) {
 	l := NewLogger{}
-	conf, ok := v.(*LokiConfig)
-	if !ok {
-		return nil, errors.New("type assertion failed")
-	}
-	l.Logger, l.LokiHook = initZapWithLoki(*conf)
+	l.Logger, l.LokiHook = initZapWithLoki(conf)
 	return &l, nil
 }
 func (r *NewLogger) SyncClean() error {

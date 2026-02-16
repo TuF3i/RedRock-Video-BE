@@ -7,11 +7,11 @@ import (
 )
 
 type Dao struct {
-	conf *config_template.DanmuGatewayConfig
+	conf *config_template.VideoGatewayConfig
 	rdb  *redis.ClusterClient
 }
 
-func GetDao(conf *config_template.DanmuGatewayConfig) (*Dao, error) {
+func GetDao(conf *config_template.VideoGatewayConfig) (*Dao, error) {
 	d := Dao{conf: conf}
 	if err := d.initRedisClient(); err != nil {
 		return nil, err

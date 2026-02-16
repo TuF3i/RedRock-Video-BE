@@ -49,27 +49,43 @@ func process(ctx context.Context, m kafka.Message) error {
 	return nil
 }
 
-func ConsumerLoop(r *kafka.Reader) {
+func (r *KClient) consumerLoop(ctx context.Context) {
 	for {
-		// 生成TraceID
-		ctx := context.Background()
-		// 自动提交偏移量
-		m, err := r.FetchMessage(ctx)
-		if err != nil {
-			continue
-		}
-		// 处理消息
-		for i := 0; i < RETRY_COUNT; i++ {
-			err := process(ctx, m)
-			if err == nil {
-				break
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			// 生成TraceID
+			ctx := context.Background()
+			// 手动提交偏移量
+			m, err := r.consumer.FetchMessage(ctx)
+			if err != nil {
+				continue
 			}
-		}
-		for i := 0; i < RETRY_COUNT; i++ {
-			err := r.CommitMessages(ctx, m)
-			if err == nil {
-				break
+			// 处理消息
+			for i := 0; i < RETRY_COUNT; i++ {
+				err := process(ctx, m)
+				if err == nil {
+					break
+				}
+			}
+			for i := 0; i < RETRY_COUNT; i++ {
+				err := r.consumer.CommitMessages(ctx, m)
+				if err == nil {
+					break
+				}
 			}
 		}
 	}
+}
+
+func (r *KClient) StartConsume() {
+	r.ctx, r.cancel = context.WithCancel(context.Background())
+
+	go r.consumerLoop(r.ctx)
+}
+
+func (r *KClient) StopConsume() error {
+	r.cancel()
+	return r.consumer.Close()
 }

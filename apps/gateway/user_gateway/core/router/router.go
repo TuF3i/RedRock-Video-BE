@@ -26,7 +26,7 @@ func HertzShutdown() error {
 	return nil
 }
 
-func HertzApi(conf *config_template.DanmuGatewayConfig) {
+func HertzApi(conf *config_template.UserGatewayConfig) {
 	// 构造Url
 	url := fmt.Sprintf("%v:%v", conf.Hertz.ListenAddr, conf.Hertz.ListenPort)
 	// 创建服务核心
