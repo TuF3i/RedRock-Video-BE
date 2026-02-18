@@ -116,7 +116,7 @@ func onDestroy() {
 	l.Info("Shutdown UserSvrNode Successfully!")
 }
 
-func RunDanmuGateway() {
+func RunUserSvr() {
 	// 初始化局部日志
 	l = logger.NewLogger(1)
 

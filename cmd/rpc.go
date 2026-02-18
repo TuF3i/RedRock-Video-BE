@@ -6,9 +6,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// gatewayCmd represents the gateway command
-var gatewayCmd = &cobra.Command{
-	Use:   "gateway",
+// rpcCmd represents the rpc command
+var rpcCmd = &cobra.Command{
+	Use:   "rpc",
 	Short: "Usage: rv run <unit> <name>",
 	Long:  `Example: rv run rpc videosvr`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -25,5 +25,5 @@ var gatewayCmd = &cobra.Command{
 }
 
 func init() {
-	runCmd.AddCommand(gatewayCmd)
+	runCmd.AddCommand(rpcCmd)
 }

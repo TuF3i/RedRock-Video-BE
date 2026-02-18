@@ -113,7 +113,7 @@ func onDestroy() {
 	l.Info("Shutdown VideoGatewayNode Successfully!")
 }
 
-func RunDanmuGateway() {
+func RunVideoGateway() {
 	// 初始化局部日志
 	l = logger.NewLogger(1)
 

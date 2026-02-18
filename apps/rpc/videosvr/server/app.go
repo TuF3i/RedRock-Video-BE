@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"LiveDanmu/apps/public/config"
@@ -118,7 +118,7 @@ func onDestroy() {
 
 }
 
-func RunDanmuGateway() {
+func RunVideoSvr() {
 	// 初始化局部日志
 	l = logger.NewLogger(1)
 

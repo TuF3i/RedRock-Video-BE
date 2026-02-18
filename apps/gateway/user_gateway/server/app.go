@@ -109,7 +109,7 @@ func onDestroy() {
 	l.Info("Shutdown UserGatewayNode Successfully!")
 }
 
-func RunDanmuGateway() {
+func RunUserGateway() {
 	// 初始化局部日志
 	l = logger.NewLogger(1)
 

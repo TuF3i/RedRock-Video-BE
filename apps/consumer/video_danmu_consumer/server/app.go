@@ -70,7 +70,7 @@ func onDestroy() {
 	l.Info("Stop VideoDanmuConsumerNode Successfully!")
 }
 
-func RunDanmuGateway() {
+func RunVideoDanmuConsumer() {
 	// 初始化局部日志
 	l = logger.NewLogger(1)
 
