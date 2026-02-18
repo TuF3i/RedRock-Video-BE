@@ -67,7 +67,7 @@ func onCreate() {
 
 	//VideoSvr
 	svr, err := videosvr.NewClient(
-		union_var.DANMU_SVR,
+		union_var.VIDEO_SVR,
 		client.WithResolver(discovery),
 		client.WithHostPorts(""),
 		client.WithRPCTimeout(5*time.Second),

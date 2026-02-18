@@ -38,5 +38,10 @@ func StopLive(ctx context.Context, req *livesvr.StopLiveReq) dto.Response {
 	if err != nil {
 		return dto.ServerInternalError(err)
 	}
+	// 发送关闭直播消息
+	err = core.Kafka.SendLiveOffMsg(ctx, rvid)
+	if err != nil {
+		return dto.ServerInternalError(err)
+	}
 	return dto.OperationSuccess
 }

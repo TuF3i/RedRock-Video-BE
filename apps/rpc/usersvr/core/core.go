@@ -1,7 +1,11 @@
 package core
 
-import "LiveDanmu/apps/rpc/usersvr/core/dao"
+import (
+	"LiveDanmu/apps/public/logger"
+	"LiveDanmu/apps/rpc/usersvr/core/dao"
+)
 
 var (
-	Dao *dao.Dao
+	Dao    *dao.Dao
+	Logger *logger.NewLogger
 )

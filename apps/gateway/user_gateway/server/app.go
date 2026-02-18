@@ -67,7 +67,7 @@ func onCreate() {
 
 	//初始化UserSvr
 	svr, err := usersvr.NewClient(
-		union_var.DANMU_SVR,
+		union_var.USER_SVR,
 		client.WithResolver(discovery),
 		client.WithHostPorts(""),
 		client.WithRPCTimeout(5*time.Second),

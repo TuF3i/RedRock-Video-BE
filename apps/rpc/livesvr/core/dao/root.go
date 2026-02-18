@@ -9,13 +9,13 @@ import (
 )
 
 type Dao struct {
-	conf          *config_template.UserRpcConfig
+	conf          *config_template.LiveRpcConfig
 	rdb           *redis.ClusterClient
 	pgdb          *gorm.DB
 	isSyncRunning atomic.Bool
 }
 
-func GetDao(conf *config_template.UserRpcConfig) (*Dao, error) {
+func GetDao(conf *config_template.LiveRpcConfig) (*Dao, error) {
 	d := Dao{conf: conf, isSyncRunning: atomic.Bool{}}
 	if err := d.initPgSQL(); err != nil {
 		return nil, err

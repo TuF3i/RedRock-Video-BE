@@ -19,3 +19,23 @@ func GetKClient(conf *config_template.DanmuRpcConfig) *KClient {
 	k.initKafkaClient()
 	return k
 }
+
+func (r *KClient) StopProducer() error {
+	if err := r.liveDanmuWriter.Close(); err != nil {
+		return err
+	}
+
+	if err := r.videoDanmuWriter.Close(); err != nil {
+		return err
+	}
+
+	if err := r.boardCastController.Close(); err != nil {
+		return err
+	}
+
+	if err := r.utilClient.Close(); err != nil {
+		return err
+	}
+
+	return nil
+}

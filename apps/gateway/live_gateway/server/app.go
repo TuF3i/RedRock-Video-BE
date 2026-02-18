@@ -66,7 +66,7 @@ func onCreate() {
 
 	// 初始化LiveSvr
 	svr, err := livesvr.NewClient(
-		union_var.DANMU_SVR,
+		union_var.LIVE_SVR,
 		client.WithResolver(discovery),
 		client.WithHostPorts(""),
 		client.WithRPCTimeout(5*time.Second),

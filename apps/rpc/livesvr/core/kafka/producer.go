@@ -4,7 +4,7 @@ import (
 	"LiveDanmu/apps/public/models/dao"
 	KMsg "LiveDanmu/apps/public/models/kafka"
 	"LiveDanmu/apps/public/union_var"
-	"LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
+	"LiveDanmu/apps/rpc/livesvr/core/dto"
 	"context"
 	"errors"
 	"strconv"

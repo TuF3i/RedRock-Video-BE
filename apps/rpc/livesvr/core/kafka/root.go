@@ -16,3 +16,7 @@ func GetKClient(conf *config_template.LiveRpcConfig) *KClient {
 	k.initKafkaClient()
 	return k
 }
+
+func (r *KClient) StopProducer() error {
+	return r.boardCastController.Close()
+}

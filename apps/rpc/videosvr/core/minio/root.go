@@ -8,10 +8,10 @@ import (
 
 type Minio struct {
 	MClient *minio.Client
-	conf    *config_template.VideoGatewayConfig
+	conf    *config_template.VideoRpcConfig
 }
 
-func GetMinio(conf *config_template.VideoGatewayConfig) (*Minio, error) {
+func GetMinio(conf *config_template.VideoRpcConfig) (*Minio, error) {
 	m := &Minio{conf: conf}
 	err := m.initMinioClient()
 	if err != nil {
