@@ -16,3 +16,7 @@ func GetBoardCast(conf *config_template.LiveDanmuConsumerConfig) *BoardCast {
 	b.initKClient()
 	return &b
 }
+
+func (r *BoardCast) StopBoardCast() error {
+	return r.kClient.Close()
+}

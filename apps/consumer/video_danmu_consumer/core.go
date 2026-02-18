@@ -1,9 +1,7 @@
 package video_danmu_consumer
 
-import (
-	"LiveDanmu/apps/consumer/video_danmu_consumer/dao"
-)
+import "LiveDanmu/apps/public/logger"
 
 var (
-	Dao dao.Dao
+	Logger *logger.NewLogger
 )
