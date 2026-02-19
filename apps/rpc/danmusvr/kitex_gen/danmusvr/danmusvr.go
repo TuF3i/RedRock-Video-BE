@@ -7,230 +7,366 @@ import (
 	"fmt"
 )
 
-type DanmuMsg struct {
-	RoomId  int64  `thrift:"room_id,1,required" frugal:"1,required,i64" json:"room_id"`
-	UserId  int64  `thrift:"user_id,2,required" frugal:"2,required,i64" json:"user_id"`
-	Content string `thrift:"content,3,required" frugal:"3,required,string" json:"content"`
-	Color   string `thrift:"color,4,required" frugal:"4,required,string" json:"color"`
-	Ts      int64  `thrift:"ts,5,required" frugal:"5,required,i64" json:"ts"`
+type PubDanmuData struct {
+	DanId     int64  `thrift:"dan_id,1,required" frugal:"1,required,i64" json:"dan_id"`
+	Rvid      int64  `thrift:"rvid,2,required" frugal:"2,required,i64" json:"rvid"`
+	Uid       int64  `thrift:"uid,3,required" frugal:"3,required,i64" json:"uid"`
+	Content   string `thrift:"content,4,required" frugal:"4,required,string" json:"content"`
+	Color     string `thrift:"color,5,required" frugal:"5,required,string" json:"color"`
+	TimeStamp int64  `thrift:"time_stamp,6,required" frugal:"6,required,i64" json:"time_stamp"`
 }
 
-func NewDanmuMsg() *DanmuMsg {
-	return &DanmuMsg{
-		Color: "#FFFFFF",
-	}
+func NewPubDanmuData() *PubDanmuData {
+	return &PubDanmuData{}
 }
 
-func (p *DanmuMsg) InitDefault() {
-	p.Color = "#FFFFFF"
+func (p *PubDanmuData) InitDefault() {
 }
 
-func (p *DanmuMsg) GetRoomId() (v int64) {
-	return p.RoomId
+func (p *PubDanmuData) GetDanId() (v int64) {
+	return p.DanId
 }
 
-func (p *DanmuMsg) GetUserId() (v int64) {
-	return p.UserId
+func (p *PubDanmuData) GetRvid() (v int64) {
+	return p.Rvid
 }
 
-func (p *DanmuMsg) GetContent() (v string) {
+func (p *PubDanmuData) GetUid() (v int64) {
+	return p.Uid
+}
+
+func (p *PubDanmuData) GetContent() (v string) {
 	return p.Content
 }
 
-func (p *DanmuMsg) GetColor() (v string) {
+func (p *PubDanmuData) GetColor() (v string) {
 	return p.Color
 }
 
-func (p *DanmuMsg) GetTs() (v int64) {
-	return p.Ts
+func (p *PubDanmuData) GetTimeStamp() (v int64) {
+	return p.TimeStamp
 }
-func (p *DanmuMsg) SetRoomId(val int64) {
-	p.RoomId = val
+func (p *PubDanmuData) SetDanId(val int64) {
+	p.DanId = val
 }
-func (p *DanmuMsg) SetUserId(val int64) {
-	p.UserId = val
+func (p *PubDanmuData) SetRvid(val int64) {
+	p.Rvid = val
 }
-func (p *DanmuMsg) SetContent(val string) {
+func (p *PubDanmuData) SetUid(val int64) {
+	p.Uid = val
+}
+func (p *PubDanmuData) SetContent(val string) {
 	p.Content = val
 }
-func (p *DanmuMsg) SetColor(val string) {
+func (p *PubDanmuData) SetColor(val string) {
 	p.Color = val
 }
-func (p *DanmuMsg) SetTs(val int64) {
-	p.Ts = val
+func (p *PubDanmuData) SetTimeStamp(val int64) {
+	p.TimeStamp = val
 }
 
-func (p *DanmuMsg) String() string {
+func (p *PubDanmuData) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("DanmuMsg(%+v)", *p)
+	return fmt.Sprintf("PubDanmuData(%+v)", *p)
 }
 
-var fieldIDToName_DanmuMsg = map[int16]string{
-	1: "room_id",
-	2: "user_id",
+var fieldIDToName_PubDanmuData = map[int16]string{
+	1: "dan_id",
+	2: "rvid",
+	3: "uid",
+	4: "content",
+	5: "color",
+	6: "time_stamp",
+}
+
+type GetDanmuData struct {
+	DanId     int64     `thrift:"dan_id,1,required" frugal:"1,required,i64" json:"dan_id"`
+	Rvid      int64     `thrift:"rvid,2,required" frugal:"2,required,i64" json:"rvid"`
+	Content   string    `thrift:"content,3,required" frugal:"3,required,string" json:"content"`
+	Color     string    `thrift:"color,4,required" frugal:"4,required,string" json:"color"`
+	TimeStamp int64     `thrift:"time_stamp,5,required" frugal:"5,required,i64" json:"time_stamp"`
+	UserInfo  *UserInfo `thrift:"user_info,6,required" frugal:"6,required,UserInfo" json:"user_info"`
+}
+
+func NewGetDanmuData() *GetDanmuData {
+	return &GetDanmuData{}
+}
+
+func (p *GetDanmuData) InitDefault() {
+}
+
+func (p *GetDanmuData) GetDanId() (v int64) {
+	return p.DanId
+}
+
+func (p *GetDanmuData) GetRvid() (v int64) {
+	return p.Rvid
+}
+
+func (p *GetDanmuData) GetContent() (v string) {
+	return p.Content
+}
+
+func (p *GetDanmuData) GetColor() (v string) {
+	return p.Color
+}
+
+func (p *GetDanmuData) GetTimeStamp() (v int64) {
+	return p.TimeStamp
+}
+
+var GetDanmuData_UserInfo_DEFAULT *UserInfo
+
+func (p *GetDanmuData) GetUserInfo() (v *UserInfo) {
+	if !p.IsSetUserInfo() {
+		return GetDanmuData_UserInfo_DEFAULT
+	}
+	return p.UserInfo
+}
+func (p *GetDanmuData) SetDanId(val int64) {
+	p.DanId = val
+}
+func (p *GetDanmuData) SetRvid(val int64) {
+	p.Rvid = val
+}
+func (p *GetDanmuData) SetContent(val string) {
+	p.Content = val
+}
+func (p *GetDanmuData) SetColor(val string) {
+	p.Color = val
+}
+func (p *GetDanmuData) SetTimeStamp(val int64) {
+	p.TimeStamp = val
+}
+func (p *GetDanmuData) SetUserInfo(val *UserInfo) {
+	p.UserInfo = val
+}
+
+func (p *GetDanmuData) IsSetUserInfo() bool {
+	return p.UserInfo != nil
+}
+
+func (p *GetDanmuData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetDanmuData(%+v)", *p)
+}
+
+var fieldIDToName_GetDanmuData = map[int16]string{
+	1: "dan_id",
+	2: "rvid",
 	3: "content",
 	4: "color",
-	5: "ts",
+	5: "time_stamp",
+	6: "user_info",
 }
 
-type PubResp struct {
+type UserInfo struct {
+	Uid       string `thrift:"uid,1,required" frugal:"1,required,string" json:"uid"`
+	UserName  string `thrift:"user_name,2,required" frugal:"2,required,string" json:"user_name"`
+	AvatarUrl string `thrift:"avatar_url,3,required" frugal:"3,required,string" json:"avatar_url"`
+}
+
+func NewUserInfo() *UserInfo {
+	return &UserInfo{}
+}
+
+func (p *UserInfo) InitDefault() {
+}
+
+func (p *UserInfo) GetUid() (v string) {
+	return p.Uid
+}
+
+func (p *UserInfo) GetUserName() (v string) {
+	return p.UserName
+}
+
+func (p *UserInfo) GetAvatarUrl() (v string) {
+	return p.AvatarUrl
+}
+func (p *UserInfo) SetUid(val string) {
+	p.Uid = val
+}
+func (p *UserInfo) SetUserName(val string) {
+	p.UserName = val
+}
+func (p *UserInfo) SetAvatarUrl(val string) {
+	p.AvatarUrl = val
+}
+
+func (p *UserInfo) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserInfo(%+v)", *p)
+}
+
+var fieldIDToName_UserInfo = map[int16]string{
+	1: "uid",
+	2: "user_name",
+	3: "avatar_url",
+}
+
+type PubVideoResp struct {
 	Status int64  `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
 	Info   string `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
 }
 
-func NewPubResp() *PubResp {
-	return &PubResp{}
+func NewPubVideoResp() *PubVideoResp {
+	return &PubVideoResp{}
 }
 
-func (p *PubResp) InitDefault() {
+func (p *PubVideoResp) InitDefault() {
 }
 
-func (p *PubResp) GetStatus() (v int64) {
+func (p *PubVideoResp) GetStatus() (v int64) {
 	return p.Status
 }
 
-func (p *PubResp) GetInfo() (v string) {
+func (p *PubVideoResp) GetInfo() (v string) {
 	return p.Info
 }
-func (p *PubResp) SetStatus(val int64) {
+func (p *PubVideoResp) SetStatus(val int64) {
 	p.Status = val
 }
-func (p *PubResp) SetInfo(val string) {
+func (p *PubVideoResp) SetInfo(val string) {
 	p.Info = val
 }
 
-func (p *PubResp) String() string {
+func (p *PubVideoResp) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("PubResp(%+v)", *p)
+	return fmt.Sprintf("PubVideoResp(%+v)", *p)
 }
 
-var fieldIDToName_PubResp = map[int16]string{
+var fieldIDToName_PubVideoResp = map[int16]string{
 	1: "status",
 	2: "info",
 }
 
-type PubReq struct {
-	DanmuMsg *DanmuMsg `thrift:"danmuMsg,1,required" frugal:"1,required,DanmuMsg" json:"danmuMsg"`
+type PubVideoReq struct {
+	DanmuMsg *PubDanmuData `thrift:"danmuMsg,1,required" frugal:"1,required,PubDanmuData" json:"danmuMsg"`
 }
 
-func NewPubReq() *PubReq {
-	return &PubReq{}
+func NewPubVideoReq() *PubVideoReq {
+	return &PubVideoReq{}
 }
 
-func (p *PubReq) InitDefault() {
+func (p *PubVideoReq) InitDefault() {
 }
 
-var PubReq_DanmuMsg_DEFAULT *DanmuMsg
+var PubVideoReq_DanmuMsg_DEFAULT *PubDanmuData
 
-func (p *PubReq) GetDanmuMsg() (v *DanmuMsg) {
+func (p *PubVideoReq) GetDanmuMsg() (v *PubDanmuData) {
 	if !p.IsSetDanmuMsg() {
-		return PubReq_DanmuMsg_DEFAULT
+		return PubVideoReq_DanmuMsg_DEFAULT
 	}
 	return p.DanmuMsg
 }
-func (p *PubReq) SetDanmuMsg(val *DanmuMsg) {
+func (p *PubVideoReq) SetDanmuMsg(val *PubDanmuData) {
 	p.DanmuMsg = val
 }
 
-func (p *PubReq) IsSetDanmuMsg() bool {
+func (p *PubVideoReq) IsSetDanmuMsg() bool {
 	return p.DanmuMsg != nil
 }
 
-func (p *PubReq) String() string {
+func (p *PubVideoReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("PubReq(%+v)", *p)
+	return fmt.Sprintf("PubVideoReq(%+v)", *p)
 }
 
-var fieldIDToName_PubReq = map[int16]string{
+var fieldIDToName_PubVideoReq = map[int16]string{
 	1: "danmuMsg",
 }
 
-type GetResp struct {
-	Status int64       `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string      `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   []*DanmuMsg `thrift:"data,3,required" frugal:"3,required,list<DanmuMsg>" json:"data"`
+type GetFullResp struct {
+	Status int64           `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string          `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   []*GetDanmuData `thrift:"data,3,required" frugal:"3,required,list<GetDanmuData>" json:"data"`
 }
 
-func NewGetResp() *GetResp {
-	return &GetResp{}
+func NewGetFullResp() *GetFullResp {
+	return &GetFullResp{}
 }
 
-func (p *GetResp) InitDefault() {
+func (p *GetFullResp) InitDefault() {
 }
 
-func (p *GetResp) GetStatus() (v int64) {
+func (p *GetFullResp) GetStatus() (v int64) {
 	return p.Status
 }
 
-func (p *GetResp) GetInfo() (v string) {
+func (p *GetFullResp) GetInfo() (v string) {
 	return p.Info
 }
 
-func (p *GetResp) GetData() (v []*DanmuMsg) {
+func (p *GetFullResp) GetData() (v []*GetDanmuData) {
 	return p.Data
 }
-func (p *GetResp) SetStatus(val int64) {
+func (p *GetFullResp) SetStatus(val int64) {
 	p.Status = val
 }
-func (p *GetResp) SetInfo(val string) {
+func (p *GetFullResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *GetResp) SetData(val []*DanmuMsg) {
+func (p *GetFullResp) SetData(val []*GetDanmuData) {
 	p.Data = val
 }
 
-func (p *GetResp) String() string {
+func (p *GetFullResp) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("GetResp(%+v)", *p)
+	return fmt.Sprintf("GetFullResp(%+v)", *p)
 }
 
-var fieldIDToName_GetResp = map[int16]string{
+var fieldIDToName_GetFullResp = map[int16]string{
 	1: "status",
 	2: "info",
 	3: "data",
 }
 
-type GetReq struct {
-	BV int64 `thrift:"BV,1,required" frugal:"1,required,i64" json:"BV"`
+type GetFullReq struct {
+	Rvid int64 `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
 }
 
-func NewGetReq() *GetReq {
-	return &GetReq{}
+func NewGetFullReq() *GetFullReq {
+	return &GetFullReq{}
 }
 
-func (p *GetReq) InitDefault() {
+func (p *GetFullReq) InitDefault() {
 }
 
-func (p *GetReq) GetBV() (v int64) {
-	return p.BV
+func (p *GetFullReq) GetRvid() (v int64) {
+	return p.Rvid
 }
-func (p *GetReq) SetBV(val int64) {
-	p.BV = val
+func (p *GetFullReq) SetRvid(val int64) {
+	p.Rvid = val
 }
 
-func (p *GetReq) String() string {
+func (p *GetFullReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("GetReq(%+v)", *p)
+	return fmt.Sprintf("GetFullReq(%+v)", *p)
 }
 
-var fieldIDToName_GetReq = map[int16]string{
-	1: "BV",
+var fieldIDToName_GetFullReq = map[int16]string{
+	1: "rvid",
 }
 
 type GetTopResp struct {
-	Status int64       `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string      `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   []*DanmuMsg `thrift:"data,3,required" frugal:"3,required,list<DanmuMsg>" json:"data"`
+	Status int64           `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string          `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   []*GetDanmuData `thrift:"data,3,required" frugal:"3,required,list<GetDanmuData>" json:"data"`
 }
 
 func NewGetTopResp() *GetTopResp {
@@ -248,7 +384,7 @@ func (p *GetTopResp) GetInfo() (v string) {
 	return p.Info
 }
 
-func (p *GetTopResp) GetData() (v []*DanmuMsg) {
+func (p *GetTopResp) GetData() (v []*GetDanmuData) {
 	return p.Data
 }
 func (p *GetTopResp) SetStatus(val int64) {
@@ -257,7 +393,7 @@ func (p *GetTopResp) SetStatus(val int64) {
 func (p *GetTopResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *GetTopResp) SetData(val []*DanmuMsg) {
+func (p *GetTopResp) SetData(val []*GetDanmuData) {
 	p.Data = val
 }
 
@@ -275,7 +411,7 @@ var fieldIDToName_GetTopResp = map[int16]string{
 }
 
 type GetTopReq struct {
-	BV int64 `thrift:"BV,1,required" frugal:"1,required,i64" json:"BV"`
+	Rvid int64 `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
 }
 
 func NewGetTopReq() *GetTopReq {
@@ -285,11 +421,11 @@ func NewGetTopReq() *GetTopReq {
 func (p *GetTopReq) InitDefault() {
 }
 
-func (p *GetTopReq) GetBV() (v int64) {
-	return p.BV
+func (p *GetTopReq) GetRvid() (v int64) {
+	return p.Rvid
 }
-func (p *GetTopReq) SetBV(val int64) {
-	p.BV = val
+func (p *GetTopReq) SetRvid(val int64) {
+	p.Rvid = val
 }
 
 func (p *GetTopReq) String() string {
@@ -300,7 +436,7 @@ func (p *GetTopReq) String() string {
 }
 
 var fieldIDToName_GetTopReq = map[int16]string{
-	1: "BV",
+	1: "rvid",
 }
 
 type PubLiveResp struct {
@@ -342,7 +478,7 @@ var fieldIDToName_PubLiveResp = map[int16]string{
 }
 
 type PubLiveReq struct {
-	DanmuMsg *DanmuMsg `thrift:"danmuMsg,1,required" frugal:"1,required,DanmuMsg" json:"danmuMsg"`
+	DanmuMsg *PubDanmuData `thrift:"danmuMsg,1,required" frugal:"1,required,PubDanmuData" json:"danmuMsg"`
 }
 
 func NewPubLiveReq() *PubLiveReq {
@@ -352,15 +488,15 @@ func NewPubLiveReq() *PubLiveReq {
 func (p *PubLiveReq) InitDefault() {
 }
 
-var PubLiveReq_DanmuMsg_DEFAULT *DanmuMsg
+var PubLiveReq_DanmuMsg_DEFAULT *PubDanmuData
 
-func (p *PubLiveReq) GetDanmuMsg() (v *DanmuMsg) {
+func (p *PubLiveReq) GetDanmuMsg() (v *PubDanmuData) {
 	if !p.IsSetDanmuMsg() {
 		return PubLiveReq_DanmuMsg_DEFAULT
 	}
 	return p.DanmuMsg
 }
-func (p *PubLiveReq) SetDanmuMsg(val *DanmuMsg) {
+func (p *PubLiveReq) SetDanmuMsg(val *PubDanmuData) {
 	p.DanmuMsg = val
 }
 
@@ -418,7 +554,7 @@ var fieldIDToName_DelLiveResp = map[int16]string{
 }
 
 type DelLiveReq struct {
-	DanmuMsg *DanmuMsg `thrift:"danmuMsg,1,required" frugal:"1,required,DanmuMsg" json:"danmuMsg"`
+	DanId int64 `thrift:"dan_id,1,required" frugal:"1,required,i64" json:"dan_id"`
 }
 
 func NewDelLiveReq() *DelLiveReq {
@@ -428,20 +564,11 @@ func NewDelLiveReq() *DelLiveReq {
 func (p *DelLiveReq) InitDefault() {
 }
 
-var DelLiveReq_DanmuMsg_DEFAULT *DanmuMsg
-
-func (p *DelLiveReq) GetDanmuMsg() (v *DanmuMsg) {
-	if !p.IsSetDanmuMsg() {
-		return DelLiveReq_DanmuMsg_DEFAULT
-	}
-	return p.DanmuMsg
+func (p *DelLiveReq) GetDanId() (v int64) {
+	return p.DanId
 }
-func (p *DelLiveReq) SetDanmuMsg(val *DanmuMsg) {
-	p.DanmuMsg = val
-}
-
-func (p *DelLiveReq) IsSetDanmuMsg() bool {
-	return p.DanmuMsg != nil
+func (p *DelLiveReq) SetDanId(val int64) {
+	p.DanId = val
 }
 
 func (p *DelLiveReq) String() string {
@@ -452,7 +579,7 @@ func (p *DelLiveReq) String() string {
 }
 
 var fieldIDToName_DelLiveReq = map[int16]string{
-	1: "danmuMsg",
+	1: "dan_id",
 }
 
 type DelResp struct {
@@ -494,7 +621,8 @@ var fieldIDToName_DelResp = map[int16]string{
 }
 
 type DelReq struct {
-	DanmuMsg *DanmuMsg `thrift:"danmuMsg,1,required" frugal:"1,required,DanmuMsg" json:"danmuMsg"`
+	DanId int64 `thrift:"dan_id,1,required" frugal:"1,required,i64" json:"dan_id"`
+	Uid   int64 `thrift:"uid,2,required" frugal:"2,required,i64" json:"uid"`
 }
 
 func NewDelReq() *DelReq {
@@ -504,20 +632,18 @@ func NewDelReq() *DelReq {
 func (p *DelReq) InitDefault() {
 }
 
-var DelReq_DanmuMsg_DEFAULT *DanmuMsg
-
-func (p *DelReq) GetDanmuMsg() (v *DanmuMsg) {
-	if !p.IsSetDanmuMsg() {
-		return DelReq_DanmuMsg_DEFAULT
-	}
-	return p.DanmuMsg
-}
-func (p *DelReq) SetDanmuMsg(val *DanmuMsg) {
-	p.DanmuMsg = val
+func (p *DelReq) GetDanId() (v int64) {
+	return p.DanId
 }
 
-func (p *DelReq) IsSetDanmuMsg() bool {
-	return p.DanmuMsg != nil
+func (p *DelReq) GetUid() (v int64) {
+	return p.Uid
+}
+func (p *DelReq) SetDanId(val int64) {
+	p.DanId = val
+}
+func (p *DelReq) SetUid(val int64) {
+	p.Uid = val
 }
 
 func (p *DelReq) String() string {
@@ -528,15 +654,16 @@ func (p *DelReq) String() string {
 }
 
 var fieldIDToName_DelReq = map[int16]string{
-	1: "danmuMsg",
+	1: "dan_id",
+	2: "uid",
 }
 
 type DanmuSvr interface {
-	PubDanmu(ctx context.Context, req *PubReq) (r *PubResp, err error)
+	PubVideoDanmu(ctx context.Context, req *PubVideoReq) (r *PubVideoResp, err error)
 
 	PubLiveDanmu(ctx context.Context, req *PubLiveReq) (r *PubLiveResp, err error)
 
-	GetDanmu(ctx context.Context, req *GetReq) (r *GetResp, err error)
+	GetDanmu(ctx context.Context, req *GetFullReq) (r *GetFullResp, err error)
 
 	GetTop(ctx context.Context, req *GetTopReq) (r *GetTopResp, err error)
 
@@ -545,79 +672,79 @@ type DanmuSvr interface {
 	DelDanmu(ctx context.Context, req *DelReq) (r *DelResp, err error)
 }
 
-type DanmuSvrPubDanmuArgs struct {
-	Req *PubReq `thrift:"req,1" frugal:"1,default,PubReq" json:"req"`
+type DanmuSvrPubVideoDanmuArgs struct {
+	Req *PubVideoReq `thrift:"req,1" frugal:"1,default,PubVideoReq" json:"req"`
 }
 
-func NewDanmuSvrPubDanmuArgs() *DanmuSvrPubDanmuArgs {
-	return &DanmuSvrPubDanmuArgs{}
+func NewDanmuSvrPubVideoDanmuArgs() *DanmuSvrPubVideoDanmuArgs {
+	return &DanmuSvrPubVideoDanmuArgs{}
 }
 
-func (p *DanmuSvrPubDanmuArgs) InitDefault() {
+func (p *DanmuSvrPubVideoDanmuArgs) InitDefault() {
 }
 
-var DanmuSvrPubDanmuArgs_Req_DEFAULT *PubReq
+var DanmuSvrPubVideoDanmuArgs_Req_DEFAULT *PubVideoReq
 
-func (p *DanmuSvrPubDanmuArgs) GetReq() (v *PubReq) {
+func (p *DanmuSvrPubVideoDanmuArgs) GetReq() (v *PubVideoReq) {
 	if !p.IsSetReq() {
-		return DanmuSvrPubDanmuArgs_Req_DEFAULT
+		return DanmuSvrPubVideoDanmuArgs_Req_DEFAULT
 	}
 	return p.Req
 }
-func (p *DanmuSvrPubDanmuArgs) SetReq(val *PubReq) {
+func (p *DanmuSvrPubVideoDanmuArgs) SetReq(val *PubVideoReq) {
 	p.Req = val
 }
 
-func (p *DanmuSvrPubDanmuArgs) IsSetReq() bool {
+func (p *DanmuSvrPubVideoDanmuArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *DanmuSvrPubDanmuArgs) String() string {
+func (p *DanmuSvrPubVideoDanmuArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("DanmuSvrPubDanmuArgs(%+v)", *p)
+	return fmt.Sprintf("DanmuSvrPubVideoDanmuArgs(%+v)", *p)
 }
 
-var fieldIDToName_DanmuSvrPubDanmuArgs = map[int16]string{
+var fieldIDToName_DanmuSvrPubVideoDanmuArgs = map[int16]string{
 	1: "req",
 }
 
-type DanmuSvrPubDanmuResult struct {
-	Success *PubResp `thrift:"success,0,optional" frugal:"0,optional,PubResp" json:"success,omitempty"`
+type DanmuSvrPubVideoDanmuResult struct {
+	Success *PubVideoResp `thrift:"success,0,optional" frugal:"0,optional,PubVideoResp" json:"success,omitempty"`
 }
 
-func NewDanmuSvrPubDanmuResult() *DanmuSvrPubDanmuResult {
-	return &DanmuSvrPubDanmuResult{}
+func NewDanmuSvrPubVideoDanmuResult() *DanmuSvrPubVideoDanmuResult {
+	return &DanmuSvrPubVideoDanmuResult{}
 }
 
-func (p *DanmuSvrPubDanmuResult) InitDefault() {
+func (p *DanmuSvrPubVideoDanmuResult) InitDefault() {
 }
 
-var DanmuSvrPubDanmuResult_Success_DEFAULT *PubResp
+var DanmuSvrPubVideoDanmuResult_Success_DEFAULT *PubVideoResp
 
-func (p *DanmuSvrPubDanmuResult) GetSuccess() (v *PubResp) {
+func (p *DanmuSvrPubVideoDanmuResult) GetSuccess() (v *PubVideoResp) {
 	if !p.IsSetSuccess() {
-		return DanmuSvrPubDanmuResult_Success_DEFAULT
+		return DanmuSvrPubVideoDanmuResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *DanmuSvrPubDanmuResult) SetSuccess(x interface{}) {
-	p.Success = x.(*PubResp)
+func (p *DanmuSvrPubVideoDanmuResult) SetSuccess(x interface{}) {
+	p.Success = x.(*PubVideoResp)
 }
 
-func (p *DanmuSvrPubDanmuResult) IsSetSuccess() bool {
+func (p *DanmuSvrPubVideoDanmuResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *DanmuSvrPubDanmuResult) String() string {
+func (p *DanmuSvrPubVideoDanmuResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("DanmuSvrPubDanmuResult(%+v)", *p)
+	return fmt.Sprintf("DanmuSvrPubVideoDanmuResult(%+v)", *p)
 }
 
-var fieldIDToName_DanmuSvrPubDanmuResult = map[int16]string{
+var fieldIDToName_DanmuSvrPubVideoDanmuResult = map[int16]string{
 	0: "success",
 }
 
@@ -698,7 +825,7 @@ var fieldIDToName_DanmuSvrPubLiveDanmuResult = map[int16]string{
 }
 
 type DanmuSvrGetDanmuArgs struct {
-	Req *GetReq `thrift:"req,1" frugal:"1,default,GetReq" json:"req"`
+	Req *GetFullReq `thrift:"req,1" frugal:"1,default,GetFullReq" json:"req"`
 }
 
 func NewDanmuSvrGetDanmuArgs() *DanmuSvrGetDanmuArgs {
@@ -708,15 +835,15 @@ func NewDanmuSvrGetDanmuArgs() *DanmuSvrGetDanmuArgs {
 func (p *DanmuSvrGetDanmuArgs) InitDefault() {
 }
 
-var DanmuSvrGetDanmuArgs_Req_DEFAULT *GetReq
+var DanmuSvrGetDanmuArgs_Req_DEFAULT *GetFullReq
 
-func (p *DanmuSvrGetDanmuArgs) GetReq() (v *GetReq) {
+func (p *DanmuSvrGetDanmuArgs) GetReq() (v *GetFullReq) {
 	if !p.IsSetReq() {
 		return DanmuSvrGetDanmuArgs_Req_DEFAULT
 	}
 	return p.Req
 }
-func (p *DanmuSvrGetDanmuArgs) SetReq(val *GetReq) {
+func (p *DanmuSvrGetDanmuArgs) SetReq(val *GetFullReq) {
 	p.Req = val
 }
 
@@ -736,7 +863,7 @@ var fieldIDToName_DanmuSvrGetDanmuArgs = map[int16]string{
 }
 
 type DanmuSvrGetDanmuResult struct {
-	Success *GetResp `thrift:"success,0,optional" frugal:"0,optional,GetResp" json:"success,omitempty"`
+	Success *GetFullResp `thrift:"success,0,optional" frugal:"0,optional,GetFullResp" json:"success,omitempty"`
 }
 
 func NewDanmuSvrGetDanmuResult() *DanmuSvrGetDanmuResult {
@@ -746,16 +873,16 @@ func NewDanmuSvrGetDanmuResult() *DanmuSvrGetDanmuResult {
 func (p *DanmuSvrGetDanmuResult) InitDefault() {
 }
 
-var DanmuSvrGetDanmuResult_Success_DEFAULT *GetResp
+var DanmuSvrGetDanmuResult_Success_DEFAULT *GetFullResp
 
-func (p *DanmuSvrGetDanmuResult) GetSuccess() (v *GetResp) {
+func (p *DanmuSvrGetDanmuResult) GetSuccess() (v *GetFullResp) {
 	if !p.IsSetSuccess() {
 		return DanmuSvrGetDanmuResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *DanmuSvrGetDanmuResult) SetSuccess(x interface{}) {
-	p.Success = x.(*GetResp)
+	p.Success = x.(*GetFullResp)
 }
 
 func (p *DanmuSvrGetDanmuResult) IsSetSuccess() bool {

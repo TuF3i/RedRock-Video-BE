@@ -3,6 +3,7 @@ package handler
 import (
 	"LiveDanmu/apps/gateway/danmu_gateway/core"
 	"LiveDanmu/apps/gateway/danmu_gateway/core/dto"
+	"LiveDanmu/apps/gateway/danmu_gateway/core/models"
 	"LiveDanmu/apps/public/models/dao"
 	"LiveDanmu/apps/public/response"
 	"LiveDanmu/apps/public/union_var"
@@ -23,10 +24,10 @@ var upgrader = websocket.HertzUpgrader{
 	}, // 跨域
 }
 
-func PubDanmuHandleFunc() app.HandlerFunc {
+func PubVideoDanmuHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 弹幕请求
-		var danmuData dao.DanmuData
+		var danmuData models.VideoDanmuReq
 		// 获取上下文中的claims
 		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
 		// 类型断言
@@ -34,28 +35,28 @@ func PubDanmuHandleFunc() app.HandlerFunc {
 		// 提取请求体中的弹幕信息
 		err := c.BindAndValidate(&danmuData)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.ValidateRequestFail)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.ValidateRequestFail))
 			return
 		}
 		// 填充danmuData
-		danmuData.UserId = claim.Uid
+		danmuData.UID = claim.Uid
 		// 转换结构体
 		pubReq := dto.GenPubReq(danmuData)
 		// 调用PubDanmu微服务
-		resp, err := core.DanmuSvr.PubDanmu(ctx, pubReq)
+		resp, err := core.DanmuSvr.PubVideoDanmu(ctx, pubReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, dto.GenFinalResponseForPubReq(resp))
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 			return
 		}
 
-		c.JSON(consts.StatusOK, response.OperationSuccess)
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 	}
 }
 
 func PubLiveDanmuHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 弹幕请求
-		var danmuData dao.DanmuData
+		var danmuData models.LiveDanmuReq
 		// 获取上下文中的claims
 		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
 		// 类型断言
@@ -63,21 +64,21 @@ func PubLiveDanmuHandleFunc() app.HandlerFunc {
 		// 提取请求体中的弹幕信息
 		err := c.BindAndValidate(&danmuData)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.ValidateRequestFail)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.ValidateRequestFail))
 			return
 		}
 		// 填充danmuData
-		danmuData.UserId = claim.Uid
+		danmuData.UID = claim.Uid
 		// 转换结构体
 		pubReq := dto.GenPubLiveReq(danmuData)
 		// 调用PubDanmu微服务
 		resp, err := core.DanmuSvr.PubLiveDanmu(ctx, pubReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, dto.GenFinalResponseForPubLive(resp))
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 			return
 		}
 
-		c.JSON(consts.StatusOK, response.OperationSuccess)
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 	}
 }
 
@@ -87,13 +88,14 @@ func GetHotDanmuHandleFunc() app.HandlerFunc {
 		// 从路由中提取rvid
 		rvid := c.Param("rvid")
 		if rvid == "" {
-			c.JSON(consts.StatusOK, response.EmptyRVID)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.EmptyRVID))
 			return
 		}
 		// 将string转为int64
 		num, err := strconv.ParseInt(rvid, 10, 64)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
+			resp := dto.GenFinalResponse(response.InternalError(err))
+			c.JSON(consts.StatusOK, resp)
 			return
 		}
 		// 生成GetTopReq
@@ -101,11 +103,11 @@ func GetHotDanmuHandleFunc() app.HandlerFunc {
 		// 调用GetTop
 		resp, err := core.DanmuSvr.GetTop(ctx, getTopReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, dto.GenFinalResponseForGetTopReq(resp))
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 			return
 		}
-		finalResp := dto.GenFinalResponseForGetTopReq(resp)
-		c.JSON(consts.StatusOK, finalResp)
+
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 	}
 }
 
@@ -113,59 +115,61 @@ func GetFullDanmuHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// danmu/full/:rvid
 		// 从路由中提取rvid
-		rvid := c.Param("rvid")
-		if rvid == "" {
-			c.JSON(consts.StatusOK, response.EmptyRVID)
+		rvid_ := c.Param("rvid")
+		if rvid_ == "" {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.EmptyRVID))
 			return
 		}
 		// 将string转为int64
-		num, err := strconv.ParseInt(rvid, 10, 64)
+		rvid, err := strconv.ParseInt(rvid_, 10, 64)
 		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
+			resp := dto.GenFinalResponse(response.InternalError(err))
+			c.JSON(consts.StatusOK, resp)
 			return
 		}
 		// 生成GetTopReq
-		getReq := dto.GenGetDanmuReq(num)
+		getReq := dto.GenGetDanmuReq(rvid)
 		// 调用GetDanmu
 		resp, err := core.DanmuSvr.GetDanmu(ctx, getReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, dto.GenFinalResponseForGetDanmuReq(resp))
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 			return
 		}
-		finalResp := dto.GenFinalResponseForGetDanmuReq(resp)
+		finalResp := dto.GenFinalResponse(resp)
 		c.JSON(consts.StatusOK, finalResp)
 	}
 }
 
 func DelDanmuHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		// 弹幕请求
-		var danmuData dao.DanmuData
 		// 获取上下文中的claims
 		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
 		// 类型断言
 		claim := claims.(*dao.MainClaims)
-		// 提取请求体中的弹幕信息
-		err := c.BindAndValidate(&danmuData)
-		if err != nil {
-			c.JSON(consts.StatusOK, response.ValidateRequestFail)
+		// 从路由中提取rvid
+		rvid_ := c.Param("rvid")
+		if rvid_ == "" {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.EmptyRVID))
 			return
 		}
-		// 校验权限
-		if claim.Role != union_var.JWT_ROLE_ADMIN || claim.Uid != danmuData.UserId {
-			c.JSON(consts.StatusOK, response.YouDoNotHaveAccess)
+		// 将string转为int64
+		rvid, err := strconv.ParseInt(rvid_, 10, 64)
+		if err != nil {
+			resp := response.InternalError(err)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 			return
 		}
 		// 转换结构体
-		delReq := dto.GenDelReq(danmuData)
+		delReq := dto.GenDelReq(rvid, claim.Uid)
 		// 调用PubDanmu微服务
 		resp, err := core.DanmuSvr.DelDanmu(ctx, delReq)
 		if err != nil {
-			c.JSON(consts.StatusOK, dto.GenFinalResponseForDelReq(resp))
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 			return
 		}
 
-		c.JSON(consts.StatusOK, response.OperationSuccess)
+		finalResp := dto.GenFinalResponse(resp)
+		c.JSON(consts.StatusOK, finalResp)
 	}
 }
 
@@ -175,27 +179,30 @@ func LiveDanmuHandleFunc() app.HandlerFunc {
 		// 将连接升级成ws
 		err := upgrader.Upgrade(c, func(conn *websocket.Conn) {
 			// 从路由中提取rvid
-			rvid := c.Param("rvid")
-			if rvid == "" {
-				c.JSON(consts.StatusOK, response.EmptyRVID)
+			rvid_ := c.Param("rvid")
+			if rvid_ == "" {
+				c.JSON(consts.StatusOK, dto.GenFinalResponse(response.EmptyRVID))
 				return
 			}
 			// 将string转为int64
-			num, err := strconv.ParseInt(rvid, 10, 64)
+			rvid, err := strconv.ParseInt(rvid_, 10, 64)
 			if err != nil {
-				c.JSON(consts.StatusOK, response.InternalError(err))
+				resp := response.InternalError(err)
+				c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 				return
 			}
 			// 在连接池内新建连接
-			err = core.PoolGroup.AddConnToGroup(num, conn)
+			err = core.PoolGroup.AddConnToGroup(rvid, conn)
 			if err != nil {
-				c.JSON(consts.StatusOK, response.InternalError(err))
+				resp := response.InternalError(err)
+				c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 				return
 			}
 		})
 		// 是否升级成功
 		if err != nil {
-			c.JSON(consts.StatusOK, response.InternalError(err))
+			resp := response.InternalError(err)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
 			return
 		}
 	}

@@ -1,43 +1,59 @@
 namespace go danmusvr
 
-struct DanmuMsg { // 弹幕结构体
-  1: required i64  room_id
-  2: required i64  user_id
+struct PubDanmuData { // 弹幕结构体
+  1: required i64  dan_id
+  2: required i64  rvid
+  3: required i64  uid
+  4: required string content
+  5: required string color
+  6: required i64 time_stamp
+}
+
+struct GetDanmuData {
+  1: required i64    dan_id
+  2: required i64    rvid
   3: required string content
-  4: required string color   = "#FFFFFF"
-  5: required i64  ts
+  4: required string color
+  5: required i64 time_stamp
+  6: required UserInfo user_info
+}
+
+struct UserInfo {
+  1: required string uid
+  2: required string user_name
+  3: required string avatar_url
 }
 
 // 发送弹幕
-struct PubResp { // 发送弹幕响应
+struct PubVideoResp { // 发送弹幕响应
   1: required i64 status
   2: required string info
 }
 
-struct PubReq { // 发送弹幕请求
-  1: required DanmuMsg danmuMsg
+struct PubVideoReq { // 发送弹幕请求
+  1: required PubDanmuData danmuMsg
 }
 
 // 获取弹幕
-struct GetResp { // 获取弹幕的响应
+struct GetFullResp { // 获取弹幕的响应
   1: required i64 status
   2: required string info
-  3: required list<DanmuMsg> data
+  3: required list<GetDanmuData> data
 }
 
-struct GetReq { // 获取弹幕的请求
-  1: required i64 BV
+struct GetFullReq { // 获取弹幕的请求
+  1: required i64 rvid
 }
 
 // 获取Top1000条
 struct GetTopResp { // 获取Top1000弹幕的响应
   1: required i64 status
   2: required string info
-  3: required list<DanmuMsg> data
+  3: required list<GetDanmuData> data
 }
 
 struct GetTopReq { // 获取Top1000弹幕的请求
-  1: required i64 BV
+  1: required i64 rvid
 }
 
 // 发送Live弹幕
@@ -47,7 +63,7 @@ struct PubLiveResp { // 发送Live弹幕响应
 }
 
 struct PubLiveReq { // 发送Live弹幕请求
-  1: required DanmuMsg danmuMsg
+  1: required PubDanmuData danmuMsg
 }
 
 // 删除Live弹幕
@@ -57,7 +73,7 @@ struct DelLiveResp { // 删除Live弹幕响应
 }
 
 struct DelLiveReq { // 删除Live弹幕请求
-  1: required DanmuMsg danmuMsg
+  1: required i64 dan_id
 }
 
 // 删除Video弹幕
@@ -67,13 +83,14 @@ struct DelResp { // 删除Video弹幕响应
 }
 
 struct DelReq { // 删除Video弹幕请求
-  1: required DanmuMsg danmuMsg
+  1: required i64 dan_id
+  2: required i64 uid
 }
 
 service DanmuSvr { // 服务方法
-  PubResp PubDanmu(1: PubReq req)
+  PubVideoResp PubVideoDanmu(1: PubVideoReq req)
   PubLiveResp PubLiveDanmu(1: PubLiveReq req)
-  GetResp GetDanmu(1: GetReq req)
+  GetFullResp GetDanmu(1: GetFullReq req)
   GetTopResp GetTop(1: GetTopReq req)
   DelLiveResp DelLiveDanmu(1: DelLiveReq req)
   DelResp DelDanmu(1: DelReq req)

@@ -12,7 +12,8 @@ type DanmuData struct {
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 
-	RVID    int64  `json:"rv_id" gorm:"column:room_id;index:idx_room_time,priority:1;not null;comment:直播间ID"`
+	DanID   int64  `json:"dan_id" gorm:"column:dan_id;index:idx_dan_id,priority:1;not null;comment:弹幕ID"`
+	RVID    int64  `json:"rv_id" gorm:"column:rvid;index:idx_rvid,priority:1;not null;comment:RVID"`
 	UserId  int64  `json:"user_id" gorm:"column:user_id;index;not null;comment:发送者用户ID"`
 	Content string `json:"content" binding:"required,min=1,max=100" gorm:"column:content;type:varchar(500);not null;comment:弹幕内容"`
 	Color   string `json:"color" binding:"omitempty,hexcolor" gorm:"column:color;size:20;default:'#FFFFFF';comment:弹幕颜色"`

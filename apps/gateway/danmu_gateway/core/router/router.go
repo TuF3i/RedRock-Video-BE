@@ -46,11 +46,11 @@ func initRouter(h *server.Hertz) {
 	g := h.Group("/danmu")
 	{
 		// 发布视频弹幕
-		g.POST("/video", middleware.JWTMiddleware(), handler.PubDanmuHandleFunc())
+		g.POST("/video", middleware.JWTMiddleware(), handler.PubVideoDanmuHandleFunc())
 		// 发布直播弹幕
 		g.POST("/live", middleware.JWTMiddleware(), handler.PubLiveDanmuHandleFunc())
-		// 删除直播弹幕
-		g.DELETE("/live", middleware.JWTMiddleware(), handler.DelDanmuHandleFunc())
+		// 删除视频弹幕
+		g.DELETE("/video/:rvid", middleware.JWTMiddleware(), handler.DelDanmuHandleFunc())
 		// 建立直播实时ws
 		g.GET("/live/:rvid", handler.LiveDanmuHandleFunc())
 		// 获取首屏视频弹幕
