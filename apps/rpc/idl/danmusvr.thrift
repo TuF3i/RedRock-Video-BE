@@ -19,7 +19,7 @@ struct GetDanmuData {
 }
 
 struct UserInfo {
-  1: required string uid
+  1: required i64 uid
   2: required string user_name
   3: required string avatar_url
 }

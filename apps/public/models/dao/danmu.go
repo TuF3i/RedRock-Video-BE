@@ -6,6 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
+type DUserInfo struct {
+	Uid       int64  `json:"uid" gorm:"-"`
+	UserName  string `json:"user_name" gorm:"-"`
+	AvatarURL string `json:"avatar_url" gorm:"-"`
+}
+
 type DanmuData struct {
 	ID        uint           `json:"-" gorm:"primarykey"`
 	CreatedAt time.Time      `json:"-"`
@@ -18,6 +24,8 @@ type DanmuData struct {
 	Content string `json:"content" binding:"required,min=1,max=100" gorm:"column:content;type:varchar(500);not null;comment:弹幕内容"`
 	Color   string `json:"color" binding:"omitempty,hexcolor" gorm:"column:color;size:20;default:'#FFFFFF';comment:弹幕颜色"`
 	Ts      int64  `json:"ts" gorm:"column:ts;index:idx_room_time,priority:2;not null;comment:发送时间戳(ms)"`
+
+	User DUserInfo `json:"user"`
 }
 
 func (DanmuData) TableName() string {

@@ -14,22 +14,23 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-func (r *KClient) genDanmuKMsg(msg *danmusvr.DanmuMsg) KMsg.DanmuKMsg {
+func (r *KClient) genDanmuKMsg(msg *danmusvr.PubDanmuData) KMsg.DanmuKMsg {
 	// 结构体转换
 	return KMsg.DanmuKMsg{
-		RVID: msg.RoomId,
+		RVID: msg.Rvid,
 		OP:   KMsg.PUB_LIVE_DANMU,
 		Data: dao.DanmuData{
-			RVID:    msg.RoomId,
-			UserId:  msg.UserId,
+			DanID:   msg.DanId,
+			RVID:    msg.Rvid,
+			UserId:  msg.Uid,
 			Content: msg.Content,
 			Color:   msg.Color,
-			Ts:      msg.Ts,
+			Ts:      msg.TimeStamp,
 		},
 	}
 }
 
-func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.DanmuMsg, writer *kafka.Writer) dto.Response {
+func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.PubDanmuData, writer *kafka.Writer) dto.Response {
 	// 生成KMsg
 	source := r.genDanmuKMsg(data)
 	// 序列化Json
@@ -55,7 +56,7 @@ func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.DanmuMsg,
 	return dto.OperationSuccess
 }
 
-func (r *KClient) SendVideoDanmuMsg(ctx context.Context, msg *danmusvr.DanmuMsg) dto.Response {
+func (r *KClient) SendVideoDanmuMsg(ctx context.Context, msg *danmusvr.PubDanmuData) dto.Response {
 	resp := r.produceDanmuKMsg(ctx, msg, r.videoDanmuWriter)
 	if !errors.Is(resp, dto.OperationSuccess) {
 		return resp
@@ -63,7 +64,7 @@ func (r *KClient) SendVideoDanmuMsg(ctx context.Context, msg *danmusvr.DanmuMsg)
 	return dto.OperationSuccess
 }
 
-func (r *KClient) SendLiveDanmuMsg(ctx context.Context, msg *danmusvr.DanmuMsg) dto.Response {
+func (r *KClient) SendLiveDanmuMsg(ctx context.Context, msg *danmusvr.PubDanmuData) dto.Response {
 	resp := r.produceDanmuKMsg(ctx, msg, r.liveDanmuWriter)
 	if !errors.Is(resp, dto.OperationSuccess) {
 		return resp

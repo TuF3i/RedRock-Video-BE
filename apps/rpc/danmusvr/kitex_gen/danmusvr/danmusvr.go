@@ -165,7 +165,7 @@ var fieldIDToName_GetDanmuData = map[int16]string{
 }
 
 type UserInfo struct {
-	Uid       string `thrift:"uid,1,required" frugal:"1,required,string" json:"uid"`
+	Uid       int64  `thrift:"uid,1,required" frugal:"1,required,i64" json:"uid"`
 	UserName  string `thrift:"user_name,2,required" frugal:"2,required,string" json:"user_name"`
 	AvatarUrl string `thrift:"avatar_url,3,required" frugal:"3,required,string" json:"avatar_url"`
 }
@@ -177,7 +177,7 @@ func NewUserInfo() *UserInfo {
 func (p *UserInfo) InitDefault() {
 }
 
-func (p *UserInfo) GetUid() (v string) {
+func (p *UserInfo) GetUid() (v int64) {
 	return p.Uid
 }
 
@@ -188,7 +188,7 @@ func (p *UserInfo) GetUserName() (v string) {
 func (p *UserInfo) GetAvatarUrl() (v string) {
 	return p.AvatarUrl
 }
-func (p *UserInfo) SetUid(val string) {
+func (p *UserInfo) SetUid(val int64) {
 	p.Uid = val
 }
 func (p *UserInfo) SetUserName(val string) {

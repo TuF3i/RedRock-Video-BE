@@ -6,32 +6,46 @@ import (
 	"LiveDanmu/apps/rpc/danmusvr/core/pkg"
 	"LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
 	"context"
-	"errors"
 )
 
 func DelVideoDanmu(ctx context.Context, req *danmusvr.DelReq) dto.Response {
 	// 提取弹幕数据
-	danmuData := req.DanmuMsg
-	// 校验RoomID
-	if !pkg.ValidateRoomID(danmuData.RoomId) {
-		return dto.InvalidRoomID
+	danID := req.DanId
+	uid := req.Uid
+	// 校验danID
+	if !pkg.ValidateDanID(danID) {
+		return dto.InvalidDanID
 	}
-	// 校验UserID
-	if !pkg.ValidateUserID(danmuData.UserId) {
+	// 校验uid
+	if !pkg.ValidateUserID(uid) {
 		return dto.InvalidUserID
 	}
-	// 校验Color
-	if !pkg.ValidateColor(danmuData.Color) {
-		return dto.InvalidColor
+	// 检查弹幕是否存在
+	ok, err := core.Dao.IfDanmuExist(danID)
+	if err != nil {
+		return dto.ServerInternalError(err)
 	}
-	// 校验Content
-	if !pkg.ValidateContent(danmuData.Content) {
-		return dto.InvalidContent
+
+	if !ok {
+		return dto.DanmuNotExist
 	}
+
+	// 获取弹幕信息
+	data, err := core.Dao.GetDanmuDetail(danID)
+	if err != nil {
+		return dto.ServerInternalError(err)
+	}
+
+	// 校验权限
+	if uid != data.UserId {
+		return dto.NoPermission
+	}
+
 	// 发送kafka消息
-	resp := core.Dao.DelVideoDanmu(ctx, danmuData)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return resp
+	err = core.Dao.DelVideoDanmu(ctx, danID)
+	if err != nil {
+		return dto.ServerInternalError(err)
 	}
+
 	return dto.OperationSuccess
 }

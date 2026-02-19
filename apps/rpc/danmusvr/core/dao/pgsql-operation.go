@@ -2,50 +2,72 @@ package dao
 
 import (
 	publicDao "LiveDanmu/apps/public/models/dao"
-	"LiveDanmu/apps/rpc/danmusvr/core/dto"
-	"LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
 	"context"
 	"errors"
 
 	"gorm.io/gorm"
 )
 
-func (r *Dao) getFullDanmuP(ctx context.Context, vid int64) ([]publicDao.DanmuData, dto.Response) {
-	var results []publicDao.DanmuData
+func (r *Dao) getFullDanmuP(ctx context.Context, vid int64) ([]*publicDao.DanmuData, error) {
+	var results []*publicDao.DanmuData
 	err := r.pgdb.Where("rv_id = ?", vid).Order("ts DESC").Find(&results).Error
 	if err != nil {
-		return []publicDao.DanmuData{}, dto.ServerInternalError(err)
+		return nil, err
 	}
 
-	return results, dto.OperationSuccess
+	return results, nil
 }
 
-func (r *Dao) checkIfDanmuExistOnPgSQL(Tx *gorm.DB, data *danmusvr.DanmuMsg) (bool, dto.Response) {
+func (r *Dao) checkIfDanmuExistOnPgSQL(tx *gorm.DB, danID int64) (bool, error) {
 	var dest publicDao.DanmuData
-	if err := Tx.
-		Where("room_id = ?", data.RoomId).
-		Where("user_id = ?", data.UserId).
-		Where("ts = ?", data.Ts).
+	if err := tx.
+		Where("dan_id = ?", danID).
 		First(&dest).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, dto.OperationSuccess
+			return false, nil
 		}
-		return false, dto.ServerInternalError(err)
+		return false, err
 	}
-	return true, dto.OperationSuccess
+	return true, nil
 }
 
-func (r *Dao) delVideoDanmu(Tx *gorm.DB, data *danmusvr.DanmuMsg) dto.Response {
+func (r *Dao) delVideoDanmu(Tx *gorm.DB, danID int64) error {
 	var dest publicDao.DanmuData
 	if err := Tx.
-		Where("room_id = ?", data.RoomId).
-		Where("user_id = ?", data.UserId).
-		Where("ts = ?", data.Ts).
+		Where("dan_id = ?", danID).
 		Delete(&dest).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return dto.OperationSuccess
+			return nil
 		}
-		return dto.ServerInternalError(err)
+		return err
 	}
-	return dto.OperationSuccess
+	return nil
+}
+
+func (r *Dao) getVideoDanmuDetail(tx *gorm.DB, danID int64) (*publicDao.DanmuData, error) {
+	var data *publicDao.DanmuData
+	err := tx.Where("dan_id = ?", danID).First(data).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+func (r *Dao) getUserInfo(uid int64) (publicDao.DUserInfo, error) {
+	var data publicDao.RvUser
+	err := r.pgdb.Where("uid = ?", uid).Select("uid", "avatar_url", "github_login").Find(data).Error
+	if err != nil {
+		return publicDao.DUserInfo{
+			Uid:       0,
+			UserName:  "",
+			AvatarURL: "",
+		}, err
+	}
+
+	return publicDao.DUserInfo{
+		Uid:       data.Uid,
+		UserName:  data.Login,
+		AvatarURL: data.AvatarURL,
+	}, nil
 }

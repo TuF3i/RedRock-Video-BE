@@ -11,39 +11,39 @@ import (
 type DanmuSvrImpl struct{}
 
 // PubDanmu implements the DanmuSvrImpl interface.
-func (s *DanmuSvrImpl) PubDanmu(ctx context.Context, req *danmusvr.PubReq) (resp *danmusvr.PubResp, err error) {
+func (s *DanmuSvrImpl) PubDanmu(ctx context.Context, req *danmusvr.PubVideoReq) (resp *danmusvr.PubVideoResp, err error) {
 	rawResp := PubVideoDanmu(ctx, req)
 	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return dto.GenFinalRespForPubDanMu(rawResp), rawResp
+		return dto.GenKitexResp[*danmusvr.PubVideoResp](rawResp, nil), rawResp
 	}
-	return dto.GenFinalRespForPubDanMu(rawResp), nil
+	return dto.GenKitexResp[*danmusvr.PubVideoResp](rawResp, nil), nil
 }
 
 // PubLiveDanmu implements the DanmuSvrImpl interface.
 func (s *DanmuSvrImpl) PubLiveDanmu(ctx context.Context, req *danmusvr.PubLiveReq) (resp *danmusvr.PubLiveResp, err error) {
 	rawResp := PubLiveDanmu(ctx, req)
 	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return dto.GenFinalRespForPubLiveDanMu(rawResp), rawResp
+		return dto.GenKitexResp[*danmusvr.PubLiveResp](rawResp, nil), rawResp
 	}
-	return dto.GenFinalRespForPubLiveDanMu(rawResp), nil
+	return dto.GenKitexResp[*danmusvr.PubLiveResp](rawResp, nil), nil
 }
 
 // GetDanmu implements the DanmuSvrImpl interface.
-func (s *DanmuSvrImpl) GetDanmu(ctx context.Context, req *danmusvr.GetReq) (resp *danmusvr.GetResp, err error) {
+func (s *DanmuSvrImpl) GetDanmu(ctx context.Context, req *danmusvr.GetFullReq) (resp *danmusvr.GetFullResp, err error) {
 	data, rawResp := GetFullDanmu(ctx, req)
 	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return dto.GenFinalRespForGetDanMu(rawResp, data), rawResp
+		return dto.GenKitexResp[*danmusvr.GetFullResp](rawResp, data), rawResp
 	}
-	return dto.GenFinalRespForGetDanMu(rawResp, data), nil
+	return dto.GenKitexResp[*danmusvr.GetFullResp](rawResp, data), nil
 }
 
 // GetTop implements the DanmuSvrImpl interface.
 func (s *DanmuSvrImpl) GetTop(ctx context.Context, req *danmusvr.GetTopReq) (resp *danmusvr.GetTopResp, err error) {
 	data, rawResp := GetHotDanmu(ctx, req)
 	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return dto.GenFinalRespForGetHotDanMu(rawResp, data), rawResp
+		return dto.GenKitexResp[*danmusvr.GetTopResp](rawResp, data), rawResp
 	}
-	return dto.GenFinalRespForGetHotDanMu(rawResp, data), nil
+	return dto.GenKitexResp[*danmusvr.GetTopResp](rawResp, data), nil
 }
 
 // DelLiveDanmu implements the DanmuSvrImpl interface.
@@ -56,7 +56,7 @@ func (s *DanmuSvrImpl) DelLiveDanmu(ctx context.Context, req *danmusvr.DelLiveRe
 func (s *DanmuSvrImpl) DelDanmu(ctx context.Context, req *danmusvr.DelReq) (resp *danmusvr.DelResp, err error) {
 	rawResp := DelVideoDanmu(ctx, req)
 	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return dto.GenFinalRespForDelVideoDanMu(rawResp), rawResp
+		return dto.GenKitexResp[*danmusvr.DelResp](rawResp, nil), rawResp
 	}
-	return dto.GenFinalRespForDelVideoDanMu(rawResp), nil
+	return dto.GenKitexResp[*danmusvr.DelResp](rawResp, nil), nil
 }

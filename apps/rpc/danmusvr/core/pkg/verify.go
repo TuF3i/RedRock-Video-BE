@@ -15,6 +15,13 @@ func ValidateRoomID(roomID int64) bool {
 	return true
 }
 
+func ValidateDanID(danID int64) bool {
+	if danID < 1 || danID > 9999999999 {
+		return false
+	}
+	return true
+}
+
 // ValidateUserID 校验用户ID
 func ValidateUserID(userID int64) bool {
 	if userID < 1 {

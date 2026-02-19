@@ -10,7 +10,7 @@ func (r *Dao) InsertDanmuIntoDBs(ctx context.Context, data *dao.DanmuData) error
 	tx := r.pgdb.Begin()
 
 	// 检查Pg中有没有相关记录
-	ok, err := r.checkIfDanmuExistOnPgSQL(tx, data)
+	ok, err := r.checkIfDanmuExistOnPgSQL(tx, data.DanID)
 	if err != nil {
 		tx.Rollback()
 		return err

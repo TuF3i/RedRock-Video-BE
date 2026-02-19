@@ -9,15 +9,15 @@ import (
 	"errors"
 )
 
-func PubVideoDanmu(ctx context.Context, req *danmusvr.PubReq) dto.Response {
+func PubVideoDanmu(ctx context.Context, req *danmusvr.PubVideoReq) dto.Response {
 	// 提取弹幕数据
 	danmuData := req.DanmuMsg
 	// 校验RoomID
-	if !pkg.ValidateRoomID(danmuData.RoomId) {
+	if !pkg.ValidateRoomID(danmuData.Rvid) {
 		return dto.InvalidRoomID
 	}
 	// 校验UserID
-	if !pkg.ValidateUserID(danmuData.UserId) {
+	if !pkg.ValidateUserID(danmuData.Uid) {
 		return dto.InvalidUserID
 	}
 	// 校验Color
@@ -40,11 +40,11 @@ func PubLiveDanmu(ctx context.Context, req *danmusvr.PubLiveReq) dto.Response {
 	// 提取弹幕数据
 	danmuData := req.DanmuMsg
 	// 校验RoomID
-	if !pkg.ValidateRoomID(danmuData.RoomId) {
+	if !pkg.ValidateRoomID(danmuData.Rvid) {
 		return dto.InvalidRoomID
 	}
 	// 校验UserID
-	if !pkg.ValidateUserID(danmuData.UserId) {
+	if !pkg.ValidateUserID(danmuData.Uid) {
 		return dto.InvalidUserID
 	}
 	// 校验Color

@@ -2,14 +2,11 @@ package dao
 
 import (
 	"LiveDanmu/apps/public/models/dao"
-	"LiveDanmu/apps/rpc/danmusvr/core/dto"
-	"LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
 	"context"
-	"errors"
 )
 
 // Compare cy的小工具,防止切片越界
-func Compare(max int, data []dao.DanmuData) []dao.DanmuData {
+func Compare(max int, data []*dao.DanmuData) []*dao.DanmuData {
 	length := len(data)
 	if length >= max {
 		return data[:max-1]
@@ -17,96 +14,135 @@ func Compare(max int, data []dao.DanmuData) []dao.DanmuData {
 	return data
 }
 
-func (r *Dao) ReadHotDanmu(ctx context.Context, vid int64) ([]dao.DanmuData, dto.Response) {
+func (r *Dao) ReadHotDanmu(ctx context.Context, vid int64) ([]*dao.DanmuData, error) {
 	// 从redis读数据
-	data, resp := r.getHotDanmuR(ctx, vid)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return []dao.DanmuData{}, resp
+	data, err := r.getHotDanmuR(ctx, vid)
+	if err != nil {
+		return nil, err
 	}
 	// redis里没有就穿透到pgsql
 	if len(data) == 0 {
 		// 从pgsql里拉数据
-		data, resp := r.getFullDanmuP(ctx, vid)
-		if !errors.Is(resp, dto.OperationSuccess) {
-			return []dao.DanmuData{}, resp
+		data, err := r.getFullDanmuP(ctx, vid)
+		if err != nil {
+			return nil, err
+		}
+		// 从pgsql里拉用户数据
+		for _, val := range data {
+			val.User, _ = r.getUserInfo(val.UserId)
 		}
 		// 向redis里写入hotDanmu
-		resp = r.setHotDanmuR(ctx, vid, Compare(1000, data))
-		if !errors.Is(resp, dto.OperationSuccess) {
-			return []dao.DanmuData{}, resp
-		}
-		// 向redis里写入fullDanmu
-		resp = r.setFullDanmuR(ctx, vid, data)
-		if !errors.Is(resp, dto.OperationSuccess) {
-			return []dao.DanmuData{}, resp
+		err = r.setHotDanmuR(ctx, vid, Compare(1000, data))
+		if err != nil {
+			return nil, err
 		}
 
-		return data, dto.OperationSuccess
+		// 向redis里写入fullDanmu
+		err = r.setFullDanmuR(ctx, vid, data)
+		if err != nil {
+			return nil, err
+		}
+
+		return data, nil
 	}
 	// 计数器递增
-	resp = r.incrementHotR(ctx, vid)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return []dao.DanmuData{}, resp
+	err = r.incrementHotR(ctx, vid)
+	if err != nil {
+		return nil, err
 	}
 
-	return data, dto.OperationSuccess
+	return data, nil
 }
 
-func (r *Dao) ReadFullDanmu(ctx context.Context, vid int64) ([]dao.DanmuData, dto.Response) {
+func (r *Dao) ReadFullDanmu(ctx context.Context, vid int64) ([]*dao.DanmuData, error) {
 	// 从redis拉数据
-	data, resp := r.getFullDanmuR(ctx, vid)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return []dao.DanmuData{}, resp
+	data, err := r.getFullDanmuR(ctx, vid)
+	if err != nil {
+		return nil, err
 	}
-	// 如果mysql里没就走pgsql
+	// 如果redis里没就走pgsql
 	if len(data) == 0 {
 		// 从pgsql里拉数据
-		data, resp := r.getFullDanmuP(ctx, vid)
-		if !errors.Is(resp, dto.OperationSuccess) {
-			return []dao.DanmuData{}, resp
+		data, err := r.getFullDanmuP(ctx, vid)
+		if err != nil {
+			return nil, err
+		}
+		// 从pgsql里拉用户数据
+		for _, val := range data {
+			val.User, _ = r.getUserInfo(val.UserId)
 		}
 		// 向redis里写入fullDanmu
-		resp = r.setFullDanmuR(ctx, vid, data)
-		if !errors.Is(resp, dto.OperationSuccess) {
-			return []dao.DanmuData{}, resp
+		err = r.setFullDanmuR(ctx, vid, data)
+		if err != nil {
+			return nil, err
 		}
 
-		return data, dto.OperationSuccess
+		return data, nil
 	}
 	// 计数器递增
-	resp = r.incrementFullR(ctx, vid)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return []dao.DanmuData{}, resp
+	err = r.incrementFullR(ctx, vid)
+	if err != nil {
+		return nil, err
 	}
 
-	return data, dto.OperationSuccess
+	return data, nil
 }
 
-func (r *Dao) DelVideoDanmu(ctx context.Context, msg *danmusvr.DanmuMsg) dto.Response {
+func (r *Dao) DelVideoDanmu(ctx context.Context, danID int64) error {
 	// 从redis中删除整个key，下次访问时自动补位
-	resp := r.delDanmuInRedis(ctx, msg.RoomId)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return resp
+	err := r.delDanmuInRedis(ctx, danID)
+	if err != nil {
+		return err
 	}
-	// 从pgsql中删除弹幕
+
+	// 检查弹幕是否存在
 	tx := r.pgdb.Begin()
-	ok, resp := r.checkIfDanmuExistOnPgSQL(tx, msg)
-	if !errors.Is(resp, dto.OperationSuccess) {
+	ok, err := r.checkIfDanmuExistOnPgSQL(tx, danID)
+	if err != nil {
 		tx.Rollback()
-		return resp
+		return err
 	}
 	// 字段不存在直接返回
 	if !ok {
 		tx.Commit()
-		return dto.OperationSuccess
+		return nil
 	}
+
 	// 删除弹幕
-	resp = r.delVideoDanmu(tx, msg)
-	if !errors.Is(resp, dto.OperationSuccess) {
+	err = r.delVideoDanmu(tx, danID)
+	if err != nil {
 		tx.Rollback()
-		return resp
+		return err
 	}
 
 	tx.Commit()
-	return dto.OperationSuccess
+	return nil
+}
+
+func (r *Dao) IfDanmuExist(danID int64) (bool, error) {
+	tx := r.pgdb.Begin()
+	ok, err := r.checkIfDanmuExistOnPgSQL(tx, danID)
+	if err != nil {
+		tx.Rollback()
+		return false, err
+	}
+	// 字段不存在直接返回
+	if !ok {
+		tx.Commit()
+		return false, nil
+	}
+
+	tx.Commit()
+	return true, nil
+}
+
+func (r *Dao) GetDanmuDetail(danID int64) (*dao.DanmuData, error) {
+	tx := r.pgdb.Begin()
+
+	data, err := r.getVideoDanmuDetail(tx, danID)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
