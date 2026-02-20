@@ -45,17 +45,6 @@ func AddVideo(ctx context.Context, req *videosvr.AddVideoReq) dto.Response {
 		return dto.InvalidAuthorID
 	}
 
-	// 从UserSvr获取用户名
-	req_ := dto.GenGetUserInfoReq(data.AuthorId)
-	resp, err := core.UserSvr.GetUserInfo(ctx, req_)
-	if err != nil {
-		return dto.ServerInternalError(err)
-	}
-	if pkg.ValidateAuthorName(data.AuthorName) {
-		return dto.InvalidAuthorName
-	}
-	data.AuthorName = resp.GetData().GetUserName()
-
 	// 转换结构体
 	videoData := genVideoInfoS(data)
 	// 调用dao层

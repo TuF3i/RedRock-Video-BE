@@ -1,28 +1,51 @@
 namespace go videosvr
 
-struct VideoInfo {
+struct VideoMataInfo {
+  1: required string face_key
+  2: required string minio_key
+  3: required string title
+  4: required string description
+  5: required i64    view_num
+}
+
+struct VideoUserInfo {
+  1: required i64 author_id
+  2: required string author_name
+  3: required string avatar_url
+}
+
+struct VideoDetail { //
   1: required i64 rvid
-  2: required string face_url
-  3: required string minio_key    // 注意：json tag 是 m3u8_url，字段名是 MinioKey
-  4: required string title
-  5: required string description
-  6: required i64 view_num
+  2: required VideoMataInfo mata_info
+  3: required VideoUserInfo user_info
 
-  7: required bool use_face
-  8: required bool in_judge
+  99: required bool in_judge
+}
 
-  9: required i64 author_id
-  10: required string author_name
+struct VideoListData { //
+  1: required i64 rvid
+  2: required string title
+  3: required string face_key
+  4: required VideoUserInfo user_info
+
+  99: required bool in_judge
+}
+
+struct AddVideoData {
+  1: required i64 rvid
+  2: required i64 uid
+  3: required string title
+  4: required string description
 }
 
 struct GetVideoListData {
   1: required i64 total
-  2: required list<VideoInfo> videos
+  2: required list<VideoListData> videos
 }
 
 // 添加视频
 struct AddVideoReq {
-  1: required VideoInfo video_info
+  1: required AddVideoData add_video_data
 }
 
 struct AddVideoResp {
@@ -89,6 +112,29 @@ struct GetJudgeListResp {
   3: optional GetVideoListData data
 }
 
+// 获取我的视频
+struct GetMyVideoListReq {
+  1: required i32 page
+  2: required i32 page_size
+  3: required i64 uid
+}
+
+struct GetMyVideoListResp {
+  1: required i64 status
+  2: required string info
+  3: optional GetVideoListData data
+}
+
+// 视频播放量递增
+struct InnocentViewNumReq {
+  1: required i64 rvid
+}
+
+struct InnocentViewNumResp {
+  1: required i64 status
+  2: required string info
+}
+
 service VideoSvr {
   AddVideoResp AddVideo(1: AddVideoReq req)
   DelVideoResp DelVideo(1: DelVideoReq req)
@@ -96,4 +142,6 @@ service VideoSvr {
   GetJudgeListResp GetJudgeList(1: GetJudgeListReq req)
   GetVideoListResp GetVideoList(1: GetVideoListReq req)
   GetPreSignedUrlResp GetPreSignedUrl(1: GetPreSignedUrlReq req)
+  GetMyVideoListResp GetMyVideoList(1: GetMyVideoListReq req)
+  InnocentViewNumResp InnocentViewNum(1: InnocentViewNumReq req)
 }

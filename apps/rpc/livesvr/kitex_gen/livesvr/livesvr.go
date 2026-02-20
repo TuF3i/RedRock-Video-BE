@@ -3,106 +3,190 @@
 package livesvr
 
 import (
-	"LiveDanmu/apps/rpc/livesvr/kitex_gen/usersvr"
 	"context"
 	"fmt"
 )
 
-type LiveInfo struct {
-	Rvid             int64               `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
-	OwerId           int64               `thrift:"ower_id,2,required" frugal:"2,required,i64" json:"ower_id"`
-	Title            string              `thrift:"title,3,required" frugal:"3,required,string" json:"title"`
-	StreamName       string              `thrift:"stream_name,4,required" frugal:"4,required,string" json:"stream_name"`
-	UpstreamPassword *string             `thrift:"upstream_password,5,optional" frugal:"5,optional,string" json:"upstream_password,omitempty"`
-	UserInfo         *usersvr.RvUserInfo `thrift:"user_info,6,optional" frugal:"6,optional,usersvr.RvUserInfo" json:"user_info,omitempty"`
+type LiveDetail struct {
+	Rvid             int64  `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+	OwerId           int64  `thrift:"ower_id,2,required" frugal:"2,required,i64" json:"ower_id"`
+	Title            string `thrift:"title,3,required" frugal:"3,required,string" json:"title"`
+	StreamName       string `thrift:"stream_name,4,required" frugal:"4,required,string" json:"stream_name"`
+	UpstreamPassword string `thrift:"upstream_password,5,required" frugal:"5,required,string" json:"upstream_password"`
 }
 
-func NewLiveInfo() *LiveInfo {
-	return &LiveInfo{}
+func NewLiveDetail() *LiveDetail {
+	return &LiveDetail{}
 }
 
-func (p *LiveInfo) InitDefault() {
+func (p *LiveDetail) InitDefault() {
 }
 
-func (p *LiveInfo) GetRvid() (v int64) {
+func (p *LiveDetail) GetRvid() (v int64) {
 	return p.Rvid
 }
 
-func (p *LiveInfo) GetOwerId() (v int64) {
+func (p *LiveDetail) GetOwerId() (v int64) {
 	return p.OwerId
 }
 
-func (p *LiveInfo) GetTitle() (v string) {
+func (p *LiveDetail) GetTitle() (v string) {
 	return p.Title
 }
 
-func (p *LiveInfo) GetStreamName() (v string) {
+func (p *LiveDetail) GetStreamName() (v string) {
 	return p.StreamName
 }
 
-var LiveInfo_UpstreamPassword_DEFAULT string
-
-func (p *LiveInfo) GetUpstreamPassword() (v string) {
-	if !p.IsSetUpstreamPassword() {
-		return LiveInfo_UpstreamPassword_DEFAULT
-	}
-	return *p.UpstreamPassword
+func (p *LiveDetail) GetUpstreamPassword() (v string) {
+	return p.UpstreamPassword
 }
-
-var LiveInfo_UserInfo_DEFAULT *usersvr.RvUserInfo
-
-func (p *LiveInfo) GetUserInfo() (v *usersvr.RvUserInfo) {
-	if !p.IsSetUserInfo() {
-		return LiveInfo_UserInfo_DEFAULT
-	}
-	return p.UserInfo
-}
-func (p *LiveInfo) SetRvid(val int64) {
+func (p *LiveDetail) SetRvid(val int64) {
 	p.Rvid = val
 }
-func (p *LiveInfo) SetOwerId(val int64) {
+func (p *LiveDetail) SetOwerId(val int64) {
 	p.OwerId = val
 }
-func (p *LiveInfo) SetTitle(val string) {
+func (p *LiveDetail) SetTitle(val string) {
 	p.Title = val
 }
-func (p *LiveInfo) SetStreamName(val string) {
+func (p *LiveDetail) SetStreamName(val string) {
 	p.StreamName = val
 }
-func (p *LiveInfo) SetUpstreamPassword(val *string) {
+func (p *LiveDetail) SetUpstreamPassword(val string) {
 	p.UpstreamPassword = val
 }
-func (p *LiveInfo) SetUserInfo(val *usersvr.RvUserInfo) {
-	p.UserInfo = val
-}
 
-func (p *LiveInfo) IsSetUpstreamPassword() bool {
-	return p.UpstreamPassword != nil
-}
-
-func (p *LiveInfo) IsSetUserInfo() bool {
-	return p.UserInfo != nil
-}
-
-func (p *LiveInfo) String() string {
+func (p *LiveDetail) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("LiveInfo(%+v)", *p)
+	return fmt.Sprintf("LiveDetail(%+v)", *p)
 }
 
-var fieldIDToName_LiveInfo = map[int16]string{
+var fieldIDToName_LiveDetail = map[int16]string{
 	1: "rvid",
 	2: "ower_id",
 	3: "title",
 	4: "stream_name",
 	5: "upstream_password",
-	6: "user_info",
+}
+
+type LiveListInfo struct {
+	Rvid       int64     `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+	Title      string    `thrift:"title,2,required" frugal:"2,required,string" json:"title"`
+	StreamName string    `thrift:"stream_name,3,required" frugal:"3,required,string" json:"stream_name"`
+	UserInfo   *UserInfo `thrift:"user_info,4,required" frugal:"4,required,UserInfo" json:"user_info"`
+}
+
+func NewLiveListInfo() *LiveListInfo {
+	return &LiveListInfo{}
+}
+
+func (p *LiveListInfo) InitDefault() {
+}
+
+func (p *LiveListInfo) GetRvid() (v int64) {
+	return p.Rvid
+}
+
+func (p *LiveListInfo) GetTitle() (v string) {
+	return p.Title
+}
+
+func (p *LiveListInfo) GetStreamName() (v string) {
+	return p.StreamName
+}
+
+var LiveListInfo_UserInfo_DEFAULT *UserInfo
+
+func (p *LiveListInfo) GetUserInfo() (v *UserInfo) {
+	if !p.IsSetUserInfo() {
+		return LiveListInfo_UserInfo_DEFAULT
+	}
+	return p.UserInfo
+}
+func (p *LiveListInfo) SetRvid(val int64) {
+	p.Rvid = val
+}
+func (p *LiveListInfo) SetTitle(val string) {
+	p.Title = val
+}
+func (p *LiveListInfo) SetStreamName(val string) {
+	p.StreamName = val
+}
+func (p *LiveListInfo) SetUserInfo(val *UserInfo) {
+	p.UserInfo = val
+}
+
+func (p *LiveListInfo) IsSetUserInfo() bool {
+	return p.UserInfo != nil
+}
+
+func (p *LiveListInfo) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("LiveListInfo(%+v)", *p)
+}
+
+var fieldIDToName_LiveListInfo = map[int16]string{
+	1: "rvid",
+	2: "title",
+	3: "stream_name",
+	4: "user_info",
+}
+
+type UserInfo struct {
+	Uid       int64  `thrift:"uid,1,required" frugal:"1,required,i64" json:"uid"`
+	UserName  string `thrift:"user_name,2,required" frugal:"2,required,string" json:"user_name"`
+	AvatarUrl string `thrift:"avatar_url,3,required" frugal:"3,required,string" json:"avatar_url"`
+}
+
+func NewUserInfo() *UserInfo {
+	return &UserInfo{}
+}
+
+func (p *UserInfo) InitDefault() {
+}
+
+func (p *UserInfo) GetUid() (v int64) {
+	return p.Uid
+}
+
+func (p *UserInfo) GetUserName() (v string) {
+	return p.UserName
+}
+
+func (p *UserInfo) GetAvatarUrl() (v string) {
+	return p.AvatarUrl
+}
+func (p *UserInfo) SetUid(val int64) {
+	p.Uid = val
+}
+func (p *UserInfo) SetUserName(val string) {
+	p.UserName = val
+}
+func (p *UserInfo) SetAvatarUrl(val string) {
+	p.AvatarUrl = val
+}
+
+func (p *UserInfo) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserInfo(%+v)", *p)
+}
+
+var fieldIDToName_UserInfo = map[int16]string{
+	1: "uid",
+	2: "user_name",
+	3: "avatar_url",
 }
 
 type GetLiveListData struct {
-	Total int64       `thrift:"total,1,required" frugal:"1,required,i64" json:"total"`
-	Lives []*LiveInfo `thrift:"lives,2,required" frugal:"2,required,list<LiveInfo>" json:"lives"`
+	Total int64           `thrift:"total,1,required" frugal:"1,required,i64" json:"total"`
+	Lives []*LiveListInfo `thrift:"lives,2,required" frugal:"2,required,list<LiveListInfo>" json:"lives"`
 }
 
 func NewGetLiveListData() *GetLiveListData {
@@ -116,13 +200,13 @@ func (p *GetLiveListData) GetTotal() (v int64) {
 	return p.Total
 }
 
-func (p *GetLiveListData) GetLives() (v []*LiveInfo) {
+func (p *GetLiveListData) GetLives() (v []*LiveListInfo) {
 	return p.Lives
 }
 func (p *GetLiveListData) SetTotal(val int64) {
 	p.Total = val
 }
-func (p *GetLiveListData) SetLives(val []*LiveInfo) {
+func (p *GetLiveListData) SetLives(val []*LiveListInfo) {
 	p.Lives = val
 }
 
@@ -134,6 +218,44 @@ func (p *GetLiveListData) String() string {
 }
 
 var fieldIDToName_GetLiveListData = map[int16]string{
+	1: "total",
+	2: "lives",
+}
+
+type GetMyLiveListData struct {
+	Total int64         `thrift:"total,1,required" frugal:"1,required,i64" json:"total"`
+	Lives []*LiveDetail `thrift:"lives,2,required" frugal:"2,required,list<LiveDetail>" json:"lives"`
+}
+
+func NewGetMyLiveListData() *GetMyLiveListData {
+	return &GetMyLiveListData{}
+}
+
+func (p *GetMyLiveListData) InitDefault() {
+}
+
+func (p *GetMyLiveListData) GetTotal() (v int64) {
+	return p.Total
+}
+
+func (p *GetMyLiveListData) GetLives() (v []*LiveDetail) {
+	return p.Lives
+}
+func (p *GetMyLiveListData) SetTotal(val int64) {
+	p.Total = val
+}
+func (p *GetMyLiveListData) SetLives(val []*LiveDetail) {
+	p.Lives = val
+}
+
+func (p *GetMyLiveListData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetMyLiveListData(%+v)", *p)
+}
+
+var fieldIDToName_GetMyLiveListData = map[int16]string{
 	1: "total",
 	2: "lives",
 }
@@ -177,9 +299,9 @@ var fieldIDToName_GetLiveInfoReq = map[int16]string{
 }
 
 type GetLiveInfoResp struct {
-	Status int64     `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string    `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   *LiveInfo `thrift:"data,3,optional" frugal:"3,optional,LiveInfo" json:"data,omitempty"`
+	Status int64       `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string      `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *LiveDetail `thrift:"data,3,optional" frugal:"3,optional,LiveDetail" json:"data,omitempty"`
 }
 
 func NewGetLiveInfoResp() *GetLiveInfoResp {
@@ -197,9 +319,9 @@ func (p *GetLiveInfoResp) GetInfo() (v string) {
 	return p.Info
 }
 
-var GetLiveInfoResp_Data_DEFAULT *LiveInfo
+var GetLiveInfoResp_Data_DEFAULT *LiveDetail
 
-func (p *GetLiveInfoResp) GetData() (v *LiveInfo) {
+func (p *GetLiveInfoResp) GetData() (v *LiveDetail) {
 	if !p.IsSetData() {
 		return GetLiveInfoResp_Data_DEFAULT
 	}
@@ -211,7 +333,7 @@ func (p *GetLiveInfoResp) SetStatus(val int64) {
 func (p *GetLiveInfoResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *GetLiveInfoResp) SetData(val *LiveInfo) {
+func (p *GetLiveInfoResp) SetData(val *LiveDetail) {
 	p.Data = val
 }
 
@@ -365,9 +487,9 @@ var fieldIDToName_StartLiveReq = map[int16]string{
 }
 
 type StartLiveResp struct {
-	Status int64     `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
-	Info   string    `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   *LiveInfo `thrift:"data,3,optional" frugal:"3,optional,LiveInfo" json:"data,omitempty"`
+	Status int64       `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string      `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *LiveDetail `thrift:"data,3,optional" frugal:"3,optional,LiveDetail" json:"data,omitempty"`
 }
 
 func NewStartLiveResp() *StartLiveResp {
@@ -385,9 +507,9 @@ func (p *StartLiveResp) GetInfo() (v string) {
 	return p.Info
 }
 
-var StartLiveResp_Data_DEFAULT *LiveInfo
+var StartLiveResp_Data_DEFAULT *LiveDetail
 
-func (p *StartLiveResp) GetData() (v *LiveInfo) {
+func (p *StartLiveResp) GetData() (v *LiveDetail) {
 	if !p.IsSetData() {
 		return StartLiveResp_Data_DEFAULT
 	}
@@ -399,7 +521,7 @@ func (p *StartLiveResp) SetStatus(val int64) {
 func (p *StartLiveResp) SetInfo(val string) {
 	p.Info = val
 }
-func (p *StartLiveResp) SetData(val *LiveInfo) {
+func (p *StartLiveResp) SetData(val *LiveDetail) {
 	p.Data = val
 }
 
@@ -566,6 +688,91 @@ var fieldIDToName_SRSAuthResp = map[int16]string{
 	1: "ok",
 }
 
+type GetMyLiveListReq struct {
+	Uid int64 `thrift:"uid,1,required" frugal:"1,required,i64" json:"uid"`
+}
+
+func NewGetMyLiveListReq() *GetMyLiveListReq {
+	return &GetMyLiveListReq{}
+}
+
+func (p *GetMyLiveListReq) InitDefault() {
+}
+
+func (p *GetMyLiveListReq) GetUid() (v int64) {
+	return p.Uid
+}
+func (p *GetMyLiveListReq) SetUid(val int64) {
+	p.Uid = val
+}
+
+func (p *GetMyLiveListReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetMyLiveListReq(%+v)", *p)
+}
+
+var fieldIDToName_GetMyLiveListReq = map[int16]string{
+	1: "uid",
+}
+
+type GetMyLiveListResp struct {
+	Status int64              `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string             `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *GetMyLiveListData `thrift:"data,3,optional" frugal:"3,optional,GetMyLiveListData" json:"data,omitempty"`
+}
+
+func NewGetMyLiveListResp() *GetMyLiveListResp {
+	return &GetMyLiveListResp{}
+}
+
+func (p *GetMyLiveListResp) InitDefault() {
+}
+
+func (p *GetMyLiveListResp) GetStatus() (v int64) {
+	return p.Status
+}
+
+func (p *GetMyLiveListResp) GetInfo() (v string) {
+	return p.Info
+}
+
+var GetMyLiveListResp_Data_DEFAULT *GetMyLiveListData
+
+func (p *GetMyLiveListResp) GetData() (v *GetMyLiveListData) {
+	if !p.IsSetData() {
+		return GetMyLiveListResp_Data_DEFAULT
+	}
+	return p.Data
+}
+func (p *GetMyLiveListResp) SetStatus(val int64) {
+	p.Status = val
+}
+func (p *GetMyLiveListResp) SetInfo(val string) {
+	p.Info = val
+}
+func (p *GetMyLiveListResp) SetData(val *GetMyLiveListData) {
+	p.Data = val
+}
+
+func (p *GetMyLiveListResp) IsSetData() bool {
+	return p.Data != nil
+}
+
+func (p *GetMyLiveListResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetMyLiveListResp(%+v)", *p)
+}
+
+var fieldIDToName_GetMyLiveListResp = map[int16]string{
+	1: "status",
+	2: "info",
+	3: "data",
+}
+
 type LiveSvr interface {
 	GetLiveInfo(ctx context.Context, req *GetLiveInfoReq) (r *GetLiveInfoResp, err error)
 
@@ -576,6 +783,8 @@ type LiveSvr interface {
 	StopLive(ctx context.Context, req *StopLiveReq) (r *StopLiveResp, err error)
 
 	SRSAuth(ctx context.Context, req *SRSAuthReq) (r *SRSAuthResp, err error)
+
+	GetMyLiveList(ctx context.Context, req *GetMyLiveListReq) (r *GetMyLiveListResp, err error)
 }
 
 type LiveSvrGetLiveInfoArgs struct {
@@ -955,5 +1164,81 @@ func (p *LiveSvrSRSAuthResult) String() string {
 }
 
 var fieldIDToName_LiveSvrSRSAuthResult = map[int16]string{
+	0: "success",
+}
+
+type LiveSvrGetMyLiveListArgs struct {
+	Req *GetMyLiveListReq `thrift:"req,1" frugal:"1,default,GetMyLiveListReq" json:"req"`
+}
+
+func NewLiveSvrGetMyLiveListArgs() *LiveSvrGetMyLiveListArgs {
+	return &LiveSvrGetMyLiveListArgs{}
+}
+
+func (p *LiveSvrGetMyLiveListArgs) InitDefault() {
+}
+
+var LiveSvrGetMyLiveListArgs_Req_DEFAULT *GetMyLiveListReq
+
+func (p *LiveSvrGetMyLiveListArgs) GetReq() (v *GetMyLiveListReq) {
+	if !p.IsSetReq() {
+		return LiveSvrGetMyLiveListArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *LiveSvrGetMyLiveListArgs) SetReq(val *GetMyLiveListReq) {
+	p.Req = val
+}
+
+func (p *LiveSvrGetMyLiveListArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *LiveSvrGetMyLiveListArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("LiveSvrGetMyLiveListArgs(%+v)", *p)
+}
+
+var fieldIDToName_LiveSvrGetMyLiveListArgs = map[int16]string{
+	1: "req",
+}
+
+type LiveSvrGetMyLiveListResult struct {
+	Success *GetMyLiveListResp `thrift:"success,0,optional" frugal:"0,optional,GetMyLiveListResp" json:"success,omitempty"`
+}
+
+func NewLiveSvrGetMyLiveListResult() *LiveSvrGetMyLiveListResult {
+	return &LiveSvrGetMyLiveListResult{}
+}
+
+func (p *LiveSvrGetMyLiveListResult) InitDefault() {
+}
+
+var LiveSvrGetMyLiveListResult_Success_DEFAULT *GetMyLiveListResp
+
+func (p *LiveSvrGetMyLiveListResult) GetSuccess() (v *GetMyLiveListResp) {
+	if !p.IsSetSuccess() {
+		return LiveSvrGetMyLiveListResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *LiveSvrGetMyLiveListResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetMyLiveListResp)
+}
+
+func (p *LiveSvrGetMyLiveListResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *LiveSvrGetMyLiveListResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("LiveSvrGetMyLiveListResult(%+v)", *p)
+}
+
+var fieldIDToName_LiveSvrGetMyLiveListResult = map[int16]string{
 	0: "success",
 }

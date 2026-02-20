@@ -36,3 +36,7 @@ func GenSRSAuthReq(rvid int64, key string) *livesvr.SRSAuthReq {
 		Password: key,
 	}
 }
+
+func GenGetMyLiveListReq(uid int64) *livesvr.GetMyLiveListReq {
+	return &livesvr.GetMyLiveListReq{Uid: uid}
+}

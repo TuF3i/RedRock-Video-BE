@@ -1223,7 +1223,6 @@ func (p *GetFullResp) FastRead(buf []byte) (int, error) {
 	var fieldId int16
 	var issetStatus bool = false
 	var issetInfo bool = false
-	var issetData bool = false
 	for {
 		fieldTypeId, fieldId, l, err = thrift.Binary.ReadFieldBegin(buf[offset:])
 		offset += l
@@ -1271,7 +1270,6 @@ func (p *GetFullResp) FastRead(buf []byte) (int, error) {
 				if err != nil {
 					goto ReadFieldError
 				}
-				issetData = true
 			} else {
 				l, err = thrift.Binary.Skip(buf[offset:], fieldTypeId)
 				offset += l
@@ -1295,11 +1293,6 @@ func (p *GetFullResp) FastRead(buf []byte) (int, error) {
 
 	if !issetInfo {
 		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetData {
-		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
 	return offset, nil
@@ -1408,15 +1401,17 @@ func (p *GetFullResp) fastWriteField2(buf []byte, w thrift.NocopyWriter) int {
 
 func (p *GetFullResp) fastWriteField3(buf []byte, w thrift.NocopyWriter) int {
 	offset := 0
-	offset += thrift.Binary.WriteFieldBegin(buf[offset:], thrift.LIST, 3)
-	listBeginOffset := offset
-	offset += thrift.Binary.ListBeginLength()
-	var length int
-	for _, v := range p.Data {
-		length++
-		offset += v.FastWriteNocopy(buf[offset:], w)
+	if p.IsSetData() {
+		offset += thrift.Binary.WriteFieldBegin(buf[offset:], thrift.LIST, 3)
+		listBeginOffset := offset
+		offset += thrift.Binary.ListBeginLength()
+		var length int
+		for _, v := range p.Data {
+			length++
+			offset += v.FastWriteNocopy(buf[offset:], w)
+		}
+		thrift.Binary.WriteListBegin(buf[listBeginOffset:], thrift.STRUCT, length)
 	}
-	thrift.Binary.WriteListBegin(buf[listBeginOffset:], thrift.STRUCT, length)
 	return offset
 }
 
@@ -1436,11 +1431,13 @@ func (p *GetFullResp) field2Length() int {
 
 func (p *GetFullResp) field3Length() int {
 	l := 0
-	l += thrift.Binary.FieldBeginLength()
-	l += thrift.Binary.ListBeginLength()
-	for _, v := range p.Data {
-		_ = v
-		l += v.BLength()
+	if p.IsSetData() {
+		l += thrift.Binary.FieldBeginLength()
+		l += thrift.Binary.ListBeginLength()
+		for _, v := range p.Data {
+			_ = v
+			l += v.BLength()
+		}
 	}
 	return l
 }
@@ -1561,7 +1558,6 @@ func (p *GetTopResp) FastRead(buf []byte) (int, error) {
 	var fieldId int16
 	var issetStatus bool = false
 	var issetInfo bool = false
-	var issetData bool = false
 	for {
 		fieldTypeId, fieldId, l, err = thrift.Binary.ReadFieldBegin(buf[offset:])
 		offset += l
@@ -1609,7 +1605,6 @@ func (p *GetTopResp) FastRead(buf []byte) (int, error) {
 				if err != nil {
 					goto ReadFieldError
 				}
-				issetData = true
 			} else {
 				l, err = thrift.Binary.Skip(buf[offset:], fieldTypeId)
 				offset += l
@@ -1633,11 +1628,6 @@ func (p *GetTopResp) FastRead(buf []byte) (int, error) {
 
 	if !issetInfo {
 		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetData {
-		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
 	return offset, nil
@@ -1746,15 +1736,17 @@ func (p *GetTopResp) fastWriteField2(buf []byte, w thrift.NocopyWriter) int {
 
 func (p *GetTopResp) fastWriteField3(buf []byte, w thrift.NocopyWriter) int {
 	offset := 0
-	offset += thrift.Binary.WriteFieldBegin(buf[offset:], thrift.LIST, 3)
-	listBeginOffset := offset
-	offset += thrift.Binary.ListBeginLength()
-	var length int
-	for _, v := range p.Data {
-		length++
-		offset += v.FastWriteNocopy(buf[offset:], w)
+	if p.IsSetData() {
+		offset += thrift.Binary.WriteFieldBegin(buf[offset:], thrift.LIST, 3)
+		listBeginOffset := offset
+		offset += thrift.Binary.ListBeginLength()
+		var length int
+		for _, v := range p.Data {
+			length++
+			offset += v.FastWriteNocopy(buf[offset:], w)
+		}
+		thrift.Binary.WriteListBegin(buf[listBeginOffset:], thrift.STRUCT, length)
 	}
-	thrift.Binary.WriteListBegin(buf[listBeginOffset:], thrift.STRUCT, length)
 	return offset
 }
 
@@ -1774,11 +1766,13 @@ func (p *GetTopResp) field2Length() int {
 
 func (p *GetTopResp) field3Length() int {
 	l := 0
-	l += thrift.Binary.FieldBeginLength()
-	l += thrift.Binary.ListBeginLength()
-	for _, v := range p.Data {
-		_ = v
-		l += v.BLength()
+	if p.IsSetData() {
+		l += thrift.Binary.FieldBeginLength()
+		l += thrift.Binary.ListBeginLength()
+		for _, v := range p.Data {
+			_ = v
+			l += v.BLength()
+		}
 	}
 	return l
 }

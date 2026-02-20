@@ -39,3 +39,11 @@ func GenLiveListKey() string {
 func GenVideoListKey() string {
 	return fmt.Sprintf("video:list")
 }
+
+func GenUserLiveListKey(uid int64) string {
+	return fmt.Sprintf("live:list:%v", uid)
+}
+
+func GenUserVideoListKey(uid int64) string {
+	return fmt.Sprintf("video:list:%v", uid)
+}

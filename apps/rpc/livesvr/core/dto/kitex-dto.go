@@ -12,7 +12,7 @@ type DtoResp interface {
 
 // KitexResp KitexResponse泛型接口
 type KitexResp interface {
-	*livesvr.GetLiveInfoResp | *livesvr.GetLiveListResp | *livesvr.StartLiveResp | *livesvr.StopLiveResp
+	*livesvr.GetLiveInfoResp | *livesvr.GetLiveListResp | *livesvr.StartLiveResp | *livesvr.StopLiveResp | *livesvr.GetMyLiveListResp
 }
 
 // GenKitexResp 生成Kitex响应
@@ -26,7 +26,7 @@ func GenKitexResp[T KitexResp](resp DtoResp, data interface{}) T {
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
 		// 类型断言
-		val, ok := data.(*livesvr.LiveInfo)
+		val, ok := data.(*livesvr.LiveDetail)
 		if ok {
 			v.SetData(val)
 		}
@@ -50,6 +50,16 @@ func GenKitexResp[T KitexResp](resp DtoResp, data interface{}) T {
 		v = new(livesvr.StopLiveResp)
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
+		res = any(v).(T)
+	case *livesvr.GetMyLiveListResp:
+		v = new(livesvr.GetMyLiveListResp)
+		v.SetStatus(resp.GetStatus())
+		v.SetInfo(resp.GetInfo())
+		// 类型断言
+		val, ok := data.(*livesvr.GetMyLiveListData)
+		if ok {
+			v.SetData(val)
+		}
 		res = any(v).(T)
 	}
 	return res

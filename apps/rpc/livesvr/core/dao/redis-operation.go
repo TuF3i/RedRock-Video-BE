@@ -27,6 +27,24 @@ func (r *Dao) delKey(ctx context.Context, key string) error {
 	return err
 }
 
+func (r *Dao) getAllFields(ctx context.Context, key string) ([]*dao.LiveInfo, error) {
+	var dataSet []*dao.LiveInfo
+	rawList, err := r.rdb.HGetAll(ctx, key).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, v := range rawList {
+		liveInfo := &dao.LiveInfo{}
+		if err := jsoniter.ConfigCompatibleWithStandardLibrary.Unmarshal([]byte(v), liveInfo); err != nil {
+			continue
+		}
+		dataSet = append(dataSet, liveInfo)
+	}
+
+	return dataSet, nil
+}
+
 func (r *Dao) getFields(ctx context.Context, key string, page int32, pageSize int32) ([]*dao.LiveInfo, int64, error) {
 	var dataSet []*dao.LiveInfo
 

@@ -38,7 +38,7 @@ struct PubVideoReq { // 发送弹幕请求
 struct GetFullResp { // 获取弹幕的响应
   1: required i64 status
   2: required string info
-  3: required list<GetDanmuData> data
+  3: optional list<GetDanmuData> data
 }
 
 struct GetFullReq { // 获取弹幕的请求
@@ -49,7 +49,7 @@ struct GetFullReq { // 获取弹幕的请求
 struct GetTopResp { // 获取Top1000弹幕的响应
   1: required i64 status
   2: required string info
-  3: required list<GetDanmuData> data
+  3: optional list<GetDanmuData> data
 }
 
 struct GetTopReq { // 获取Top1000弹幕的请求

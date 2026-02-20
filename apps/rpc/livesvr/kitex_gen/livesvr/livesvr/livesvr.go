@@ -48,6 +48,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"GetMyLiveList": kitex.NewMethodInfo(
+		getMyLiveListHandler,
+		newLiveSvrGetMyLiveListArgs,
+		newLiveSvrGetMyLiveListResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 }
 
 var (
@@ -204,6 +211,24 @@ func newLiveSvrSRSAuthResult() interface{} {
 	return livesvr.NewLiveSvrSRSAuthResult()
 }
 
+func getMyLiveListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*livesvr.LiveSvrGetMyLiveListArgs)
+	realResult := result.(*livesvr.LiveSvrGetMyLiveListResult)
+	success, err := handler.(livesvr.LiveSvr).GetMyLiveList(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newLiveSvrGetMyLiveListArgs() interface{} {
+	return livesvr.NewLiveSvrGetMyLiveListArgs()
+}
+
+func newLiveSvrGetMyLiveListResult() interface{} {
+	return livesvr.NewLiveSvrGetMyLiveListResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -259,6 +284,16 @@ func (p *kClient) SRSAuth(ctx context.Context, req *livesvr.SRSAuthReq) (r *live
 	_args.Req = req
 	var _result livesvr.LiveSvrSRSAuthResult
 	if err = p.c.Call(ctx, "SRSAuth", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetMyLiveList(ctx context.Context, req *livesvr.GetMyLiveListReq) (r *livesvr.GetMyLiveListResp, err error) {
+	var _args livesvr.LiveSvrGetMyLiveListArgs
+	_args.Req = req
+	var _result livesvr.LiveSvrGetMyLiveListResult
+	if err = p.c.Call(ctx, "GetMyLiveList", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

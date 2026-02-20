@@ -2,7 +2,7 @@ package dto
 
 import (
 	"LiveDanmu/apps/public/response"
-	"LiveDanmu/apps/rpc/videosvr/kitex_gen/videosvr"
+	"LiveDanmu/apps/rpc/livesvr/kitex_gen/livesvr"
 )
 
 func genFinalResp(resp Kresp, data interface{}) response.FinalResponse {
@@ -25,32 +25,32 @@ func GenFinalResponse[T KitexResps](resp T) response.FinalResponse {
 	// 组装
 	switch v := any(resp).(type) {
 	// 微服务响应
-	case *videosvr.AddVideoResp:
-		if v.GetStatus() == 0 {
-			return genFinalResp(response.OperationSuccess, nil)
-		}
-		return genFinalResp(v, nil)
-	case *videosvr.DelVideoResp:
-		if v.GetStatus() == 0 {
-			return genFinalResp(response.OperationSuccess, nil)
-		}
-		return genFinalResp(v, nil)
-	case *videosvr.JudgeAccessResp:
-		if v.GetStatus() == 0 {
-			return genFinalResp(response.OperationSuccess, nil)
-		}
-		return genFinalResp(v, nil)
-	case *videosvr.GetVideoListResp:
+	case *livesvr.GetLiveInfoResp:
 		if v.GetStatus() == 0 {
 			return genFinalResp(response.OperationSuccess, v.GetData())
 		}
 		return genFinalResp(v, nil)
-	case *videosvr.GetPreSignedUrlResp:
+	case *livesvr.GetLiveListResp:
 		if v.GetStatus() == 0 {
 			return genFinalResp(response.OperationSuccess, v.GetData())
+		}
+		return genFinalResp(v, nil)
+	case *livesvr.StartLiveResp:
+		if v.GetStatus() == 0 {
+			return genFinalResp(response.OperationSuccess, v.GetData())
+		}
+		return genFinalResp(v, nil)
+	case *livesvr.StopLiveResp:
+		if v.GetStatus() == 0 {
+			return genFinalResp(response.OperationSuccess, nil)
 		}
 		return genFinalResp(v, nil)
 	case response.Response:
+		return genFinalResp(v, nil)
+	case *livesvr.GetMyLiveListResp:
+		if v.GetStatus() == 0 {
+			return genFinalResp(response.OperationSuccess, v.GetData())
+		}
 		return genFinalResp(v, nil)
 	}
 	// 兜底

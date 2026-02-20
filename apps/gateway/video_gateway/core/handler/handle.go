@@ -3,6 +3,7 @@ package handler
 import (
 	"LiveDanmu/apps/gateway/video_gateway/core"
 	"LiveDanmu/apps/gateway/video_gateway/core/dto"
+	"LiveDanmu/apps/gateway/video_gateway/models"
 	"LiveDanmu/apps/public/models/dao"
 	"LiveDanmu/apps/public/response"
 	"LiveDanmu/apps/public/union_var"
@@ -12,11 +13,11 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/google/uuid"
 )
 
 func UploadVideoHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		// video/upload/:rvid
 		// 获取rvid
 		RawRvid := c.Param("rvid")
 		if RawRvid == "" {
@@ -46,7 +47,6 @@ func UploadVideoHandleFunc() app.HandlerFunc {
 
 func UploadFaceHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		// video/upload/face/:rvid
 		// 获取rvid
 		RawRvid := c.Param("rvid")
 		if RawRvid == "" {
@@ -77,7 +77,7 @@ func UploadFaceHandleFunc() app.HandlerFunc {
 func AddVideoHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 视频数据
-		var data dao.VideoInfo
+		var data models.AddVideoReq
 		// 获取上下文中的claims
 		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
 		// 类型断言
@@ -89,10 +89,8 @@ func AddVideoHandleFunc() app.HandlerFunc {
 			c.JSON(consts.StatusOK, resp)
 			return
 		}
-		// 填充结构体
-		data.AuthorID = claim.Uid
 		// 构造请求
-		req := dto.GenAddVideoReq(&data)
+		req := dto.GenAddVideoReq(claim.Uid, &data)
 		// 调用AddVideo
 		rawResp, err := core.VideoSvr.AddVideo(ctx, req)
 		if err != nil {
@@ -110,13 +108,17 @@ func DelVideoHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// video/delete/:rvid
 		// 获取rvid
-		RawRvid := c.Param("rvid")
-		if RawRvid == "" {
+		rvid_ := c.Param("rvid")
+		if rvid_ == "" {
 			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](response.EmptyRVID))
 			return
 		}
-		// 解码rvid
-		rvid := utils.RVIDDecoder(RawRvid)
+		rvid, err := strconv.ParseInt(rvid_, 10, 64)
+		if err != nil {
+			resp := dto.GenFinalResponse(response.InternalError(err))
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 获取上下文中的claims
 		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
 		// 类型断言
@@ -140,13 +142,17 @@ func JudgeAccessHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// video/judge/:rvid
 		// 获取rvid
-		RawRvid := c.Param("rvid")
-		if RawRvid == "" {
+		rvid_ := c.Param("rvid")
+		if rvid_ == "" {
 			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](response.EmptyRVID))
 			return
 		}
-		// 解码rvid
-		rvid := utils.RVIDDecoder(RawRvid)
+		rvid, err := strconv.ParseInt(rvid_, 10, 64)
+		if err != nil {
+			resp := dto.GenFinalResponse(response.InternalError(err))
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 获取上下文中的claims
 		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
 		// 类型断言
@@ -255,13 +261,17 @@ func GetPreSignedUrlHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// video/play/:rvid
 		// 获取rvid
-		RawRvid := c.Param("rvid")
-		if RawRvid == "" {
+		rvid_ := c.Param("rvid")
+		if rvid_ == "" {
 			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](response.EmptyRVID))
 			return
 		}
-		// 解码rvid
-		rvid := utils.RVIDDecoder(RawRvid)
+		rvid, err := strconv.ParseInt(rvid_, 10, 64)
+		if err != nil {
+			resp := dto.GenFinalResponse(response.InternalError(err))
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 获取上下文中的claims
 		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
 		if !ok {
@@ -294,5 +304,87 @@ func GetPreSignedUrlHandleFunc() app.HandlerFunc {
 
 		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
 		return
+	}
+}
+
+func GetMyVideoListHandleFunc() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// video/my?page=xxx&pageSize=xxx
+		// 获取page和pageSize
+		page_ := c.Query("page")
+		pageSize_ := c.Query("pageSize")
+		// 获取上下文中的claims
+		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		// 类型断言
+		claim := claims.(*dao.MainClaims)
+		// 类型转换
+		page, err := strconv.Atoi(page_)
+		if err != nil {
+			resp := response.InternalError(err)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](resp))
+			return
+		}
+		pageSize, err := strconv.Atoi(pageSize_)
+		if err != nil {
+			resp := response.InternalError(err)
+			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](resp))
+			return
+		}
+		// 生成请求
+		req := dto.GenGetMyVideoListReq(int32(page), int32(pageSize), claim.Uid)
+		// 调用
+		rawResp, err := core.VideoSvr.GetMyVideoList(ctx, req)
+
+		if err != nil {
+			resp := dto.GenFinalResponse(rawResp)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
+
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
+		return
+	}
+}
+
+func InnocentViewNumHandleFunc() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// video/:rvid/innocent
+		// 获取rvid
+		rvid_ := c.Param("rvid")
+		if rvid_ == "" {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](response.EmptyRVID))
+			return
+		}
+		rvid, err := strconv.ParseInt(rvid_, 10, 64)
+		if err != nil {
+			resp := dto.GenFinalResponse(response.InternalError(err))
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
+		// 构造请求
+		req := dto.GenInnocentViewNumReq(rvid)
+		// 发起调用
+		rawResp, err := core.VideoSvr.InnocentViewNum(ctx, req)
+
+		if err != nil {
+			resp := dto.GenFinalResponse(rawResp)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
+
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
+		return
+	}
+}
+
+func GetNewRvidHandleFunc() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		rvid := uuid.New().ID()
+		resp := dto.GenFinalResponse(response.FinalResponse{
+			Status: 200,
+			Info:   "Operation Success",
+			Data:   rvid,
+		})
+		c.JSON(consts.StatusOK, resp)
 	}
 }

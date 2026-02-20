@@ -27,9 +27,10 @@ func (r *Dao) StartLive(ctx context.Context, data *dao.LiveInfo) error {
 		tx.Rollback()
 		return err
 	}
-	// 向redis中写入
+
+	// 从redis中删除整个key
 	key := utils.GenLiveListKey()
-	err = r.newField(ctx, key, strconv.FormatInt(data.RVID, 10), data)
+	err = r.delKey(ctx, key)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -91,6 +92,10 @@ func (r *Dao) GetLiveList(ctx context.Context, page int32, pageSize int32) ([]*d
 		tx.Rollback()
 		return nil, 0, err
 	}
+	// 从pgsql里读用户
+	for _, val := range data {
+		val.User, _ = r.getUserInfo(val.OwerId)
+	}
 	// 异步更新
 	if !r.isSyncRunning.Load() {
 		go func(data []*dao.LiveInfo, r *Dao) {
@@ -107,20 +112,23 @@ func (r *Dao) GetLiveList(ctx context.Context, page int32, pageSize int32) ([]*d
 	return data, total, nil
 }
 
+func (r *Dao) GetUserLiveList(ctx context.Context, uid int64) ([]*dao.LiveInfo, int64, error) {
+	// 启动数据库事物
+	tx := r.pgdb.Begin()
+	// 从pgsql中获取数据
+	dataSet, total, err := r.getRecordDetailForUsers(tx, uid)
+	if err != nil {
+		tx.Rollback()
+		return nil, 0, err
+	}
+
+	tx.Commit()
+	return dataSet, total, nil
+}
+
 func (r *Dao) GetLiveInfo(ctx context.Context, rvid int64) (*dao.LiveInfo, error) {
 	// 启动数据库事物
 	tx := r.pgdb.Begin()
-	key := utils.GenLiveListKey()
-	// 从redis读取缓存
-	data, err := r.getFieldDetail(ctx, key, strconv.FormatInt(rvid, 10))
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-	if data != nil {
-		tx.Rollback()
-		return data, nil
-	}
 	// 检查pgsql中是否存在结果
 	ok, err := r.ifRecordExist(tx, rvid)
 	if err != nil {
@@ -132,13 +140,11 @@ func (r *Dao) GetLiveInfo(ctx context.Context, rvid int64) (*dao.LiveInfo, error
 		return nil, errors.New("live not exists")
 	}
 	// 从pgsql里读取数据
-	data, err = r.getRecordDetail(tx, rvid)
+	data, err := r.getRecordDetail(tx, rvid)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
-	// 向redis内写入数据
-	_ = r.newField(ctx, key, strconv.FormatInt(rvid, 10), data)
 
 	tx.Commit()
 	return data, nil

@@ -1,23 +1,16 @@
 package dto
 
 import (
-	"LiveDanmu/apps/public/models/dao"
+	"LiveDanmu/apps/gateway/video_gateway/models"
 	"LiveDanmu/apps/rpc/videosvr/kitex_gen/videosvr"
 )
 
-func GenAddVideoReq(data *dao.VideoInfo) *videosvr.AddVideoReq {
-	return &videosvr.AddVideoReq{VideoInfo: &videosvr.VideoInfo{
-		Rvid:        data.RVID,
-		FaceUrl:     data.FaceUrl,
-		MinioKey:    data.MinioKey,
+func GenAddVideoReq(uid int64, data *models.AddVideoReq) *videosvr.AddVideoReq {
+	return &videosvr.AddVideoReq{AddVideoData: &videosvr.AddVideoData{
+		Rvid:        data.Rvid,
+		Uid:         uid,
 		Title:       data.Title,
 		Description: data.Description,
-		UseFace:     data.UseFace,
-		AuthorId:    data.AuthorID,
-		// 默认字段
-		AuthorName: "",
-		InJudge:    true,
-		ViewNum:    0,
 	}}
 }
 
@@ -49,4 +42,16 @@ func GenGetPreSignedUrlReq(rvid int64, uid int64, role string) *videosvr.GetPreS
 		Uid:  uid,
 		Role: role,
 	}
+}
+
+func GenGetMyVideoListReq(page int32, pageSize int32, uid int64) *videosvr.GetMyVideoListReq {
+	return &videosvr.GetMyVideoListReq{
+		Page:     page,
+		PageSize: pageSize,
+		Uid:      uid,
+	}
+}
+
+func GenInnocentViewNumReq(rvid int64) *videosvr.InnocentViewNumReq {
+	return &videosvr.InnocentViewNumReq{Rvid: rvid}
 }

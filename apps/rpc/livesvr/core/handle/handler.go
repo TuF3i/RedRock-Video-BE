@@ -71,3 +71,16 @@ func (s *LiveSvrImpl) SRSAuth(ctx context.Context, req *livesvr.SRSAuthReq) (res
 	resp = SRSAuth(ctx, req)
 	return resp, nil
 }
+
+func (s *LiveSvrImpl) GetMyLiveList(ctx context.Context, req *livesvr.GetMyLiveListReq) (resp *livesvr.GetMyLiveListResp, err error) {
+	// 调用
+	rawResp, data := GetMyLiveList(ctx, req)
+	// 装换上响应
+	resp = dto.GenKitexResp[*livesvr.GetMyLiveListResp](rawResp, data)
+	// 判断错误
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
+}

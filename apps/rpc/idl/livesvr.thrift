@@ -1,19 +1,34 @@
 namespace go livesvr
 
-include "./usersvr.thrift"
-
-struct LiveInfo {
+struct LiveDetail {
   1: required i64 rvid
   2: required i64 ower_id
   3: required string title
   4: required string stream_name
-  5: optional string upstream_password
-  6: optional usersvr.RvUserInfo user_info
+  5: required string upstream_password
+}
+
+struct LiveListInfo {
+  1: required i64 rvid
+  2: required string title
+  3: required string stream_name
+  4: required UserInfo user_info
+}
+
+struct UserInfo {
+  1: required i64 uid
+  2: required string user_name
+  3: required string avatar_url
 }
 
 struct GetLiveListData {
   1: required i64 total
-  2: required list<LiveInfo> lives
+  2: required list<LiveListInfo> lives
+}
+
+struct GetMyLiveListData {
+  1: required i64 total
+  2: required list<LiveDetail> lives
 }
 
 // 获取直播信息
@@ -25,7 +40,7 @@ struct GetLiveInfoReq {
 struct GetLiveInfoResp {
   1: required i64 status
   2: required string info
-  3: optional LiveInfo data
+  3: optional LiveDetail data
 }
 
 // 获取直播列表
@@ -49,7 +64,7 @@ struct StartLiveReq {
 struct StartLiveResp {
   1: required i64 status
   2: required string info
-  3: optional LiveInfo data
+  3: optional LiveDetail data
 }
 
 // 停止直播
@@ -73,10 +88,22 @@ struct SRSAuthResp {
   1: required i32 ok = 1
 }
 
+// 获取自己的直播
+struct GetMyLiveListReq {
+  1: required i64 uid
+}
+
+struct GetMyLiveListResp {
+  1: required i64 status
+  2: required string info
+  3: optional GetMyLiveListData data
+}
+
 service LiveSvr {
   GetLiveInfoResp GetLiveInfo(1: GetLiveInfoReq req)
   GetLiveListResp GetLiveList(1: GetLiveListReq req)
   StartLiveResp StartLive(1: StartLiveReq req)
   StopLiveResp StopLive(1: StopLiveReq req)
   SRSAuthResp SRSAuth(1: SRSAuthReq req)
+  GetMyLiveListResp GetMyLiveList(1: GetMyLiveListReq req)
 }

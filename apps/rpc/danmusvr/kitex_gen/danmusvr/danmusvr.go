@@ -290,7 +290,7 @@ var fieldIDToName_PubVideoReq = map[int16]string{
 type GetFullResp struct {
 	Status int64           `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
 	Info   string          `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   []*GetDanmuData `thrift:"data,3,required" frugal:"3,required,list<GetDanmuData>" json:"data"`
+	Data   []*GetDanmuData `thrift:"data,3,optional" frugal:"3,optional,list<GetDanmuData>" json:"data,omitempty"`
 }
 
 func NewGetFullResp() *GetFullResp {
@@ -308,7 +308,12 @@ func (p *GetFullResp) GetInfo() (v string) {
 	return p.Info
 }
 
+var GetFullResp_Data_DEFAULT []*GetDanmuData
+
 func (p *GetFullResp) GetData() (v []*GetDanmuData) {
+	if !p.IsSetData() {
+		return GetFullResp_Data_DEFAULT
+	}
 	return p.Data
 }
 func (p *GetFullResp) SetStatus(val int64) {
@@ -319,6 +324,10 @@ func (p *GetFullResp) SetInfo(val string) {
 }
 func (p *GetFullResp) SetData(val []*GetDanmuData) {
 	p.Data = val
+}
+
+func (p *GetFullResp) IsSetData() bool {
+	return p.Data != nil
 }
 
 func (p *GetFullResp) String() string {
@@ -366,7 +375,7 @@ var fieldIDToName_GetFullReq = map[int16]string{
 type GetTopResp struct {
 	Status int64           `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
 	Info   string          `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
-	Data   []*GetDanmuData `thrift:"data,3,required" frugal:"3,required,list<GetDanmuData>" json:"data"`
+	Data   []*GetDanmuData `thrift:"data,3,optional" frugal:"3,optional,list<GetDanmuData>" json:"data,omitempty"`
 }
 
 func NewGetTopResp() *GetTopResp {
@@ -384,7 +393,12 @@ func (p *GetTopResp) GetInfo() (v string) {
 	return p.Info
 }
 
+var GetTopResp_Data_DEFAULT []*GetDanmuData
+
 func (p *GetTopResp) GetData() (v []*GetDanmuData) {
+	if !p.IsSetData() {
+		return GetTopResp_Data_DEFAULT
+	}
 	return p.Data
 }
 func (p *GetTopResp) SetStatus(val int64) {
@@ -395,6 +409,10 @@ func (p *GetTopResp) SetInfo(val string) {
 }
 func (p *GetTopResp) SetData(val []*GetDanmuData) {
 	p.Data = val
+}
+
+func (p *GetTopResp) IsSetData() bool {
+	return p.Data != nil
 }
 
 func (p *GetTopResp) String() string {

@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func StartLive(ctx context.Context, req *livesvr.StartLiveReq) (dto.Response, *livesvr.LiveInfo) {
+func StartLive(ctx context.Context, req *livesvr.StartLiveReq) (dto.Response, *livesvr.LiveDetail) {
 	// 获取字段值
 	title := req.GetTitle()
 	owerID := req.GetOwerId()
@@ -34,7 +34,7 @@ func StartLive(ctx context.Context, req *livesvr.StartLiveReq) (dto.Response, *l
 	}
 
 	// 转换结构体
-	respData := convertDao2Livesvr(data)
+	respData := convertDao2LiveDetail(data)
 
 	return dto.OperationSuccess, respData
 }

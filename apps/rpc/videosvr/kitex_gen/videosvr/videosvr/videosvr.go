@@ -55,6 +55,20 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"GetMyVideoList": kitex.NewMethodInfo(
+		getMyVideoListHandler,
+		newVideoSvrGetMyVideoListArgs,
+		newVideoSvrGetMyVideoListResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
+	"InnocentViewNum": kitex.NewMethodInfo(
+		innocentViewNumHandler,
+		newVideoSvrInnocentViewNumArgs,
+		newVideoSvrInnocentViewNumResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 }
 
 var (
@@ -229,6 +243,42 @@ func newVideoSvrGetPreSignedUrlResult() interface{} {
 	return videosvr.NewVideoSvrGetPreSignedUrlResult()
 }
 
+func getMyVideoListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*videosvr.VideoSvrGetMyVideoListArgs)
+	realResult := result.(*videosvr.VideoSvrGetMyVideoListResult)
+	success, err := handler.(videosvr.VideoSvr).GetMyVideoList(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newVideoSvrGetMyVideoListArgs() interface{} {
+	return videosvr.NewVideoSvrGetMyVideoListArgs()
+}
+
+func newVideoSvrGetMyVideoListResult() interface{} {
+	return videosvr.NewVideoSvrGetMyVideoListResult()
+}
+
+func innocentViewNumHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*videosvr.VideoSvrInnocentViewNumArgs)
+	realResult := result.(*videosvr.VideoSvrInnocentViewNumResult)
+	success, err := handler.(videosvr.VideoSvr).InnocentViewNum(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newVideoSvrInnocentViewNumArgs() interface{} {
+	return videosvr.NewVideoSvrInnocentViewNumArgs()
+}
+
+func newVideoSvrInnocentViewNumResult() interface{} {
+	return videosvr.NewVideoSvrInnocentViewNumResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -294,6 +344,26 @@ func (p *kClient) GetPreSignedUrl(ctx context.Context, req *videosvr.GetPreSigne
 	_args.Req = req
 	var _result videosvr.VideoSvrGetPreSignedUrlResult
 	if err = p.c.Call(ctx, "GetPreSignedUrl", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetMyVideoList(ctx context.Context, req *videosvr.GetMyVideoListReq) (r *videosvr.GetMyVideoListResp, err error) {
+	var _args videosvr.VideoSvrGetMyVideoListArgs
+	_args.Req = req
+	var _result videosvr.VideoSvrGetMyVideoListResult
+	if err = p.c.Call(ctx, "GetMyVideoList", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) InnocentViewNum(ctx context.Context, req *videosvr.InnocentViewNumReq) (r *videosvr.InnocentViewNumResp, err error) {
+	var _args videosvr.VideoSvrInnocentViewNumArgs
+	_args.Req = req
+	var _result videosvr.VideoSvrInnocentViewNumResult
+	if err = p.c.Call(ctx, "InnocentViewNum", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

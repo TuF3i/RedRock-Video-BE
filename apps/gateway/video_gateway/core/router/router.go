@@ -46,10 +46,16 @@ func initRouter(h *server.Hertz) {
 	{
 		// 获取视频列表
 		g.GET("/list", handler.GetVideoListHandleFunc())
+		// 获取我的视频列表
+		g.GET("/list/my", middleware.JWTMiddleware(), handler.GetMyVideoListHandleFunc())
+		// 获取新的RVID
+		g.GET("/new/rvid", middleware.JWTMiddleware(), handler.GetNewRvidHandleFunc())
 		// 发布视频
-		g.POST("", middleware.JWTMiddleware(), handler.AddVideoHandleFunc())
+		g.POST("/new", middleware.JWTMiddleware(), handler.AddVideoHandleFunc())
 		// 删除视频
 		g.DELETE("/:rvid", middleware.JWTMiddleware(), handler.DelVideoHandleFunc())
+		// 增加观看数
+		g.GET("/:rvid/innocent", handler.InnocentViewNumHandleFunc())
 
 		// 审核子分组
 		judgeGroup := g.Group("/judge")

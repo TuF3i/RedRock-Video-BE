@@ -7,119 +7,325 @@ import (
 	"fmt"
 )
 
-type VideoInfo struct {
-	Rvid        int64  `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
-	FaceUrl     string `thrift:"face_url,2,required" frugal:"2,required,string" json:"face_url"`
-	MinioKey    string `thrift:"minio_key,3,required" frugal:"3,required,string" json:"minio_key"`
-	Title       string `thrift:"title,4,required" frugal:"4,required,string" json:"title"`
-	Description string `thrift:"description,5,required" frugal:"5,required,string" json:"description"`
-	ViewNum     int64  `thrift:"view_num,6,required" frugal:"6,required,i64" json:"view_num"`
-	UseFace     bool   `thrift:"use_face,7,required" frugal:"7,required,bool" json:"use_face"`
-	InJudge     bool   `thrift:"in_judge,8,required" frugal:"8,required,bool" json:"in_judge"`
-	AuthorId    int64  `thrift:"author_id,9,required" frugal:"9,required,i64" json:"author_id"`
-	AuthorName  string `thrift:"author_name,10,required" frugal:"10,required,string" json:"author_name"`
+type VideoMataInfo struct {
+	FaceKey     string `thrift:"face_key,1,required" frugal:"1,required,string" json:"face_key"`
+	MinioKey    string `thrift:"minio_key,2,required" frugal:"2,required,string" json:"minio_key"`
+	Title       string `thrift:"title,3,required" frugal:"3,required,string" json:"title"`
+	Description string `thrift:"description,4,required" frugal:"4,required,string" json:"description"`
+	ViewNum     int64  `thrift:"view_num,5,required" frugal:"5,required,i64" json:"view_num"`
 }
 
-func NewVideoInfo() *VideoInfo {
-	return &VideoInfo{}
+func NewVideoMataInfo() *VideoMataInfo {
+	return &VideoMataInfo{}
 }
 
-func (p *VideoInfo) InitDefault() {
+func (p *VideoMataInfo) InitDefault() {
 }
 
-func (p *VideoInfo) GetRvid() (v int64) {
-	return p.Rvid
+func (p *VideoMataInfo) GetFaceKey() (v string) {
+	return p.FaceKey
 }
 
-func (p *VideoInfo) GetFaceUrl() (v string) {
-	return p.FaceUrl
-}
-
-func (p *VideoInfo) GetMinioKey() (v string) {
+func (p *VideoMataInfo) GetMinioKey() (v string) {
 	return p.MinioKey
 }
 
-func (p *VideoInfo) GetTitle() (v string) {
+func (p *VideoMataInfo) GetTitle() (v string) {
 	return p.Title
 }
 
-func (p *VideoInfo) GetDescription() (v string) {
+func (p *VideoMataInfo) GetDescription() (v string) {
 	return p.Description
 }
 
-func (p *VideoInfo) GetViewNum() (v int64) {
+func (p *VideoMataInfo) GetViewNum() (v int64) {
 	return p.ViewNum
 }
-
-func (p *VideoInfo) GetUseFace() (v bool) {
-	return p.UseFace
+func (p *VideoMataInfo) SetFaceKey(val string) {
+	p.FaceKey = val
 }
-
-func (p *VideoInfo) GetInJudge() (v bool) {
-	return p.InJudge
-}
-
-func (p *VideoInfo) GetAuthorId() (v int64) {
-	return p.AuthorId
-}
-
-func (p *VideoInfo) GetAuthorName() (v string) {
-	return p.AuthorName
-}
-func (p *VideoInfo) SetRvid(val int64) {
-	p.Rvid = val
-}
-func (p *VideoInfo) SetFaceUrl(val string) {
-	p.FaceUrl = val
-}
-func (p *VideoInfo) SetMinioKey(val string) {
+func (p *VideoMataInfo) SetMinioKey(val string) {
 	p.MinioKey = val
 }
-func (p *VideoInfo) SetTitle(val string) {
+func (p *VideoMataInfo) SetTitle(val string) {
 	p.Title = val
 }
-func (p *VideoInfo) SetDescription(val string) {
+func (p *VideoMataInfo) SetDescription(val string) {
 	p.Description = val
 }
-func (p *VideoInfo) SetViewNum(val int64) {
+func (p *VideoMataInfo) SetViewNum(val int64) {
 	p.ViewNum = val
 }
-func (p *VideoInfo) SetUseFace(val bool) {
-	p.UseFace = val
-}
-func (p *VideoInfo) SetInJudge(val bool) {
-	p.InJudge = val
-}
-func (p *VideoInfo) SetAuthorId(val int64) {
-	p.AuthorId = val
-}
-func (p *VideoInfo) SetAuthorName(val string) {
-	p.AuthorName = val
-}
 
-func (p *VideoInfo) String() string {
+func (p *VideoMataInfo) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("VideoInfo(%+v)", *p)
+	return fmt.Sprintf("VideoMataInfo(%+v)", *p)
 }
 
-var fieldIDToName_VideoInfo = map[int16]string{
+var fieldIDToName_VideoMataInfo = map[int16]string{
+	1: "face_key",
+	2: "minio_key",
+	3: "title",
+	4: "description",
+	5: "view_num",
+}
+
+type VideoUserInfo struct {
+	AuthorId   int64  `thrift:"author_id,1,required" frugal:"1,required,i64" json:"author_id"`
+	AuthorName string `thrift:"author_name,2,required" frugal:"2,required,string" json:"author_name"`
+	AvatarUrl  string `thrift:"avatar_url,3,required" frugal:"3,required,string" json:"avatar_url"`
+}
+
+func NewVideoUserInfo() *VideoUserInfo {
+	return &VideoUserInfo{}
+}
+
+func (p *VideoUserInfo) InitDefault() {
+}
+
+func (p *VideoUserInfo) GetAuthorId() (v int64) {
+	return p.AuthorId
+}
+
+func (p *VideoUserInfo) GetAuthorName() (v string) {
+	return p.AuthorName
+}
+
+func (p *VideoUserInfo) GetAvatarUrl() (v string) {
+	return p.AvatarUrl
+}
+func (p *VideoUserInfo) SetAuthorId(val int64) {
+	p.AuthorId = val
+}
+func (p *VideoUserInfo) SetAuthorName(val string) {
+	p.AuthorName = val
+}
+func (p *VideoUserInfo) SetAvatarUrl(val string) {
+	p.AvatarUrl = val
+}
+
+func (p *VideoUserInfo) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoUserInfo(%+v)", *p)
+}
+
+var fieldIDToName_VideoUserInfo = map[int16]string{
+	1: "author_id",
+	2: "author_name",
+	3: "avatar_url",
+}
+
+type VideoDetail struct {
+	Rvid     int64          `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+	MataInfo *VideoMataInfo `thrift:"mata_info,2,required" frugal:"2,required,VideoMataInfo" json:"mata_info"`
+	UserInfo *VideoUserInfo `thrift:"user_info,3,required" frugal:"3,required,VideoUserInfo" json:"user_info"`
+	InJudge  bool           `thrift:"in_judge,99,required" frugal:"99,required,bool" json:"in_judge"`
+}
+
+func NewVideoDetail() *VideoDetail {
+	return &VideoDetail{}
+}
+
+func (p *VideoDetail) InitDefault() {
+}
+
+func (p *VideoDetail) GetRvid() (v int64) {
+	return p.Rvid
+}
+
+var VideoDetail_MataInfo_DEFAULT *VideoMataInfo
+
+func (p *VideoDetail) GetMataInfo() (v *VideoMataInfo) {
+	if !p.IsSetMataInfo() {
+		return VideoDetail_MataInfo_DEFAULT
+	}
+	return p.MataInfo
+}
+
+var VideoDetail_UserInfo_DEFAULT *VideoUserInfo
+
+func (p *VideoDetail) GetUserInfo() (v *VideoUserInfo) {
+	if !p.IsSetUserInfo() {
+		return VideoDetail_UserInfo_DEFAULT
+	}
+	return p.UserInfo
+}
+
+func (p *VideoDetail) GetInJudge() (v bool) {
+	return p.InJudge
+}
+func (p *VideoDetail) SetRvid(val int64) {
+	p.Rvid = val
+}
+func (p *VideoDetail) SetMataInfo(val *VideoMataInfo) {
+	p.MataInfo = val
+}
+func (p *VideoDetail) SetUserInfo(val *VideoUserInfo) {
+	p.UserInfo = val
+}
+func (p *VideoDetail) SetInJudge(val bool) {
+	p.InJudge = val
+}
+
+func (p *VideoDetail) IsSetMataInfo() bool {
+	return p.MataInfo != nil
+}
+
+func (p *VideoDetail) IsSetUserInfo() bool {
+	return p.UserInfo != nil
+}
+
+func (p *VideoDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoDetail(%+v)", *p)
+}
+
+var fieldIDToName_VideoDetail = map[int16]string{
 	1:  "rvid",
-	2:  "face_url",
-	3:  "minio_key",
-	4:  "title",
-	5:  "description",
-	6:  "view_num",
-	7:  "use_face",
-	8:  "in_judge",
-	9:  "author_id",
-	10: "author_name",
+	2:  "mata_info",
+	3:  "user_info",
+	99: "in_judge",
+}
+
+type VideoListData struct {
+	Rvid     int64          `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+	Title    string         `thrift:"title,2,required" frugal:"2,required,string" json:"title"`
+	FaceKey  string         `thrift:"face_key,3,required" frugal:"3,required,string" json:"face_key"`
+	UserInfo *VideoUserInfo `thrift:"user_info,4,required" frugal:"4,required,VideoUserInfo" json:"user_info"`
+	InJudge  bool           `thrift:"in_judge,99,required" frugal:"99,required,bool" json:"in_judge"`
+}
+
+func NewVideoListData() *VideoListData {
+	return &VideoListData{}
+}
+
+func (p *VideoListData) InitDefault() {
+}
+
+func (p *VideoListData) GetRvid() (v int64) {
+	return p.Rvid
+}
+
+func (p *VideoListData) GetTitle() (v string) {
+	return p.Title
+}
+
+func (p *VideoListData) GetFaceKey() (v string) {
+	return p.FaceKey
+}
+
+var VideoListData_UserInfo_DEFAULT *VideoUserInfo
+
+func (p *VideoListData) GetUserInfo() (v *VideoUserInfo) {
+	if !p.IsSetUserInfo() {
+		return VideoListData_UserInfo_DEFAULT
+	}
+	return p.UserInfo
+}
+
+func (p *VideoListData) GetInJudge() (v bool) {
+	return p.InJudge
+}
+func (p *VideoListData) SetRvid(val int64) {
+	p.Rvid = val
+}
+func (p *VideoListData) SetTitle(val string) {
+	p.Title = val
+}
+func (p *VideoListData) SetFaceKey(val string) {
+	p.FaceKey = val
+}
+func (p *VideoListData) SetUserInfo(val *VideoUserInfo) {
+	p.UserInfo = val
+}
+func (p *VideoListData) SetInJudge(val bool) {
+	p.InJudge = val
+}
+
+func (p *VideoListData) IsSetUserInfo() bool {
+	return p.UserInfo != nil
+}
+
+func (p *VideoListData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoListData(%+v)", *p)
+}
+
+var fieldIDToName_VideoListData = map[int16]string{
+	1:  "rvid",
+	2:  "title",
+	3:  "face_key",
+	4:  "user_info",
+	99: "in_judge",
+}
+
+type AddVideoData struct {
+	Rvid        int64  `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+	Uid         int64  `thrift:"uid,2,required" frugal:"2,required,i64" json:"uid"`
+	Title       string `thrift:"title,3,required" frugal:"3,required,string" json:"title"`
+	Description string `thrift:"description,4,required" frugal:"4,required,string" json:"description"`
+}
+
+func NewAddVideoData() *AddVideoData {
+	return &AddVideoData{}
+}
+
+func (p *AddVideoData) InitDefault() {
+}
+
+func (p *AddVideoData) GetRvid() (v int64) {
+	return p.Rvid
+}
+
+func (p *AddVideoData) GetUid() (v int64) {
+	return p.Uid
+}
+
+func (p *AddVideoData) GetTitle() (v string) {
+	return p.Title
+}
+
+func (p *AddVideoData) GetDescription() (v string) {
+	return p.Description
+}
+func (p *AddVideoData) SetRvid(val int64) {
+	p.Rvid = val
+}
+func (p *AddVideoData) SetUid(val int64) {
+	p.Uid = val
+}
+func (p *AddVideoData) SetTitle(val string) {
+	p.Title = val
+}
+func (p *AddVideoData) SetDescription(val string) {
+	p.Description = val
+}
+
+func (p *AddVideoData) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("AddVideoData(%+v)", *p)
+}
+
+var fieldIDToName_AddVideoData = map[int16]string{
+	1: "rvid",
+	2: "uid",
+	3: "title",
+	4: "description",
 }
 
 type GetVideoListData struct {
-	Total  int64        `thrift:"total,1,required" frugal:"1,required,i64" json:"total"`
-	Videos []*VideoInfo `thrift:"videos,2,required" frugal:"2,required,list<VideoInfo>" json:"videos"`
+	Total  int64            `thrift:"total,1,required" frugal:"1,required,i64" json:"total"`
+	Videos []*VideoListData `thrift:"videos,2,required" frugal:"2,required,list<VideoListData>" json:"videos"`
 }
 
 func NewGetVideoListData() *GetVideoListData {
@@ -133,13 +339,13 @@ func (p *GetVideoListData) GetTotal() (v int64) {
 	return p.Total
 }
 
-func (p *GetVideoListData) GetVideos() (v []*VideoInfo) {
+func (p *GetVideoListData) GetVideos() (v []*VideoListData) {
 	return p.Videos
 }
 func (p *GetVideoListData) SetTotal(val int64) {
 	p.Total = val
 }
-func (p *GetVideoListData) SetVideos(val []*VideoInfo) {
+func (p *GetVideoListData) SetVideos(val []*VideoListData) {
 	p.Videos = val
 }
 
@@ -156,7 +362,7 @@ var fieldIDToName_GetVideoListData = map[int16]string{
 }
 
 type AddVideoReq struct {
-	VideoInfo *VideoInfo `thrift:"video_info,1,required" frugal:"1,required,VideoInfo" json:"video_info"`
+	AddVideoData *AddVideoData `thrift:"add_video_data,1,required" frugal:"1,required,AddVideoData" json:"add_video_data"`
 }
 
 func NewAddVideoReq() *AddVideoReq {
@@ -166,20 +372,20 @@ func NewAddVideoReq() *AddVideoReq {
 func (p *AddVideoReq) InitDefault() {
 }
 
-var AddVideoReq_VideoInfo_DEFAULT *VideoInfo
+var AddVideoReq_AddVideoData_DEFAULT *AddVideoData
 
-func (p *AddVideoReq) GetVideoInfo() (v *VideoInfo) {
-	if !p.IsSetVideoInfo() {
-		return AddVideoReq_VideoInfo_DEFAULT
+func (p *AddVideoReq) GetAddVideoData() (v *AddVideoData) {
+	if !p.IsSetAddVideoData() {
+		return AddVideoReq_AddVideoData_DEFAULT
 	}
-	return p.VideoInfo
+	return p.AddVideoData
 }
-func (p *AddVideoReq) SetVideoInfo(val *VideoInfo) {
-	p.VideoInfo = val
+func (p *AddVideoReq) SetAddVideoData(val *AddVideoData) {
+	p.AddVideoData = val
 }
 
-func (p *AddVideoReq) IsSetVideoInfo() bool {
-	return p.VideoInfo != nil
+func (p *AddVideoReq) IsSetAddVideoData() bool {
+	return p.AddVideoData != nil
 }
 
 func (p *AddVideoReq) String() string {
@@ -190,7 +396,7 @@ func (p *AddVideoReq) String() string {
 }
 
 var fieldIDToName_AddVideoReq = map[int16]string{
-	1: "video_info",
+	1: "add_video_data",
 }
 
 type AddVideoResp struct {
@@ -674,6 +880,176 @@ var fieldIDToName_GetJudgeListResp = map[int16]string{
 	3: "data",
 }
 
+type GetMyVideoListReq struct {
+	Page     int32 `thrift:"page,1,required" frugal:"1,required,i32" json:"page"`
+	PageSize int32 `thrift:"page_size,2,required" frugal:"2,required,i32" json:"page_size"`
+	Uid      int64 `thrift:"uid,3,required" frugal:"3,required,i64" json:"uid"`
+}
+
+func NewGetMyVideoListReq() *GetMyVideoListReq {
+	return &GetMyVideoListReq{}
+}
+
+func (p *GetMyVideoListReq) InitDefault() {
+}
+
+func (p *GetMyVideoListReq) GetPage() (v int32) {
+	return p.Page
+}
+
+func (p *GetMyVideoListReq) GetPageSize() (v int32) {
+	return p.PageSize
+}
+
+func (p *GetMyVideoListReq) GetUid() (v int64) {
+	return p.Uid
+}
+func (p *GetMyVideoListReq) SetPage(val int32) {
+	p.Page = val
+}
+func (p *GetMyVideoListReq) SetPageSize(val int32) {
+	p.PageSize = val
+}
+func (p *GetMyVideoListReq) SetUid(val int64) {
+	p.Uid = val
+}
+
+func (p *GetMyVideoListReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetMyVideoListReq(%+v)", *p)
+}
+
+var fieldIDToName_GetMyVideoListReq = map[int16]string{
+	1: "page",
+	2: "page_size",
+	3: "uid",
+}
+
+type GetMyVideoListResp struct {
+	Status int64             `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string            `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *GetVideoListData `thrift:"data,3,optional" frugal:"3,optional,GetVideoListData" json:"data,omitempty"`
+}
+
+func NewGetMyVideoListResp() *GetMyVideoListResp {
+	return &GetMyVideoListResp{}
+}
+
+func (p *GetMyVideoListResp) InitDefault() {
+}
+
+func (p *GetMyVideoListResp) GetStatus() (v int64) {
+	return p.Status
+}
+
+func (p *GetMyVideoListResp) GetInfo() (v string) {
+	return p.Info
+}
+
+var GetMyVideoListResp_Data_DEFAULT *GetVideoListData
+
+func (p *GetMyVideoListResp) GetData() (v *GetVideoListData) {
+	if !p.IsSetData() {
+		return GetMyVideoListResp_Data_DEFAULT
+	}
+	return p.Data
+}
+func (p *GetMyVideoListResp) SetStatus(val int64) {
+	p.Status = val
+}
+func (p *GetMyVideoListResp) SetInfo(val string) {
+	p.Info = val
+}
+func (p *GetMyVideoListResp) SetData(val *GetVideoListData) {
+	p.Data = val
+}
+
+func (p *GetMyVideoListResp) IsSetData() bool {
+	return p.Data != nil
+}
+
+func (p *GetMyVideoListResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetMyVideoListResp(%+v)", *p)
+}
+
+var fieldIDToName_GetMyVideoListResp = map[int16]string{
+	1: "status",
+	2: "info",
+	3: "data",
+}
+
+type InnocentViewNumReq struct {
+	Rvid int64 `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+}
+
+func NewInnocentViewNumReq() *InnocentViewNumReq {
+	return &InnocentViewNumReq{}
+}
+
+func (p *InnocentViewNumReq) InitDefault() {
+}
+
+func (p *InnocentViewNumReq) GetRvid() (v int64) {
+	return p.Rvid
+}
+func (p *InnocentViewNumReq) SetRvid(val int64) {
+	p.Rvid = val
+}
+
+func (p *InnocentViewNumReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("InnocentViewNumReq(%+v)", *p)
+}
+
+var fieldIDToName_InnocentViewNumReq = map[int16]string{
+	1: "rvid",
+}
+
+type InnocentViewNumResp struct {
+	Status int64  `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+}
+
+func NewInnocentViewNumResp() *InnocentViewNumResp {
+	return &InnocentViewNumResp{}
+}
+
+func (p *InnocentViewNumResp) InitDefault() {
+}
+
+func (p *InnocentViewNumResp) GetStatus() (v int64) {
+	return p.Status
+}
+
+func (p *InnocentViewNumResp) GetInfo() (v string) {
+	return p.Info
+}
+func (p *InnocentViewNumResp) SetStatus(val int64) {
+	p.Status = val
+}
+func (p *InnocentViewNumResp) SetInfo(val string) {
+	p.Info = val
+}
+
+func (p *InnocentViewNumResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("InnocentViewNumResp(%+v)", *p)
+}
+
+var fieldIDToName_InnocentViewNumResp = map[int16]string{
+	1: "status",
+	2: "info",
+}
+
 type VideoSvr interface {
 	AddVideo(ctx context.Context, req *AddVideoReq) (r *AddVideoResp, err error)
 
@@ -686,6 +1062,10 @@ type VideoSvr interface {
 	GetVideoList(ctx context.Context, req *GetVideoListReq) (r *GetVideoListResp, err error)
 
 	GetPreSignedUrl(ctx context.Context, req *GetPreSignedUrlReq) (r *GetPreSignedUrlResp, err error)
+
+	GetMyVideoList(ctx context.Context, req *GetMyVideoListReq) (r *GetMyVideoListResp, err error)
+
+	InnocentViewNum(ctx context.Context, req *InnocentViewNumReq) (r *InnocentViewNumResp, err error)
 }
 
 type VideoSvrAddVideoArgs struct {
@@ -1141,5 +1521,157 @@ func (p *VideoSvrGetPreSignedUrlResult) String() string {
 }
 
 var fieldIDToName_VideoSvrGetPreSignedUrlResult = map[int16]string{
+	0: "success",
+}
+
+type VideoSvrGetMyVideoListArgs struct {
+	Req *GetMyVideoListReq `thrift:"req,1" frugal:"1,default,GetMyVideoListReq" json:"req"`
+}
+
+func NewVideoSvrGetMyVideoListArgs() *VideoSvrGetMyVideoListArgs {
+	return &VideoSvrGetMyVideoListArgs{}
+}
+
+func (p *VideoSvrGetMyVideoListArgs) InitDefault() {
+}
+
+var VideoSvrGetMyVideoListArgs_Req_DEFAULT *GetMyVideoListReq
+
+func (p *VideoSvrGetMyVideoListArgs) GetReq() (v *GetMyVideoListReq) {
+	if !p.IsSetReq() {
+		return VideoSvrGetMyVideoListArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *VideoSvrGetMyVideoListArgs) SetReq(val *GetMyVideoListReq) {
+	p.Req = val
+}
+
+func (p *VideoSvrGetMyVideoListArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VideoSvrGetMyVideoListArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoSvrGetMyVideoListArgs(%+v)", *p)
+}
+
+var fieldIDToName_VideoSvrGetMyVideoListArgs = map[int16]string{
+	1: "req",
+}
+
+type VideoSvrGetMyVideoListResult struct {
+	Success *GetMyVideoListResp `thrift:"success,0,optional" frugal:"0,optional,GetMyVideoListResp" json:"success,omitempty"`
+}
+
+func NewVideoSvrGetMyVideoListResult() *VideoSvrGetMyVideoListResult {
+	return &VideoSvrGetMyVideoListResult{}
+}
+
+func (p *VideoSvrGetMyVideoListResult) InitDefault() {
+}
+
+var VideoSvrGetMyVideoListResult_Success_DEFAULT *GetMyVideoListResp
+
+func (p *VideoSvrGetMyVideoListResult) GetSuccess() (v *GetMyVideoListResp) {
+	if !p.IsSetSuccess() {
+		return VideoSvrGetMyVideoListResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *VideoSvrGetMyVideoListResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetMyVideoListResp)
+}
+
+func (p *VideoSvrGetMyVideoListResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VideoSvrGetMyVideoListResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoSvrGetMyVideoListResult(%+v)", *p)
+}
+
+var fieldIDToName_VideoSvrGetMyVideoListResult = map[int16]string{
+	0: "success",
+}
+
+type VideoSvrInnocentViewNumArgs struct {
+	Req *InnocentViewNumReq `thrift:"req,1" frugal:"1,default,InnocentViewNumReq" json:"req"`
+}
+
+func NewVideoSvrInnocentViewNumArgs() *VideoSvrInnocentViewNumArgs {
+	return &VideoSvrInnocentViewNumArgs{}
+}
+
+func (p *VideoSvrInnocentViewNumArgs) InitDefault() {
+}
+
+var VideoSvrInnocentViewNumArgs_Req_DEFAULT *InnocentViewNumReq
+
+func (p *VideoSvrInnocentViewNumArgs) GetReq() (v *InnocentViewNumReq) {
+	if !p.IsSetReq() {
+		return VideoSvrInnocentViewNumArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *VideoSvrInnocentViewNumArgs) SetReq(val *InnocentViewNumReq) {
+	p.Req = val
+}
+
+func (p *VideoSvrInnocentViewNumArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VideoSvrInnocentViewNumArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoSvrInnocentViewNumArgs(%+v)", *p)
+}
+
+var fieldIDToName_VideoSvrInnocentViewNumArgs = map[int16]string{
+	1: "req",
+}
+
+type VideoSvrInnocentViewNumResult struct {
+	Success *InnocentViewNumResp `thrift:"success,0,optional" frugal:"0,optional,InnocentViewNumResp" json:"success,omitempty"`
+}
+
+func NewVideoSvrInnocentViewNumResult() *VideoSvrInnocentViewNumResult {
+	return &VideoSvrInnocentViewNumResult{}
+}
+
+func (p *VideoSvrInnocentViewNumResult) InitDefault() {
+}
+
+var VideoSvrInnocentViewNumResult_Success_DEFAULT *InnocentViewNumResp
+
+func (p *VideoSvrInnocentViewNumResult) GetSuccess() (v *InnocentViewNumResp) {
+	if !p.IsSetSuccess() {
+		return VideoSvrInnocentViewNumResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *VideoSvrInnocentViewNumResult) SetSuccess(x interface{}) {
+	p.Success = x.(*InnocentViewNumResp)
+}
+
+func (p *VideoSvrInnocentViewNumResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VideoSvrInnocentViewNumResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoSvrInnocentViewNumResult(%+v)", *p)
+}
+
+var fieldIDToName_VideoSvrInnocentViewNumResult = map[int16]string{
 	0: "success",
 }

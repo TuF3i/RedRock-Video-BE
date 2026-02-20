@@ -47,6 +47,7 @@ func initRouter(h *server.Hertz) {
 	{
 		g.GET("/info", middleware.JWTMiddleware(), handle.GetLiveInfoHandleFunc())
 		g.GET("/list", handle.GetLiveListHandleFunc())
+		g.GET("/list/my", middleware.JWTMiddleware(), handle.GetMyLiveListHandleFunc())
 		g.POST("/start", middleware.JWTMiddleware(), handle.StartLiveHandleFunc())
 		g.GET("/stop", middleware.JWTMiddleware(), handle.StopLiveHandleFunc())
 		g.POST("/srs/auth", handle.SRSAuthHandleFunc())

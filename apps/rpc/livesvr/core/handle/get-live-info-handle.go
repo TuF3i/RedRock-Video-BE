@@ -9,8 +9,8 @@ import (
 	"context"
 )
 
-func convertDao2Livesvr(raw *dao.LiveInfo) *livesvr.LiveInfo {
-	return &livesvr.LiveInfo{
+func convertDao2LiveDetail(raw *dao.LiveInfo) *livesvr.LiveDetail {
+	return &livesvr.LiveDetail{
 		Rvid:             raw.RVID,
 		OwerId:           raw.OwerId,
 		Title:            raw.Title,
@@ -19,7 +19,7 @@ func convertDao2Livesvr(raw *dao.LiveInfo) *livesvr.LiveInfo {
 	}
 }
 
-func GetLiveInfo(ctx context.Context, req *livesvr.GetLiveInfoReq) (dto.Response, *livesvr.LiveInfo) {
+func GetLiveInfo(ctx context.Context, req *livesvr.GetLiveInfoReq) (dto.Response, *livesvr.LiveDetail) {
 	// 获取参数
 	rvid := req.GetRvid()
 	uid := req.GetUid()
@@ -46,7 +46,7 @@ func GetLiveInfo(ctx context.Context, req *livesvr.GetLiveInfoReq) (dto.Response
 	}
 
 	// 转换结构体
-	d := convertDao2Livesvr(data)
+	d := convertDao2LiveDetail(data)
 
 	return dto.OperationSuccess, d
 }

@@ -10,7 +10,7 @@ type KitexReqs interface {
 }
 
 type KitexResps interface {
-	*livesvr.GetLiveInfoResp | *livesvr.GetLiveListResp | *livesvr.StartLiveResp | *livesvr.StopLiveResp | response.Response
+	*livesvr.GetLiveInfoResp | *livesvr.GetLiveListResp | *livesvr.StartLiveResp | *livesvr.StopLiveResp | *livesvr.GetMyLiveListResp | response.Response
 }
 
 type Kresp interface {

@@ -1,4 +1,4 @@
-package dto
+package models
 
 type HStartLiveRequest struct {
 	Title string `json:"title"`

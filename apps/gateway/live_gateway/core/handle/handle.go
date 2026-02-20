@@ -3,6 +3,7 @@ package handle
 import (
 	"LiveDanmu/apps/gateway/live_gateway/core"
 	"LiveDanmu/apps/gateway/live_gateway/core/dto"
+	"LiveDanmu/apps/gateway/live_gateway/core/models"
 	"LiveDanmu/apps/public/models/dao"
 	"LiveDanmu/apps/public/response"
 	"LiveDanmu/apps/public/union_var"
@@ -71,7 +72,7 @@ func GetLiveListHandleFunc() app.HandlerFunc {
 
 func StartLiveHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		data := new(dto.HStartLiveRequest)
+		data := new(models.HStartLiveRequest)
 		// 获取上下文中的claims
 		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
 		// 类型断言
@@ -133,5 +134,25 @@ func SRSAuthHandleFunc() app.HandlerFunc {
 		resp, _ := core.LiveSvr.SRSAuth(ctx, req)
 
 		c.JSON(consts.StatusOK, map[string]int{"code": int(resp.Ok)})
+	}
+}
+
+func GetMyLiveListHandleFunc() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// 获取上下文中的claims
+		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		// 类型断言
+		claim := claims.(*dao.MainClaims)
+		// 构造请求
+		req := dto.GenGetMyLiveListReq(claim.Uid)
+		// 发起请求
+		rawResp, err := core.LiveSvr.GetMyLiveList(ctx, req)
+		if err != nil {
+			resp := dto.GenFinalResponse(rawResp)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
+		resp := dto.GenFinalResponse(rawResp)
+		c.JSON(consts.StatusOK, resp)
 	}
 }

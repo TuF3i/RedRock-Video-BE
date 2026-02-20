@@ -6,6 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
+type LUserInfo struct {
+	Uid       int64  `json:"uid" gorm:"-"`
+	UserName  string `json:"user_name" gorm:"-"`
+	AvatarURL string `json:"avatar_url" gorm:"-"`
+}
+
 type LiveInfo struct {
 	ID        uint           `gorm:"primarykey"`
 	CreatedAt time.Time      `gorm:"column:created_at;type:datetime;not null;default:CURRENT_TIMESTAMP;comment:创建时间"`
@@ -17,6 +23,8 @@ type LiveInfo struct {
 	Title            string `gorm:"column:title;type:varchar(64);not null;index:idx_title;comment:直播名称"`
 	StreamName       string `gorm:"column:stream_name;type:varchar(64);not null;uniqueIndex:uk_stream_name;comment:推流名称（如 live/test123）"`
 	UpstreamPassword string `gorm:"column:upstream_password;type:varchar(64);not null;comment:推流密码（建议加密存储）"`
+
+	User LUserInfo `json:"user"`
 }
 
 // TableName 显式指定表名（可选，若结构体名复数形式与表名不一致时推荐）
