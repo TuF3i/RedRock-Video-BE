@@ -13,10 +13,11 @@ type Dao struct {
 	rdb           *redis.ClusterClient
 	pgdb          *gorm.DB
 	isSyncRunning atomic.Bool
+	userSyncPool  map[int64]atomic.Bool
 }
 
 func GetDao(conf *config_template.VideoRpcConfig) (*Dao, error) {
-	d := Dao{conf: conf, isSyncRunning: atomic.Bool{}}
+	d := Dao{conf: conf, isSyncRunning: atomic.Bool{}, userSyncPool: make(map[int64]atomic.Bool)}
 	if err := d.initPgSQL(); err != nil {
 		return nil, err
 	}

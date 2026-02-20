@@ -18,8 +18,8 @@ func DelVideo(ctx context.Context, req *videosvr.DelVideoReq) dto.Response {
 	if !pkg.ValidateRVID(rvid) {
 		return dto.InvalidRVID
 	}
-	if !pkg.ValidateAuthorID(uid) {
-		return dto.InvalidAuthorID
+	if !pkg.ValidateUid(uid) {
+		return dto.InvalidUid
 	}
 	// 从Dao层获取视频信息
 	vInfo, err := core.Dao.GetVideoInfo(ctx, rvid)
@@ -27,11 +27,11 @@ func DelVideo(ctx context.Context, req *videosvr.DelVideoReq) dto.Response {
 		return dto.ServerInternalError(err)
 	}
 	// 校验数据
-	if uid != vInfo.AuthorID && role != union_var.JWT_ROLE_ADMIN {
+	if uid != vInfo.UID && role != union_var.JWT_ROLE_ADMIN {
 		return dto.NoPermission
 	}
 	// 调用Dao层
-	tx, err := core.Dao.DelVideoRecord(ctx, rvid)
+	tx, err := core.Dao.DelVideoRecord(ctx, rvid, vInfo.UID)
 	if err != nil {
 		return dto.ServerInternalError(err)
 	}

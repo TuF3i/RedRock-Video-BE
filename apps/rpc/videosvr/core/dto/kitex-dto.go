@@ -10,7 +10,7 @@ type DtoResp interface {
 
 // KitexResp KitexResponse泛型接口
 type KitexResp interface {
-	*videosvr.AddVideoResp | *videosvr.DelVideoResp | *videosvr.JudgeAccessResp | *videosvr.GetVideoListResp | *videosvr.GetPreSignedUrlResp | *videosvr.GetJudgeListResp
+	*videosvr.AddVideoResp | *videosvr.DelVideoResp | *videosvr.JudgeAccessResp | *videosvr.GetVideoListResp | *videosvr.GetPreSignedUrlResp | *videosvr.GetJudgeListResp | *videosvr.GetMyVideoListResp | *videosvr.InnocentViewNumResp | *videosvr.GetVideoDetailResp
 }
 
 // GenKitexResp 生成Kitex响应
@@ -60,6 +60,30 @@ func GenKitexResp[T KitexResp](resp DtoResp, data interface{}) T {
 		v.SetInfo(resp.GetInfo())
 		// 类型断言
 		val, ok := data.(*videosvr.GetVideoListData)
+		if ok {
+			v.SetData(val)
+		}
+		res = any(v).(T)
+	case *videosvr.GetMyVideoListResp:
+		v = new(videosvr.GetMyVideoListResp)
+		v.SetStatus(resp.GetStatus())
+		v.SetInfo(resp.GetInfo())
+		// 类型断言
+		val, ok := data.(*videosvr.GetVideoListData)
+		if ok {
+			v.SetData(val)
+		}
+		res = any(v).(T)
+	case *videosvr.InnocentViewNumResp:
+		v = new(videosvr.InnocentViewNumResp)
+		v.SetStatus(resp.GetStatus())
+		v.SetInfo(resp.GetInfo())
+	case *videosvr.GetVideoDetailResp:
+		v = new(videosvr.GetVideoDetailResp)
+		v.SetStatus(resp.GetStatus())
+		v.SetInfo(resp.GetInfo())
+		// 类型断言
+		val, ok := data.(*videosvr.VideoDetail)
 		if ok {
 			v.SetData(val)
 		}

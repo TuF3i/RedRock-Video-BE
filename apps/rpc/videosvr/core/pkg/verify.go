@@ -60,8 +60,8 @@ func ValidateDescription(description string) bool {
 }
 
 // 9. 校验 AuthorID：必须是大于 0 的整数
-func ValidateAuthorID(authorID int64) bool {
-	return authorID > 0
+func ValidateUid(uid int64) bool {
+	return uid > 0
 }
 
 // 10. 校验 AuthorName：非空（去空白后）、长度≤255

@@ -6,11 +6,11 @@ import (
 )
 
 type KitexReqs interface {
-	*videosvr.AddVideoReq | *videosvr.DelVideoReq | *videosvr.JudgeAccessReq | *videosvr.GetVideoListReq | *videosvr.GetPreSignedUrlReq | *videosvr.GetMyVideoListReq | *videosvr.InnocentViewNumReq
+	*videosvr.AddVideoReq | *videosvr.DelVideoReq | *videosvr.JudgeAccessReq | *videosvr.GetVideoListReq | *videosvr.GetPreSignedUrlReq | *videosvr.GetMyVideoListReq | *videosvr.InnocentViewNumReq | *videosvr.GetVideoDetailReq
 }
 
 type KitexResps interface {
-	*videosvr.AddVideoResp | *videosvr.DelVideoResp | *videosvr.JudgeAccessResp | *videosvr.GetVideoListResp | *videosvr.GetPreSignedUrlResp | *videosvr.GetJudgeListResp | *videosvr.GetMyVideoListResp | *videosvr.InnocentViewNumResp | response.Response | response.FinalResponse
+	*videosvr.AddVideoResp | *videosvr.DelVideoResp | *videosvr.JudgeAccessResp | *videosvr.GetVideoListResp | *videosvr.GetPreSignedUrlResp | *videosvr.GetJudgeListResp | *videosvr.GetMyVideoListResp | *videosvr.InnocentViewNumResp | *videosvr.GetVideoDetailResp | response.Response | response.FinalResponse
 }
 
 type Kresp interface {

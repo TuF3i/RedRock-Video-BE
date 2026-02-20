@@ -55,3 +55,9 @@ func (s *VideoSvrImpl) InnocentViewNum(ctx context.Context, req *videosvr.Innoce
 	// TODO: Your code here...
 	return
 }
+
+// GetVideoDetail implements the VideoSvrImpl interface.
+func (s *VideoSvrImpl) GetVideoDetail(ctx context.Context, req *videosvr.GetVideoDetailReq) (resp *videosvr.GetVideoDetailResp, err error) {
+	// TODO: Your code here...
+	return
+}

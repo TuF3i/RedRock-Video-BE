@@ -56,6 +56,8 @@ func initRouter(h *server.Hertz) {
 		g.DELETE("/:rvid", middleware.JWTMiddleware(), handler.DelVideoHandleFunc())
 		// 增加观看数
 		g.GET("/:rvid/innocent", handler.InnocentViewNumHandleFunc())
+		// 查看视频详情
+		g.GET("/:rvid/detail", handler.GetVideoDetailHandleFunc())
 
 		// 审核子分组
 		judgeGroup := g.Group("/judge")

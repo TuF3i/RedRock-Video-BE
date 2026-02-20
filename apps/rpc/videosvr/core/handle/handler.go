@@ -88,3 +88,42 @@ func (s *VideoSvrImpl) GetJudgeList(ctx context.Context, req *videosvr.GetJudgeL
 
 	return resp, nil
 }
+
+// GetMyVideoList implements the VideoSvrImpl interface.
+func (s *VideoSvrImpl) GetMyVideoList(ctx context.Context, req *videosvr.GetMyVideoListReq) (resp *videosvr.GetMyVideoListResp, err error) {
+	// 调用方法
+	rawResp, data := GetMyVideoList(ctx, req)
+	resp = dto.GenKitexResp[*videosvr.GetMyVideoListResp](rawResp, data)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
+}
+
+// InnocentViewNum implements the VideoSvrImpl interface.
+func (s *VideoSvrImpl) InnocentViewNum(ctx context.Context, req *videosvr.InnocentViewNumReq) (resp *videosvr.InnocentViewNumResp, err error) {
+	// 调用方法
+	rawResp := InnocentViewNum(ctx, req)
+	resp = dto.GenKitexResp[*videosvr.InnocentViewNumResp](rawResp, nil)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
+}
+
+// GetVideoDetail implements the VideoSvrImpl interface.
+func (s *VideoSvrImpl) GetVideoDetail(ctx context.Context, req *videosvr.GetVideoDetailReq) (resp *videosvr.GetVideoDetailResp, err error) {
+	// 调用方法
+	rawResp, data := GetVideoDetail(ctx, req)
+	resp = dto.GenKitexResp[*videosvr.GetVideoDetailResp](rawResp, data)
+	// 判断响应
+	if !errors.Is(rawResp, dto.OperationSuccess) {
+		return resp, rawResp
+	}
+
+	return resp, nil
+}

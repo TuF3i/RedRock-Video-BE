@@ -19,6 +19,7 @@ type Client interface {
 	GetPreSignedUrl(ctx context.Context, req *videosvr.GetPreSignedUrlReq, callOptions ...callopt.Option) (r *videosvr.GetPreSignedUrlResp, err error)
 	GetMyVideoList(ctx context.Context, req *videosvr.GetMyVideoListReq, callOptions ...callopt.Option) (r *videosvr.GetMyVideoListResp, err error)
 	InnocentViewNum(ctx context.Context, req *videosvr.InnocentViewNumReq, callOptions ...callopt.Option) (r *videosvr.InnocentViewNumResp, err error)
+	GetVideoDetail(ctx context.Context, req *videosvr.GetVideoDetailReq, callOptions ...callopt.Option) (r *videosvr.GetVideoDetailResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -88,4 +89,9 @@ func (p *kVideoSvrClient) GetMyVideoList(ctx context.Context, req *videosvr.GetM
 func (p *kVideoSvrClient) InnocentViewNum(ctx context.Context, req *videosvr.InnocentViewNumReq, callOptions ...callopt.Option) (r *videosvr.InnocentViewNumResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.InnocentViewNum(ctx, req)
+}
+
+func (p *kVideoSvrClient) GetVideoDetail(ctx context.Context, req *videosvr.GetVideoDetailReq, callOptions ...callopt.Option) (r *videosvr.GetVideoDetailResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetVideoDetail(ctx, req)
 }

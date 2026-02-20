@@ -135,6 +135,17 @@ struct InnocentViewNumResp {
   2: required string info
 }
 
+// 获取VideoDetail
+struct GetVideoDetailReq {
+  1: required i64 rvid
+}
+
+struct GetVideoDetailResp {
+  1: required i64 status
+  2: required string info
+  3: optional VideoDetail data
+}
+
 service VideoSvr {
   AddVideoResp AddVideo(1: AddVideoReq req)
   DelVideoResp DelVideo(1: DelVideoReq req)
@@ -144,4 +155,5 @@ service VideoSvr {
   GetPreSignedUrlResp GetPreSignedUrl(1: GetPreSignedUrlReq req)
   GetMyVideoListResp GetMyVideoList(1: GetMyVideoListReq req)
   InnocentViewNumResp InnocentViewNum(1: InnocentViewNumReq req)
+  GetVideoDetailResp GetVideoDetail(1: GetVideoDetailReq req)
 }

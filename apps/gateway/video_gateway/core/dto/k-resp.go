@@ -60,6 +60,11 @@ func GenFinalResponse[T KitexResps](resp T) response.FinalResponse {
 			return genFinalResp(response.OperationSuccess, v.GetData())
 		}
 		return genFinalResp(v, nil)
+	case *videosvr.GetVideoDetailResp:
+		if v.GetStatus() == 0 {
+			return genFinalResp(response.OperationSuccess, v.GetData())
+		}
+		return genFinalResp(v, nil)
 	case response.Response:
 		return genFinalResp(v, nil)
 	case response.FinalResponse:

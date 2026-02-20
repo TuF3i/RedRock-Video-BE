@@ -6,6 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
+type VUserInfo struct {
+	Uid       int64  `json:"uid" gorm:"-"`
+	UserName  string `json:"user_name" gorm:"-"`
+	AvatarURL string `json:"avatar_url" gorm:"-"`
+}
+
 type VideoInfo struct {
 	// gorm段
 	ID        uint           `json:"-" gorm:"primarykey"`
@@ -20,11 +26,11 @@ type VideoInfo struct {
 	Description string `gorm:"column:description;type:text" json:"description"`
 	ViewNum     int64  `gorm:"column:view_num;default:0" json:"view_num"`
 	// 属性段
-	UseFace bool `gorm:"column:use_face;default:false" json:"use_face"`
 	InJudge bool `gorm:"column:in_judge;default:true" json:"-"`
 	// 用户段
-	AuthorID   int64  `gorm:"column:author_id" json:"author_id"`
-	AuthorName string `gorm:"column:author_name" json:"author_name"`
+	UID int64 `gorm:"column:uid" json:"uid"`
+
+	User VUserInfo `json:"user"`
 }
 
 func (VideoInfo) TableName() string {

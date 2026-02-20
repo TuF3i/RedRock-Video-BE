@@ -3,10 +3,17 @@ package dao
 import (
 	"LiveDanmu/apps/public/models/dao"
 	"LiveDanmu/apps/public/union_var"
+	"LiveDanmu/apps/public/utils"
 	"context"
+	"errors"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
+	"github.com/redis/go-redis/v9"
+)
+
+const (
+	ON_REFRESH = 500 // 500播放就刷新
 )
 
 func (r *Dao) checkIfKeyExist(ctx context.Context, key string) (bool, error) {
@@ -111,4 +118,30 @@ func (r *Dao) getFieldDetail(ctx context.Context, key string, field string) (*da
 	}
 
 	return data, nil
+}
+
+func (r *Dao) incrementHotR(ctx context.Context, rvid int64) bool {
+	// 生成redis的键
+	keyForVideoFieldCounter := utils.GenVideoFieldCounterKey(rvid)
+	// 获取计数器值
+	counter, err := r.rdb.Get(ctx, keyForVideoFieldCounter).Int64()
+	if err != nil {
+		if errors.Is(err, redis.Nil) {
+			counter = 0 // 显式初始化
+		} else {
+			return false
+		}
+	}
+	// 如果值到达续期线就续期
+	if counter >= ON_REFRESH {
+		r.rdb.Set(ctx, keyForVideoFieldCounter, 0, 0)
+		return true
+	}
+	// 递增值
+	err = r.rdb.Incr(ctx, keyForVideoFieldCounter).Err()
+	if err != nil {
+		return false
+	}
+
+	return false
 }

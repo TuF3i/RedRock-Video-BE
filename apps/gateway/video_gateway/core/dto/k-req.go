@@ -55,3 +55,7 @@ func GenGetMyVideoListReq(page int32, pageSize int32, uid int64) *videosvr.GetMy
 func GenInnocentViewNumReq(rvid int64) *videosvr.InnocentViewNumReq {
 	return &videosvr.InnocentViewNumReq{Rvid: rvid}
 }
+
+func GetVideoDetailReq(rvid int64) *videosvr.GetVideoDetailReq {
+	return &videosvr.GetVideoDetailReq{Rvid: rvid}
+}

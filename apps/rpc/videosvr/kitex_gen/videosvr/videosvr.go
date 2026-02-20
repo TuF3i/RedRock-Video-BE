@@ -1050,6 +1050,91 @@ var fieldIDToName_InnocentViewNumResp = map[int16]string{
 	2: "info",
 }
 
+type GetVideoDetailReq struct {
+	Rvid int64 `thrift:"rvid,1,required" frugal:"1,required,i64" json:"rvid"`
+}
+
+func NewGetVideoDetailReq() *GetVideoDetailReq {
+	return &GetVideoDetailReq{}
+}
+
+func (p *GetVideoDetailReq) InitDefault() {
+}
+
+func (p *GetVideoDetailReq) GetRvid() (v int64) {
+	return p.Rvid
+}
+func (p *GetVideoDetailReq) SetRvid(val int64) {
+	p.Rvid = val
+}
+
+func (p *GetVideoDetailReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetVideoDetailReq(%+v)", *p)
+}
+
+var fieldIDToName_GetVideoDetailReq = map[int16]string{
+	1: "rvid",
+}
+
+type GetVideoDetailResp struct {
+	Status int64        `thrift:"status,1,required" frugal:"1,required,i64" json:"status"`
+	Info   string       `thrift:"info,2,required" frugal:"2,required,string" json:"info"`
+	Data   *VideoDetail `thrift:"data,3,optional" frugal:"3,optional,VideoDetail" json:"data,omitempty"`
+}
+
+func NewGetVideoDetailResp() *GetVideoDetailResp {
+	return &GetVideoDetailResp{}
+}
+
+func (p *GetVideoDetailResp) InitDefault() {
+}
+
+func (p *GetVideoDetailResp) GetStatus() (v int64) {
+	return p.Status
+}
+
+func (p *GetVideoDetailResp) GetInfo() (v string) {
+	return p.Info
+}
+
+var GetVideoDetailResp_Data_DEFAULT *VideoDetail
+
+func (p *GetVideoDetailResp) GetData() (v *VideoDetail) {
+	if !p.IsSetData() {
+		return GetVideoDetailResp_Data_DEFAULT
+	}
+	return p.Data
+}
+func (p *GetVideoDetailResp) SetStatus(val int64) {
+	p.Status = val
+}
+func (p *GetVideoDetailResp) SetInfo(val string) {
+	p.Info = val
+}
+func (p *GetVideoDetailResp) SetData(val *VideoDetail) {
+	p.Data = val
+}
+
+func (p *GetVideoDetailResp) IsSetData() bool {
+	return p.Data != nil
+}
+
+func (p *GetVideoDetailResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetVideoDetailResp(%+v)", *p)
+}
+
+var fieldIDToName_GetVideoDetailResp = map[int16]string{
+	1: "status",
+	2: "info",
+	3: "data",
+}
+
 type VideoSvr interface {
 	AddVideo(ctx context.Context, req *AddVideoReq) (r *AddVideoResp, err error)
 
@@ -1066,6 +1151,8 @@ type VideoSvr interface {
 	GetMyVideoList(ctx context.Context, req *GetMyVideoListReq) (r *GetMyVideoListResp, err error)
 
 	InnocentViewNum(ctx context.Context, req *InnocentViewNumReq) (r *InnocentViewNumResp, err error)
+
+	GetVideoDetail(ctx context.Context, req *GetVideoDetailReq) (r *GetVideoDetailResp, err error)
 }
 
 type VideoSvrAddVideoArgs struct {
@@ -1673,5 +1760,81 @@ func (p *VideoSvrInnocentViewNumResult) String() string {
 }
 
 var fieldIDToName_VideoSvrInnocentViewNumResult = map[int16]string{
+	0: "success",
+}
+
+type VideoSvrGetVideoDetailArgs struct {
+	Req *GetVideoDetailReq `thrift:"req,1" frugal:"1,default,GetVideoDetailReq" json:"req"`
+}
+
+func NewVideoSvrGetVideoDetailArgs() *VideoSvrGetVideoDetailArgs {
+	return &VideoSvrGetVideoDetailArgs{}
+}
+
+func (p *VideoSvrGetVideoDetailArgs) InitDefault() {
+}
+
+var VideoSvrGetVideoDetailArgs_Req_DEFAULT *GetVideoDetailReq
+
+func (p *VideoSvrGetVideoDetailArgs) GetReq() (v *GetVideoDetailReq) {
+	if !p.IsSetReq() {
+		return VideoSvrGetVideoDetailArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *VideoSvrGetVideoDetailArgs) SetReq(val *GetVideoDetailReq) {
+	p.Req = val
+}
+
+func (p *VideoSvrGetVideoDetailArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VideoSvrGetVideoDetailArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoSvrGetVideoDetailArgs(%+v)", *p)
+}
+
+var fieldIDToName_VideoSvrGetVideoDetailArgs = map[int16]string{
+	1: "req",
+}
+
+type VideoSvrGetVideoDetailResult struct {
+	Success *GetVideoDetailResp `thrift:"success,0,optional" frugal:"0,optional,GetVideoDetailResp" json:"success,omitempty"`
+}
+
+func NewVideoSvrGetVideoDetailResult() *VideoSvrGetVideoDetailResult {
+	return &VideoSvrGetVideoDetailResult{}
+}
+
+func (p *VideoSvrGetVideoDetailResult) InitDefault() {
+}
+
+var VideoSvrGetVideoDetailResult_Success_DEFAULT *GetVideoDetailResp
+
+func (p *VideoSvrGetVideoDetailResult) GetSuccess() (v *GetVideoDetailResp) {
+	if !p.IsSetSuccess() {
+		return VideoSvrGetVideoDetailResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *VideoSvrGetVideoDetailResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetVideoDetailResp)
+}
+
+func (p *VideoSvrGetVideoDetailResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VideoSvrGetVideoDetailResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoSvrGetVideoDetailResult(%+v)", *p)
+}
+
+var fieldIDToName_VideoSvrGetVideoDetailResult = map[int16]string{
 	0: "success",
 }

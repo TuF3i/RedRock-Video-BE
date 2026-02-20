@@ -69,6 +69,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"GetVideoDetail": kitex.NewMethodInfo(
+		getVideoDetailHandler,
+		newVideoSvrGetVideoDetailArgs,
+		newVideoSvrGetVideoDetailResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 }
 
 var (
@@ -279,6 +286,24 @@ func newVideoSvrInnocentViewNumResult() interface{} {
 	return videosvr.NewVideoSvrInnocentViewNumResult()
 }
 
+func getVideoDetailHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*videosvr.VideoSvrGetVideoDetailArgs)
+	realResult := result.(*videosvr.VideoSvrGetVideoDetailResult)
+	success, err := handler.(videosvr.VideoSvr).GetVideoDetail(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newVideoSvrGetVideoDetailArgs() interface{} {
+	return videosvr.NewVideoSvrGetVideoDetailArgs()
+}
+
+func newVideoSvrGetVideoDetailResult() interface{} {
+	return videosvr.NewVideoSvrGetVideoDetailResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -364,6 +389,16 @@ func (p *kClient) InnocentViewNum(ctx context.Context, req *videosvr.InnocentVie
 	_args.Req = req
 	var _result videosvr.VideoSvrInnocentViewNumResult
 	if err = p.c.Call(ctx, "InnocentViewNum", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetVideoDetail(ctx context.Context, req *videosvr.GetVideoDetailReq) (r *videosvr.GetVideoDetailResp, err error) {
+	var _args videosvr.VideoSvrGetVideoDetailArgs
+	_args.Req = req
+	var _result videosvr.VideoSvrGetVideoDetailResult
+	if err = p.c.Call(ctx, "GetVideoDetail", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

@@ -377,6 +377,36 @@ func InnocentViewNumHandleFunc() app.HandlerFunc {
 	}
 }
 
+func GetVideoDetailHandleFunc() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// 获取rvid
+		rvid_ := c.Param("rvid")
+		if rvid_ == "" {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](response.EmptyRVID))
+			return
+		}
+		rvid, err := strconv.ParseInt(rvid_, 10, 64)
+		if err != nil {
+			resp := dto.GenFinalResponse(response.InternalError(err))
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
+		// 生成请求
+		req := dto.GetVideoDetailReq(rvid)
+		// 发起调用
+		rawResp, err := core.VideoSvr.GetVideoDetail(ctx, req)
+
+		if err != nil {
+			resp := dto.GenFinalResponse(rawResp)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
+
+		c.JSON(consts.StatusOK, dto.GenFinalResponse(rawResp))
+		return
+	}
+}
+
 func GetNewRvidHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		rvid := uuid.New().ID()

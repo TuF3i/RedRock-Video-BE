@@ -7,6 +7,8 @@ import (
 	"context"
 	"errors"
 	"strconv"
+	"sync/atomic"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -44,6 +46,8 @@ func (r *Dao) GetPreSignedUrlFromRedis(ctx context.Context, uid int64, rvid int6
 func (r *Dao) NewVideoRecord(ctx context.Context, data *dao.VideoInfo) error {
 	tx := r.pgdb.Begin()
 	key := utils.GenVideoListKey()
+	keyForUserVideoList := utils.GenUserVideoListKey(data.UID)
+
 	ok, err := r.checkIfRecordExist(tx, data.RVID)
 	if err != nil {
 		tx.Rollback()
@@ -59,19 +63,19 @@ func (r *Dao) NewVideoRecord(ctx context.Context, data *dao.VideoInfo) error {
 		return err
 	}
 
-	err = r.delKey(ctx, key)
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
+	_ = r.delKey(ctx, key)
+
+	_ = r.delKey(ctx, keyForUserVideoList)
 
 	tx.Commit()
 	return nil
 }
 
-func (r *Dao) DelVideoRecord(ctx context.Context, rvid int64) (*gorm.DB, error) {
+func (r *Dao) DelVideoRecord(ctx context.Context, rvid int64, uid int64) (*gorm.DB, error) {
 	tx := r.pgdb.Begin()
 	key := utils.GenVideoListKey()
+	keyForUserVideoList := utils.GenUserVideoListKey(uid)
+
 	ok, err := r.checkIfRecordExist(tx, rvid)
 	if err != nil {
 		tx.Rollback()
@@ -88,6 +92,7 @@ func (r *Dao) DelVideoRecord(ctx context.Context, rvid int64) (*gorm.DB, error) 
 	}
 
 	_ = r.delKey(ctx, key)
+	_ = r.delKey(ctx, keyForUserVideoList)
 
 	//tx.Commit()
 	return tx, nil
@@ -157,7 +162,51 @@ func (r *Dao) GetVideoList(ctx context.Context, page int32, pageSize int32) ([]*
 			for _, v := range data {
 				_ = r.newField(ctx, key, strconv.FormatInt(v.RVID, 10), v)
 			}
+			r.rdb.Expire(ctx, key, 24*time.Hour)
 			r.isSyncRunning.Store(false)
+		}(dataSet, r)
+	}
+
+	tx.Commit()
+	return dataSet, total, nil
+}
+
+func (r *Dao) GetUserVideoList(ctx context.Context, page int32, pageSize int32, uid int64) ([]*dao.VideoInfo, int64, error) {
+	tx := r.pgdb.Begin()
+	key := utils.GenUserVideoListKey(uid)
+
+	dataSet, total, err := r.getFields(ctx, key, page, pageSize)
+	if err != nil {
+		tx.Rollback()
+		return nil, 0, err
+	}
+
+	if dataSet != nil {
+		tx.Rollback()
+		return dataSet, total, nil
+	}
+
+	dataSet, total, err = r.getUserRecordList(tx, page, pageSize, uid)
+	if err != nil {
+		tx.Rollback()
+		return nil, 0, err
+	}
+
+	signal, ok := r.userSyncPool[uid]
+	if !ok {
+		r.userSyncPool[uid] = atomic.Bool{}
+	}
+
+	// 异步更新
+	if !signal.Load() {
+		go func(data []*dao.VideoInfo, r *Dao) {
+			signal.Store(true)
+			ctx := context.Background()
+			for _, v := range data {
+				_ = r.newField(ctx, key, strconv.FormatInt(v.RVID, 10), v)
+			}
+			r.rdb.Expire(ctx, key, 24*time.Hour)
+			signal.Store(false)
 		}(dataSet, r)
 	}
 
@@ -189,5 +238,30 @@ func (r *Dao) JudgeAccess(ctx context.Context, rvid int64) error {
 	_ = r.delKey(ctx, key)
 
 	tx.Commit()
+	return nil
+}
+
+func (r *Dao) InnocentViewNum(ctx context.Context, rvid int64) error {
+	// 从redis读取数据
+	data, err := r.getFieldDetail(ctx, utils.GenVideoListKey(), strconv.FormatInt(rvid, 10))
+	if err != nil {
+		return err
+	}
+	// 播放递增
+	data.ViewNum++
+	// 写用户视频列表
+	err = r.newField(ctx, utils.GenUserVideoListKey(data.UID), strconv.FormatInt(rvid, 10), data)
+	// 写总视频列表
+	err = r.newField(ctx, utils.GenVideoListKey(), strconv.FormatInt(rvid, 10), data)
+	// 判断是否要写入pgsql
+	if r.incrementHotR(ctx, rvid) {
+		tx := r.pgdb.Begin()
+		err := r.setRecordColumn(tx, rvid, "view_num", data.ViewNum)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
 	return nil
 }
