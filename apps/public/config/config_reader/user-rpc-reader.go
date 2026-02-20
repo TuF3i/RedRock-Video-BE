@@ -10,22 +10,22 @@ import (
 
 func setDefaultForUserRpc(v *viper.Viper) {
 	v.SetDefault(config_template.USER_RPC_ETCD_SERVICENAME, "etcd")
-	v.SetDefault(config_template.USER_RPC_ETCD_NAMESPACE, "middleware")
+	v.SetDefault(config_template.USER_RPC_ETCD_NAMESPACE, "")
 	v.SetDefault(config_template.USER_RPC_PGSQL_SERVICENAME, "pgpool")
-	v.SetDefault(config_template.USER_RPC_PGSQL_NAMESPACE, "dao")
+	v.SetDefault(config_template.USER_RPC_PGSQL_NAMESPACE, "")
 	v.SetDefault(config_template.USER_RPC_PGSQL_USER, "root")
 	v.SetDefault(config_template.USER_RPC_PGSQL_PASSWORD, "")
 	v.SetDefault(config_template.USER_RPC_PGSQL_DBNAME, "rvideo")
 	v.SetDefault(config_template.USER_RPC_REDIS_SERVICENAME, "redis")
-	v.SetDefault(config_template.USER_RPC_REDIS_NAMESPACE, "dao")
+	v.SetDefault(config_template.USER_RPC_REDIS_NAMESPACE, "")
 	v.SetDefault(config_template.USER_RPC_REDIS_PASSWORD, "")
 	v.SetDefault(config_template.USER_RPC_POD_UID, uuid.New().String())
-	v.SetDefault(config_template.USER_RPC_LOKI_NAMESPACE, "middleware")
+	v.SetDefault(config_template.USER_RPC_LOKI_NAMESPACE, "")
 	v.SetDefault(config_template.USER_RPC_LOKI_SERVICENAME, "loki")
 	v.SetDefault(config_template.USER_RPC_LOKI_SERVICE, "USER_RPC")
 	v.SetDefault(config_template.USER_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.USER_RPC_LOKI_ENV, "proc")
-	v.SetDefault(config_template.USER_RPC_ADMINS, "")
+	v.SetDefault(config_template.USER_RPC_ADMIN, "")
 }
 
 func UserRpcConfigLoader() (*config_template.UserRpcConfig, error) {

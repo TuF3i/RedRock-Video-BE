@@ -10,15 +10,15 @@ import (
 
 func setDefaultForLiveDanmuConsumer(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_KAFKA_SERVICENAME, "kafka")
-	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_KAFKA_NAMESPACE, "middleware")
+	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_KAFKA_NAMESPACE, "")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_SERVICENAME, "pgpool")
-	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_NAMESPACE, "dao")
+	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_NAMESPACE, "")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_USER, "root")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_PASSWORD, "")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_DBNAME, "rvideo")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_GROUPID, "live-danmu-consumer-group-union")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_POD_UID, uuid.New().String())
-	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_LOKI_NAMESPACE, "middleware")
+	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_LOKI_NAMESPACE, "")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_LOKI_SERVICENAME, "loki")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_LOKI_SERVICE, "LIVE_DANMU_CONSUMER")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_LOKI_LEVEL, "INFO")

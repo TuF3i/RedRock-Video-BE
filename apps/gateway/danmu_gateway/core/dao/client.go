@@ -15,7 +15,7 @@ func (r *Dao) initRedisClient() error {
 			Addrs:        r.conf.Redis.Urls,
 			Password:     r.conf.Redis.Password,
 			MaxRedirects: 3, // 最大重定向次数
-
+			
 			// 连接池配置
 			PoolSize:     10, // 每个节点的连接池大小
 			MinIdleConns: 5,  // 最小空闲连接
