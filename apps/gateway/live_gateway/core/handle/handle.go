@@ -18,9 +18,19 @@ import (
 func GetLiveInfoHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 获取rvid
 		rvid_ := c.Query("rvid")
 		rvid := utils.RVIDDecoder(rvid_)
@@ -74,9 +84,19 @@ func StartLiveHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		data := new(models.HStartLiveRequest)
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 获取标题
 		err := c.BindAndValidate(data)
 		if err != nil {
@@ -102,9 +122,19 @@ func StartLiveHandleFunc() app.HandlerFunc {
 func StopLiveHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 获取rvid
 		rvid_ := c.Query("rvid")
 		rvid := utils.RVIDDecoder(rvid_)
@@ -140,9 +170,19 @@ func SRSAuthHandleFunc() app.HandlerFunc {
 func GetMyLiveListHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 构造请求
 		req := dto.GenGetMyLiveListReq(claim.Uid)
 		// 发起请求

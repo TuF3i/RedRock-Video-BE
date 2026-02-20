@@ -35,30 +35,32 @@ func (r *Dao) AddUser(data *dao.RvUser) error {
 
 func (r *Dao) IfUserExist(uid int64) (bool, error) {
 	tx := r.pgdb.Begin()
-	defer r.pgdb.Commit()
+	defer tx.Rollback()
 	// 查询用户是否存在
 	ok, err := r.ifRecordExist(tx, uid)
 	if err != nil {
-		tx.Rollback()
 		return false, err
 	}
 	if !ok {
 		return false, nil
 	}
 
+	tx.Commit()
+
 	return true, nil
 }
 
 func (r *Dao) GetUserInfo(uid int64) (*dao.RvUser, error) {
 	tx := r.pgdb.Begin()
+	defer tx.Rollback()
 	// 获取用户信息
 	data, err := r.getRecordDetail(tx, uid)
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 
 	tx.Commit()
+
 	return data, nil
 }
 
@@ -110,20 +112,26 @@ func (r *Dao) SetAdminRole(ctx context.Context, uid int64) error {
 
 func (r *Dao) GetAdminerList(ctx context.Context, page int32, pageSize int32) ([]*dao.RvUser, int64, error) {
 	tx := r.pgdb.Begin()
+	defer tx.Rollback()
 	dataSet, total, err := r.getRecordDetails(tx, page, pageSize, union_var.JWT_ROLE_ADMIN)
 	if err != nil {
 		return nil, 0, err
 	}
+
+	tx.Commit()
 
 	return dataSet, total, nil
 }
 
 func (r *Dao) GetUserList(ctx context.Context, page int32, pageSize int32) ([]*dao.RvUser, int64, error) {
 	tx := r.pgdb.Begin()
+	defer tx.Rollback()
 	dataSet, total, err := r.getRecordDetails(tx, page, pageSize, union_var.JWT_ROLE_USER)
 	if err != nil {
 		return nil, 0, err
 	}
+
+	tx.Commit()
 
 	return dataSet, total, nil
 }

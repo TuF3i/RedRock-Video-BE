@@ -45,9 +45,19 @@ func CallbackHandleFunc() app.HandlerFunc {
 func RefreshAccessTokenHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的refreshToken
-		token, _ := c.Get(union_var.JWT_REFRESH_KEY)
+		token, ok := c.Get(union_var.JWT_REFRESH_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		refreshToken := token.(string)
+		refreshToken, ok := token.(string)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 生成请求
 		req := dto.GenRefreshAccessTokenReq(refreshToken)
 		// 发起调用
@@ -66,9 +76,19 @@ func RefreshAccessTokenHandleFunc() app.HandlerFunc {
 func GetUserInfoHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 生成请求
 		req := dto.GenGetUserInfoReq(claim.Uid)
 		// 发起调用
@@ -87,9 +107,19 @@ func GetUserInfoHandleFunc() app.HandlerFunc {
 func SetAdminRoleHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 权限判断
 		if claim.Role != union_var.JWT_ROLE_ADMIN {
 			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
@@ -122,9 +152,19 @@ func SetAdminRoleHandleFunc() app.HandlerFunc {
 func GetAdminerHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 权限判断
 		if claim.Role != union_var.JWT_ROLE_ADMIN {
 			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
@@ -165,9 +205,19 @@ func GetAdminerHandleFunc() app.HandlerFunc {
 func GetUsersHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 权限判断
 		if claim.Role != union_var.JWT_ROLE_ADMIN {
 			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
@@ -208,9 +258,19 @@ func GetUsersHandleFunc() app.HandlerFunc {
 func LogoutHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 生成请求
 		req := dto.GenLogoutReq(claim.Uid)
 		// 发起调用

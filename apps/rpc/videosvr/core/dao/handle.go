@@ -192,10 +192,17 @@ func (r *Dao) GetUserVideoList(ctx context.Context, page int32, pageSize int32, 
 		return nil, 0, err
 	}
 
+	r.userSyncMutex.RLock()
 	signal, ok := r.userSyncPool[uid]
+	r.userSyncMutex.RUnlock()
 	if !ok {
-		signal = &atomic.Bool{}
-		r.userSyncPool[uid] = signal
+		r.userSyncMutex.Lock()
+		signal, ok = r.userSyncPool[uid]
+		if !ok {
+			signal = &atomic.Bool{}
+			r.userSyncPool[uid] = signal
+		}
+		r.userSyncMutex.Unlock()
 	}
 
 	// 异步更新
@@ -262,6 +269,7 @@ func (r *Dao) InnocentViewNum(ctx context.Context, rvid int64) error {
 			tx.Rollback()
 			return err
 		}
+		tx.Commit()
 	}
 
 	return nil

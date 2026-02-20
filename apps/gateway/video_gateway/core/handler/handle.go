@@ -79,9 +79,19 @@ func AddVideoHandleFunc() app.HandlerFunc {
 		// 视频数据
 		var data models.AddVideoReq
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 提取请求体中的弹幕信息
 		err := c.BindAndValidate(&data)
 		if err != nil {
@@ -120,9 +130,19 @@ func DelVideoHandleFunc() app.HandlerFunc {
 			return
 		}
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 生成请求
 		req := dto.GenDelVideoReq(rvid, claim.Uid, claim.Role)
 		// 调用
@@ -154,9 +174,19 @@ func JudgeAccessHandleFunc() app.HandlerFunc {
 			return
 		}
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 权限判断
 		if claim.Role != union_var.JWT_ROLE_ADMIN {
 			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](response.YouDoNotHaveAccess))
@@ -185,9 +215,19 @@ func GetJudgeListHandleFunc() app.HandlerFunc {
 		page_ := c.Query("page")
 		pageSize_ := c.Query("pageSize")
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 权限判断
 		if claim.Role != union_var.JWT_ROLE_ADMIN {
 			c.JSON(consts.StatusOK, dto.GenFinalResponse[response.Response](response.YouDoNotHaveAccess))
@@ -314,9 +354,19 @@ func GetMyVideoListHandleFunc() app.HandlerFunc {
 		page_ := c.Query("page")
 		pageSize_ := c.Query("pageSize")
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			resp := dto.GenFinalResponse(response.YouDoNotHaveAccess)
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 类型转换
 		page, err := strconv.Atoi(page_)
 		if err != nil {

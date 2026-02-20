@@ -89,12 +89,6 @@ func (r *Dao) ReadFullDanmu(ctx context.Context, vid int64) ([]*dao.DanmuData, e
 }
 
 func (r *Dao) DelVideoDanmu(ctx context.Context, danID int64) error {
-	// 从redis中删除整个key，下次访问时自动补位
-	err := r.delDanmuInRedis(ctx, danID)
-	if err != nil {
-		return err
-	}
-
 	// 检查弹幕是否存在
 	tx := r.pgdb.Begin()
 	ok, err := r.checkIfDanmuExistOnPgSQL(tx, danID)
@@ -116,6 +110,13 @@ func (r *Dao) DelVideoDanmu(ctx context.Context, danID int64) error {
 	}
 
 	tx.Commit()
+
+	// 从redis中删除整个key，下次访问时自动补位
+	err = r.delDanmuInRedis(ctx, danID)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -138,11 +139,14 @@ func (r *Dao) IfDanmuExist(danID int64) (bool, error) {
 
 func (r *Dao) GetDanmuDetail(danID int64) (*dao.DanmuData, error) {
 	tx := r.pgdb.Begin()
+	defer tx.Rollback()
 
 	data, err := r.getVideoDanmuDetail(tx, danID)
 	if err != nil {
 		return nil, err
 	}
+
+	tx.Commit()
 
 	return data, nil
 }

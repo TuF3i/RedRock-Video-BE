@@ -29,9 +29,17 @@ func PubVideoDanmuHandleFunc() app.HandlerFunc {
 		// 弹幕请求
 		var danmuData models.VideoDanmuReq
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.YouDoNotHaveAccess))
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.YouDoNotHaveAccess))
+			return
+		}
 		// 提取请求体中的弹幕信息
 		err := c.BindAndValidate(&danmuData)
 		if err != nil {
@@ -58,9 +66,17 @@ func PubLiveDanmuHandleFunc() app.HandlerFunc {
 		// 弹幕请求
 		var danmuData models.LiveDanmuReq
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.YouDoNotHaveAccess))
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.YouDoNotHaveAccess))
+			return
+		}
 		// 提取请求体中的弹幕信息
 		err := c.BindAndValidate(&danmuData)
 		if err != nil {
@@ -143,9 +159,17 @@ func GetFullDanmuHandleFunc() app.HandlerFunc {
 func DelDanmuHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 获取上下文中的claims
-		claims, _ := c.Get(union_var.JWT_CONTEXT_KEY)
+		claims, ok := c.Get(union_var.JWT_CONTEXT_KEY)
+		if !ok {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.YouDoNotHaveAccess))
+			return
+		}
 		// 类型断言
-		claim := claims.(*dao.MainClaims)
+		claim, ok := claims.(*dao.MainClaims)
+		if !ok {
+			c.JSON(consts.StatusOK, dto.GenFinalResponse(response.YouDoNotHaveAccess))
+			return
+		}
 		// 从路由中提取rvid
 		rvid_ := c.Param("rvid")
 		if rvid_ == "" {

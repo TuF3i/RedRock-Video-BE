@@ -24,8 +24,8 @@ func convertDao2LiveListInfo(raw *dao.LiveInfo) *livesvr.LiveListInfo {
 
 func batchA2B(raw []*dao.LiveInfo) []*livesvr.LiveListInfo {
 	res := make([]*livesvr.LiveListInfo, 0, len(raw))
-	for i, v := range raw {
-		res[i] = convertDao2LiveListInfo(v)
+	for _, v := range raw {
+		res = append(res, convertDao2LiveListInfo(v))
 	}
 
 	return res
@@ -33,8 +33,8 @@ func batchA2B(raw []*dao.LiveInfo) []*livesvr.LiveListInfo {
 
 func batchC2D(raw []*dao.LiveInfo) []*livesvr.LiveDetail {
 	res := make([]*livesvr.LiveDetail, 0, len(raw))
-	for i, v := range raw {
-		res[i] = convertDao2LiveDetail(v)
+	for _, v := range raw {
+		res = append(res, convertDao2LiveDetail(v))
 	}
 
 	return res

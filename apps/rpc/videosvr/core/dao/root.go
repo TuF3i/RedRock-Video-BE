@@ -2,6 +2,7 @@ package dao
 
 import (
 	"LiveDanmu/apps/public/config/config_template"
+	"sync"
 	"sync/atomic"
 
 	"github.com/redis/go-redis/v9"
@@ -14,6 +15,7 @@ type Dao struct {
 	pgdb          *gorm.DB
 	isSyncRunning atomic.Bool
 	userSyncPool  map[int64]*atomic.Bool
+	userSyncMutex sync.RWMutex
 }
 
 func GetDao(conf *config_template.VideoRpcConfig) (*Dao, error) {
