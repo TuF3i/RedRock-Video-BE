@@ -1,0 +1,381 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "RedRock Video Backend API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    }
+  ],
+  "tags": [
+    {
+      "name": "用户服务"
+    },
+    {
+      "name": "视频服务"
+    },
+    {
+      "name": "弹幕服务"
+    },
+    {
+      "name": "直播服务"
+    }
+  ],
+  "paths": {
+    "/user/oauth2/github": {
+      "get": {
+        "tags": [
+          "用户服务"
+        ],
+        "summary": "GitHub OAuth2 登录",
+        "responses": {
+          "302": {
+            "description": "重定向到 GitHub"
+          }
+        }
+      }
+    },
+    "/user/oauth2/github/callback": {
+      "get": {
+        "tags": [
+          "用户服务"
+        ],
+        "summary": "GitHub OAuth2 回调",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 0,
+                  "info": "success",
+                  "data": {
+                    "accessToken": "xxx",
+                    "refreshToken": "yyy"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/refresh": {
+      "post": {
+        "tags": [
+          "用户服务"
+        ],
+        "summary": "刷新 Access Token",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 0,
+                  "info": "success",
+                  "data": {
+                    "accessToken": "xxx",
+                    "refreshToken": "yyy"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/info": {
+      "get": {
+        "tags": [
+          "用户服务"
+        ],
+        "summary": "获取用户信息",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 0,
+                  "info": "success",
+                  "data": {
+                    "uid": 123456,
+                    "userName": "username",
+                    "avatarUrl": "https://xxx",
+                    "bio": "user bio",
+                    "role": "user"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/video/add": {
+      "post": {
+        "tags": [
+          "视频服务"
+        ],
+        "summary": "创建视频记录",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "rvid": 123456,
+                "title": "视频标题",
+                "description": "视频描述"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 0,
+                  "info": "success",
+                  "data": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/video/list": {
+      "get": {
+        "tags": [
+          "视频服务"
+        ],
+        "summary": "获取视频列表",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 0,
+                  "info": "success",
+                  "data": {
+                    "total": 100,
+                    "list": [
+                      {
+                        "rvid": 123456,
+                        "uid": 789012,
+                        "title": "视频标题",
+                        "description": "视频描述",
+                        "faceUrl": "https://xxx",
+                        "viewNum": 1000,
+                        "inJudge": false
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/danmu/hot/{rvid}": {
+      "get": {
+        "tags": [
+          "弹幕服务"
+        ],
+        "summary": "获取热门弹幕",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "rvid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 0,
+                  "info": "success",
+                  "data": {
+                    "danmuList": [
+                      {
+                        "danID": 123456,
+                        "userID": 789012,
+                        "content": "弹幕内容",
+                        "video": true,
+                        "videoTime": 123.45
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/live/start": {
+      "post": {
+        "tags": [
+          "直播服务"
+        ],
+        "summary": "开始直播",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "title": "直播标题"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 0,
+                  "info": "success",
+                  "data": {
+                    "rvid": 123456,
+                    "raw": "abc123",
+                    "pushKey": "stream_key_xxx"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/live/list": {
+      "get": {
+        "tags": [
+          "直播服务"
+        ],
+        "summary": "获取直播列表",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 0,
+                  "info": "success",
+                  "data": {
+                    "total": 10,
+                    "list": [
+                      {
+                        "rvid": 123456,
+                        "uid": 789012,
+                        "title": "直播标题"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
