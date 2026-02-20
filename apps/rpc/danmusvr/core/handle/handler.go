@@ -10,8 +10,8 @@ import (
 // DanmuSvrImpl implements the last handler interface defined in the IDL.
 type DanmuSvrImpl struct{}
 
-// PubDanmu implements the DanmuSvrImpl interface.
-func (s *DanmuSvrImpl) PubDanmu(ctx context.Context, req *danmusvr.PubVideoReq) (resp *danmusvr.PubVideoResp, err error) {
+// PubVideoDanmu implements the DanmuSvrImpl interface.
+func (s *DanmuSvrImpl) PubVideoDanmu(ctx context.Context, req *danmusvr.PubVideoReq) (resp *danmusvr.PubVideoResp, err error) {
 	rawResp := PubVideoDanmu(ctx, req)
 	if !errors.Is(rawResp, dto.OperationSuccess) {
 		return dto.GenKitexResp[*danmusvr.PubVideoResp](rawResp, nil), rawResp

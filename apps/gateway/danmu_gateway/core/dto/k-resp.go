@@ -15,7 +15,8 @@ func genFinalResp(resp Kresp, data interface{}) response.FinalResponse {
 
 func GenFinalResponse[T KitexResps](resp T) response.FinalResponse {
 	// 空指针检查
-	if resp == nil {
+	v := any(resp)
+	if v == nil {
 		return response.FinalResponse{
 			Status: 0,
 			Info:   "nil response",

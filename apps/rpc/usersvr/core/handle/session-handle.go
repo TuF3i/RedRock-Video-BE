@@ -11,11 +11,15 @@ import (
 )
 
 func convertRvUserInfo2RvUser(raw *usersvr.RvUserInfo) *dao.RvUser {
+	bio := ""
+	if raw.Bio != nil {
+		bio = *raw.Bio
+	}
 	return &dao.RvUser{
 		Uid:       raw.Uid,
 		Login:     raw.UserName,
 		AvatarURL: raw.AvatarUrl,
-		Bio:       raw.Bio,
+		Bio:       bio,
 	}
 }
 

@@ -22,7 +22,7 @@ func DanmuPoolReleaseMiddleware(next endpoint.Endpoint) endpoint.Endpoint {
 			}
 		}
 		// Full型类型断言
-		if dmResp, ok := resp.(*danmusvr.GetResp); ok {
+		if dmResp, ok := resp.(*danmusvr.GetFullResp); ok {
 			// 释放内存
 			if dmResp.Data != nil {
 				handle.ReleaseDanmuMsg(dmResp.Data)

@@ -194,12 +194,13 @@ func (r *Dao) GetUserVideoList(ctx context.Context, page int32, pageSize int32, 
 
 	signal, ok := r.userSyncPool[uid]
 	if !ok {
-		r.userSyncPool[uid] = atomic.Bool{}
+		signal = &atomic.Bool{}
+		r.userSyncPool[uid] = signal
 	}
 
 	// 异步更新
 	if !signal.Load() {
-		go func(data []*dao.VideoInfo, r *Dao) {
+		go func(data []*dao.VideoInfo, r *Dao, signal *atomic.Bool) {
 			signal.Store(true)
 			ctx := context.Background()
 			for _, v := range data {
@@ -207,7 +208,7 @@ func (r *Dao) GetUserVideoList(ctx context.Context, page int32, pageSize int32, 
 			}
 			r.rdb.Expire(ctx, key, 24*time.Hour)
 			signal.Store(false)
-		}(dataSet, r)
+		}(dataSet, r, signal)
 	}
 
 	tx.Commit()

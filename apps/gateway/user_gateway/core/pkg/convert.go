@@ -6,11 +6,13 @@ import (
 )
 
 func ConvertGitHubUser2RvUserInfo(raw *dao.GitHubUser) *usersvr.RvUserInfo {
+	bio := raw.Bio
+	role := ""
 	return &usersvr.RvUserInfo{
 		Uid:       raw.ID,
 		UserName:  raw.Login,
 		AvatarUrl: raw.AvatarURL,
-		Bio:       raw.Bio,
-		Role:      "",
+		Bio:       &bio,
+		Role:      &role,
 	}
 }

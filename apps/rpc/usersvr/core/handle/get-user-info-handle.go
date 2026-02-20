@@ -9,19 +9,21 @@ import (
 )
 
 func convertRvUser2RvUserInfo(raw *dao.RvUser) *usersvr.RvUserInfo {
+	bio := raw.Bio
+	role := raw.Role
 	return &usersvr.RvUserInfo{
 		Uid:       raw.Uid,
 		UserName:  raw.Login,
 		AvatarUrl: raw.AvatarURL,
-		Bio:       raw.Bio,
-		Role:      raw.Role,
+		Bio:       &bio,
+		Role:      &role,
 	}
 }
 
 func batchRvUser2RvUserInfo(raw []*dao.RvUser) []*usersvr.RvUserInfo {
 	dataSet := make([]*usersvr.RvUserInfo, 0, len(raw))
-	for i, v := range raw {
-		dataSet[i] = convertRvUser2RvUserInfo(v)
+	for _, v := range raw {
+		dataSet = append(dataSet, convertRvUser2RvUserInfo(v))
 	}
 	return dataSet
 }
