@@ -22,7 +22,7 @@ func setDefaultForDanmuGateway(v *viper.Viper) {
 	v.SetDefault(config_template.DANMU_GATEWAY_LOKI_ENV, "proc")
 	v.SetDefault(config_template.DANMU_GATEWAY_REDIS_SERVICENAME, "redis")
 	v.SetDefault(config_template.DANMU_GATEWAY_REDIS_NAMESPACE, "")
-	v.SetDefault(config_template.DANMU_GATEWAY_REDIS_PASSWORD, "")
+	v.SetDefault(config_template.DANMU_GATEWAY_REDIS_PASSWORD, "eeelcgkklo12l13l17gg")
 	v.SetDefault(config_template.DANMU_GATEWAY_KAFKA_SERVICENAME, "kafka")
 	v.SetDefault(config_template.DANMU_GATEWAY_KAFKA_NAMESPACE, "")
 }

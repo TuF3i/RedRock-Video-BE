@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -9,6 +10,7 @@ import (
 
 func (r *Dao) initRedisClient() error {
 	// 创建集群连接
+	fmt.Printf("Singal: %v", r.conf.Redis.Urls)
 	rdb := redis.NewClusterClient(
 		&redis.ClusterOptions{
 			// 基础配置

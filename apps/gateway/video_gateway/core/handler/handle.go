@@ -461,7 +461,7 @@ func GetNewRvidHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		rvid := uuid.New().ID()
 		resp := dto.GenFinalResponse(response.FinalResponse{
-			Status: 200,
+			Status: 10200,
 			Info:   "Operation Success",
 			Data:   rvid,
 		})

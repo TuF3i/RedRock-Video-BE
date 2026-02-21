@@ -5,6 +5,7 @@ import (
 	usersvr "LiveDanmu/apps/rpc/usersvr/kitex_gen/usersvr"
 	"context"
 	"errors"
+	"fmt"
 )
 
 // UserSvrImpl implements the last service interface defined in the IDL.
@@ -12,6 +13,7 @@ type UserSvrImpl struct{}
 
 // UserLogin implements the UserSvrImpl interface.
 func (s *UserSvrImpl) UserLogin(ctx context.Context, req *usersvr.LoginReq) (resp *usersvr.LoginResp, err error) {
+	fmt.Printf("UserLogin Called")
 	// 调用方法
 	rawResp, data := UserLogin(ctx, req)
 	resp = dto.GenKitexResp[*usersvr.LoginResp](rawResp, data)

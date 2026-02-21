@@ -30,8 +30,9 @@ func HertzShutdown() error {
 func HertzApi(conf *config_template.LiveGatewayConfig) {
 	// 构造Url
 	url := fmt.Sprintf("%v:%v", conf.Hertz.ListenAddr, conf.Hertz.ListenPort)
+	monitorUrl := fmt.Sprintf("%v:%v", conf.Hertz.ListenAddr, conf.Hertz.MonitoringPort)
 	// 创建服务核心
-	h = server.Default(server.WithHostPorts(url), server.WithTracer(prometheus.NewServerTracer(conf.Hertz.MonitoringPort, "/hertz")))
+	h = server.Default(server.WithHostPorts(url), server.WithTracer(prometheus.NewServerTracer(monitorUrl, "/hertz")))
 	// 注册TraceID生成中间件
 	h.Use(middleware.TraceIDMiddleware())
 	// 初始化路由
@@ -48,8 +49,8 @@ func initRouter(h *server.Hertz) {
 		g.GET("/info", middleware.JWTMiddleware(), handle.GetLiveInfoHandleFunc())
 		g.GET("/list", handle.GetLiveListHandleFunc())
 		g.GET("/list/my", middleware.JWTMiddleware(), handle.GetMyLiveListHandleFunc())
-		g.POST("/start", middleware.JWTMiddleware(), handle.StartLiveHandleFunc())
-		g.GET("/stop", middleware.JWTMiddleware(), handle.StopLiveHandleFunc())
+		g.POST("/start", middleware.JWTMiddleware(), handle.StartLiveHandleFunc()) //
+		g.GET("/stop", middleware.JWTMiddleware(), handle.StopLiveHandleFunc())    //
 		g.POST("/srs/auth", handle.SRSAuthHandleFunc())
 	}
 }

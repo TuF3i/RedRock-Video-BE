@@ -10,7 +10,7 @@ import (
 
 func (r *Dao) ifRecordExist(tx *gorm.DB, uid int64) (bool, error) {
 	var count int64
-	err := tx.Model(&dao.RvUser{}).Where("uid = ?", uid).Count(&count).Error
+	err := tx.Model(&dao.RvUser{}).Where("github_uid = ?", uid).Count(&count).Error
 	if err != nil {
 		return false, err
 	}
@@ -24,7 +24,7 @@ func (r *Dao) ifRecordExist(tx *gorm.DB, uid int64) (bool, error) {
 
 func (r *Dao) getRecordDetail(tx *gorm.DB, uid int64) (*dao.RvUser, error) {
 	data := new(dao.RvUser)
-	err := tx.Where("uid = ?", uid).First(data).Error
+	err := tx.Where("github_uid = ?", uid).First(data).Error
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (r *Dao) getRecordDetails(tx *gorm.DB, page int32, pageSize int32, role str
 }
 
 func (r *Dao) setColumnValue(tx *gorm.DB, uid int64, column string, value interface{}) error {
-	err := tx.Model(&dao.RvUser{}).Where("uid = ?", uid).Update(column, value).Error
+	err := tx.Model(&dao.RvUser{}).Where("github_uid = ?", uid).Update(column, value).Error
 	if err != nil {
 		return err
 	}

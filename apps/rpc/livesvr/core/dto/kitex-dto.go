@@ -45,6 +45,11 @@ func GenKitexResp[T KitexResp](resp DtoResp, data interface{}) T {
 		v = new(livesvr.StartLiveResp)
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
+		// 类型断言
+		val, ok := data.(*livesvr.LiveDetail)
+		if ok {
+			v.SetData(val)
+		}
 		res = any(v).(T)
 	case *livesvr.StopLiveResp:
 		v = new(livesvr.StopLiveResp)

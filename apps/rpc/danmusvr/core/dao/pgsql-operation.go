@@ -10,7 +10,7 @@ import (
 
 func (r *Dao) getFullDanmuP(ctx context.Context, vid int64) ([]*publicDao.DanmuData, error) {
 	var results []*publicDao.DanmuData
-	err := r.pgdb.Where("rv_id = ?", vid).Order("ts DESC").Find(&results).Error
+	err := r.pgdb.Where("rvid = ?", vid).Order("ts DESC").Find(&results).Error
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (r *Dao) getVideoDanmuDetail(tx *gorm.DB, danID int64) (*publicDao.DanmuDat
 
 func (r *Dao) getUserInfo(uid int64) (publicDao.DUserInfo, error) {
 	var data publicDao.RvUser
-	err := r.pgdb.Where("uid = ?", uid).Select("uid", "avatar_url", "github_login").Find(data).Error
+	err := r.pgdb.Where("github_uid = ?", uid).Select("github_uid", "avatar_url", "github_login").Find(&data).Error
 	if err != nil {
 		return publicDao.DUserInfo{
 			Uid:       0,

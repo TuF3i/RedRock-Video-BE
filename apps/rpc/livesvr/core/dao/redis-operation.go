@@ -45,6 +45,7 @@ func (r *Dao) getAllFields(ctx context.Context, key string) ([]*dao.LiveInfo, er
 	return dataSet, nil
 }
 
+// TODO 抄代码
 func (r *Dao) getFields(ctx context.Context, key string, page int32, pageSize int32) ([]*dao.LiveInfo, int64, error) {
 	var dataSet []*dao.LiveInfo
 
@@ -63,8 +64,17 @@ func (r *Dao) getFields(ctx context.Context, key string, page int32, pageSize in
 	}
 
 	total := len(rawList)
-	offset := (page - 1) * pageSize
-	end := offset + pageSize
+
+	// ✅ 添加分页边界检查
+	offset := int((page - 1) * pageSize)
+	if offset < 0 || offset >= total {
+		return nil, int64(total), nil
+	}
+
+	end := offset + int(pageSize)
+	if end > total {
+		end = total
+	}
 
 	for i := offset; i < end; i++ {
 		liveInfo := &dao.LiveInfo{}

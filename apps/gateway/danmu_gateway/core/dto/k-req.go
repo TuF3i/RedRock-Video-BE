@@ -60,6 +60,6 @@ func GenLiveOffWMsg() models.WebsocketMsg {
 	}
 }
 
-func GenDelReq(rvid int64, uid int64) *danmusvr.DelReq {
-	return &danmusvr.DelReq{DanId: rvid, Uid: uid}
+func GenDelReq(danID int64, uid int64) *danmusvr.DelReq {
+	return &danmusvr.DelReq{DanId: danID, Uid: uid}
 }

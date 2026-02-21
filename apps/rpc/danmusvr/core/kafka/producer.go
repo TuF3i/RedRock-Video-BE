@@ -4,10 +4,8 @@ import (
 	"LiveDanmu/apps/public/models/dao"
 	KMsg "LiveDanmu/apps/public/models/kafka"
 	"LiveDanmu/apps/public/union_var"
-	"LiveDanmu/apps/rpc/danmusvr/core/dto"
 	"LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
 	"context"
-	"errors"
 	"strconv"
 
 	jsoniter "github.com/json-iterator/go"
@@ -30,13 +28,13 @@ func (r *KClient) genDanmuKMsg(msg *danmusvr.PubDanmuData) KMsg.DanmuKMsg {
 	}
 }
 
-func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.PubDanmuData, writer *kafka.Writer) dto.Response {
+func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.PubDanmuData, writer *kafka.Writer) error {
 	// 生成KMsg
 	source := r.genDanmuKMsg(data)
 	// 序列化Json
 	msg, err := jsoniter.ConfigCompatibleWithStandardLibrary.Marshal(source)
 	if err != nil {
-		return dto.ServerInternalError(err)
+		return err
 	}
 	// 组装弹幕消息
 	kmsg := kafka.Message{
@@ -50,24 +48,16 @@ func (r *KClient) produceDanmuKMsg(ctx context.Context, data *danmusvr.PubDanmuD
 	// 发送消息
 	err = writer.WriteMessages(ctx, kmsg)
 	if err != nil {
-		return dto.ServerInternalError(err)
+		return err
 	}
 
-	return dto.OperationSuccess
+	return nil
 }
 
-func (r *KClient) SendVideoDanmuMsg(ctx context.Context, msg *danmusvr.PubDanmuData) dto.Response {
-	resp := r.produceDanmuKMsg(ctx, msg, r.videoDanmuWriter)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return resp
-	}
-	return dto.OperationSuccess
+func (r *KClient) SendVideoDanmuMsg(ctx context.Context, msg *danmusvr.PubDanmuData) error {
+	return r.produceDanmuKMsg(ctx, msg, r.videoDanmuWriter)
 }
 
-func (r *KClient) SendLiveDanmuMsg(ctx context.Context, msg *danmusvr.PubDanmuData) dto.Response {
-	resp := r.produceDanmuKMsg(ctx, msg, r.liveDanmuWriter)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return resp
-	}
-	return dto.OperationSuccess
+func (r *KClient) SendLiveDanmuMsg(ctx context.Context, msg *danmusvr.PubDanmuData) error {
+	return r.produceDanmuKMsg(ctx, msg, r.liveDanmuWriter)
 }

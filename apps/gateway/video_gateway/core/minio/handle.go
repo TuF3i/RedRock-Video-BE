@@ -20,7 +20,7 @@ func (r *Minio) UploadFile(ctx context.Context, minioKey string, file *multipart
 		minioKey,
 		f,
 		file.Size,
-		minio.PutObjectOptions{},
+		minio.PutObjectOptions{ContentType: "video/mp4"},
 	)
 	if err != nil {
 		return err

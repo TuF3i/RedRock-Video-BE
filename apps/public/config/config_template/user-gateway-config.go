@@ -7,7 +7,7 @@ type UserGatewayConfig struct {
 	Hertz  HertzForUserGateway
 	Redis  RedisForUserGateway
 	Etcd   EtcdForUserGateway
-	Loki   logger.LokiConfig
+	Loki   logger.LoggerConfig
 	OAuth  OAuthConfForUserGateway
 }
 

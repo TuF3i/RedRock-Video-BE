@@ -17,12 +17,11 @@ func (b *BoardCast) initKClient() {
 	b.kClient = &kafka.Writer{
 		Addr:                   kafka.TCP(b.conf.KafKa.Urls...),
 		Topic:                  kafkaCfg.LIVE_DANMU_BOARDCAST_TOPIC,
-		MaxAttempts:            1, // 重试次数
+		MaxAttempts:            3, // 重试次数
 		BatchSize:              1,
-		BatchTimeout:           1 * time.Millisecond, // 超时时间
+		BatchTimeout:           100 * time.Millisecond, // 超时时间
 		RequiredAcks:           1,
 		Async:                  false,
-		Compression:            kafka.Snappy,
 		AllowAutoTopicCreation: true,
 		Transport:              dialer,
 	}

@@ -72,6 +72,7 @@ func (r *Dao) delKey(ctx context.Context, key string) error {
 	return err
 }
 
+// TODO 抄过来
 func (r *Dao) getFields(ctx context.Context, key string, page int32, pageSize int32) ([]*dao.VideoInfo, int64, error) {
 	var dataSet []*dao.VideoInfo
 
@@ -90,8 +91,17 @@ func (r *Dao) getFields(ctx context.Context, key string, page int32, pageSize in
 	}
 
 	total := len(rawList)
-	offset := (page - 1) * pageSize
-	end := offset + pageSize
+
+	// ✅ 添加分页边界检查
+	offset := int((page - 1) * pageSize)
+	if offset < 0 || offset >= total {
+		return nil, int64(total), nil // 页码超出范围，返回空数据和总条数
+	}
+
+	end := offset + int(pageSize)
+	if end > total {
+		end = total // ✅ 关键修复：end 不能超过实际数据长度
+	}
 
 	for i := offset; i < end; i++ {
 		videoInfo := &dao.VideoInfo{}
@@ -109,6 +119,9 @@ func (r *Dao) getFieldDetail(ctx context.Context, key string, field string) (*da
 
 	raw, err := r.rdb.HGet(ctx, key, field).Result()
 	if err != nil {
+		if errors.Is(err, redis.Nil) {
+			return nil, nil
+		}
 		return nil, err
 	}
 

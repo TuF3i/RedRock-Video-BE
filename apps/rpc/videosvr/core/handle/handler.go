@@ -4,7 +4,7 @@ import (
 	"LiveDanmu/apps/rpc/videosvr/core/dto"
 	videosvr "LiveDanmu/apps/rpc/videosvr/kitex_gen/videosvr"
 	"context"
-	"errors"
+	"fmt"
 )
 
 // VideoSvrImpl implements the last service_tag.yaml interface defined in the IDL.
@@ -15,10 +15,6 @@ func (s *VideoSvrImpl) AddVideo(ctx context.Context, req *videosvr.AddVideoReq) 
 	// 调用方法
 	rawResp := AddVideo(ctx, req)
 	resp = dto.GenKitexResp[*videosvr.AddVideoResp](rawResp, nil)
-	// 判断响应
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }
@@ -28,10 +24,6 @@ func (s *VideoSvrImpl) DelVideo(ctx context.Context, req *videosvr.DelVideoReq) 
 	// 调用方法
 	rawResp := DelVideo(ctx, req)
 	resp = dto.GenKitexResp[*videosvr.DelVideoResp](rawResp, nil)
-	// 判断响应
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }
@@ -41,10 +33,6 @@ func (s *VideoSvrImpl) JudgeAccess(ctx context.Context, req *videosvr.JudgeAcces
 	// 调用方法
 	rawResp := AccessTheJudge(ctx, req)
 	resp = dto.GenKitexResp[*videosvr.JudgeAccessResp](rawResp, nil)
-	// 判断响应
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }
@@ -54,13 +42,8 @@ func (s *VideoSvrImpl) GetVideoList(ctx context.Context, req *videosvr.GetVideoL
 	// 调用方法
 	rawResp, data := GetVideoList(ctx, req)
 	resp = dto.GenKitexResp[*videosvr.GetVideoListResp](rawResp, data)
-	// 判断响应
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
-
 }
 
 // GetPreSignedUrl implements the VideoSvrImpl interface.
@@ -68,10 +51,6 @@ func (s *VideoSvrImpl) GetPreSignedUrl(ctx context.Context, req *videosvr.GetPre
 	// 调用方法
 	rawResp, data := GetPreSignedUrl(ctx, req)
 	resp = dto.GenKitexResp[*videosvr.GetPreSignedUrlResp](rawResp, data)
-	// 判断响应
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }
@@ -80,11 +59,9 @@ func (s *VideoSvrImpl) GetPreSignedUrl(ctx context.Context, req *videosvr.GetPre
 func (s *VideoSvrImpl) GetJudgeList(ctx context.Context, req *videosvr.GetJudgeListReq) (resp *videosvr.GetJudgeListResp, err error) {
 	// 调用方法
 	rawResp, data := GetJudgeList(ctx, req)
+	fmt.Printf("rawResp: %v", rawResp)
 	resp = dto.GenKitexResp[*videosvr.GetJudgeListResp](rawResp, data)
-	// 判断响应
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
+	fmt.Printf("Resp: %v", resp)
 
 	return resp, nil
 }
@@ -94,10 +71,6 @@ func (s *VideoSvrImpl) GetMyVideoList(ctx context.Context, req *videosvr.GetMyVi
 	// 调用方法
 	rawResp, data := GetMyVideoList(ctx, req)
 	resp = dto.GenKitexResp[*videosvr.GetMyVideoListResp](rawResp, data)
-	// 判断响应
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }
@@ -107,10 +80,6 @@ func (s *VideoSvrImpl) InnocentViewNum(ctx context.Context, req *videosvr.Innoce
 	// 调用方法
 	rawResp := InnocentViewNum(ctx, req)
 	resp = dto.GenKitexResp[*videosvr.InnocentViewNumResp](rawResp, nil)
-	// 判断响应
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }
@@ -120,10 +89,6 @@ func (s *VideoSvrImpl) GetVideoDetail(ctx context.Context, req *videosvr.GetVide
 	// 调用方法
 	rawResp, data := GetVideoDetail(ctx, req)
 	resp = dto.GenKitexResp[*videosvr.GetVideoDetailResp](rawResp, data)
-	// 判断响应
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }

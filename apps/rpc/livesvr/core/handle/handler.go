@@ -4,7 +4,7 @@ import (
 	"LiveDanmu/apps/rpc/livesvr/core/dto"
 	livesvr "LiveDanmu/apps/rpc/livesvr/kitex_gen/livesvr"
 	"context"
-	"errors"
+	"fmt"
 )
 
 // LiveSvrImpl implements the last service interface defined in the IDL.
@@ -16,10 +16,6 @@ func (s *LiveSvrImpl) GetLiveInfo(ctx context.Context, req *livesvr.GetLiveInfoR
 	rawResp, data := GetLiveInfo(ctx, req)
 	// 装换上响应
 	resp = dto.GenKitexResp[*livesvr.GetLiveInfoResp](rawResp, data)
-	// 判断错误
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }
@@ -30,10 +26,6 @@ func (s *LiveSvrImpl) GetLiveList(ctx context.Context, req *livesvr.GetLiveListR
 	rawResp, data := GetLiveList(ctx, req)
 	// 装换上响应
 	resp = dto.GenKitexResp[*livesvr.GetLiveListResp](rawResp, data)
-	// 判断错误
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }
@@ -44,10 +36,6 @@ func (s *LiveSvrImpl) StartLive(ctx context.Context, req *livesvr.StartLiveReq) 
 	rawResp, data := StartLive(ctx, req)
 	// 装换上响应
 	resp = dto.GenKitexResp[*livesvr.StartLiveResp](rawResp, data)
-	// 判断错误
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }
@@ -56,12 +44,10 @@ func (s *LiveSvrImpl) StartLive(ctx context.Context, req *livesvr.StartLiveReq) 
 func (s *LiveSvrImpl) StopLive(ctx context.Context, req *livesvr.StopLiveReq) (resp *livesvr.StopLiveResp, err error) {
 	// 调用
 	rawResp := StopLive(ctx, req)
+	fmt.Printf("rawResp: %v \n", rawResp)
 	// 装换上响应
 	resp = dto.GenKitexResp[*livesvr.StopLiveResp](rawResp, nil)
-	// 判断错误
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
+	fmt.Printf("Resp: %v \n", resp)
 
 	return resp, nil
 }
@@ -77,10 +63,6 @@ func (s *LiveSvrImpl) GetMyLiveList(ctx context.Context, req *livesvr.GetMyLiveL
 	rawResp, data := GetMyLiveList(ctx, req)
 	// 装换上响应
 	resp = dto.GenKitexResp[*livesvr.GetMyLiveListResp](rawResp, data)
-	// 判断错误
-	if !errors.Is(rawResp, dto.OperationSuccess) {
-		return resp, rawResp
-	}
 
 	return resp, nil
 }

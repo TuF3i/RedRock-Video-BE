@@ -21,11 +21,11 @@ func setDefaultForUserGatewayGateway(v *viper.Viper) {
 	v.SetDefault(config_template.USER_GATEWAY_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.USER_GATEWAY_REDIS_SERVICENAME, "redis")
 	v.SetDefault(config_template.USER_GATEWAY_REDIS_NAMESPACE, "")
-	v.SetDefault(config_template.USER_GATEWAY_REDIS_PASSWORD, "")
+	v.SetDefault(config_template.USER_GATEWAY_REDIS_PASSWORD, "eeelcgkklo12l13l17gg")
 	v.SetDefault(config_template.USER_GATEWAY_POD_UID, uuid.New().String())
-	v.SetDefault(config_template.USER_GATEWAY_CLIENT_ID, "")
-	v.SetDefault(config_template.USER_GATEWAY_CLIENT_SECRET, "")
-	v.SetDefault(config_template.USER_GATEWAY_REDIRECT_URL, "")
+	v.SetDefault(config_template.USER_GATEWAY_CLIENT_ID, "Ov23liQYWeYUqm5Ftg8n")
+	v.SetDefault(config_template.USER_GATEWAY_CLIENT_SECRET, "855678832e830a1e051642737740987d2190d67f")
+	v.SetDefault(config_template.USER_GATEWAY_REDIRECT_URL, "http://127.0.0.1:8080/user/auth/callback")
 }
 
 func UserGatewayConfigLoader() (*config_template.UserGatewayConfig, error) {

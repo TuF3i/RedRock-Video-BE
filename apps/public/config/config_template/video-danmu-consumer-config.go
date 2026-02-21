@@ -8,7 +8,7 @@ type VideoDanmuConsumerConfig struct {
 	KafKa   KafkaForVideoDanmuConsumer
 	PgSQL   PostgresForVideoDanmuConsumer
 	Redis   RedisForVideoDanmuConsumer
-	Loki    logger.LokiConfig
+	Loki    logger.LoggerConfig
 }
 
 type KafkaForVideoDanmuConsumer struct {

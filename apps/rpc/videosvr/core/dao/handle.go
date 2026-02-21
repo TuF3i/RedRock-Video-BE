@@ -127,7 +127,9 @@ func (r *Dao) GetVideoInfo(ctx context.Context, rvid int64) (*dao.VideoInfo, err
 		return nil, err
 	}
 
-	_ = r.newField(ctx, key, strconv.FormatInt(rvid, 10), data)
+	if !data.InJudge {
+		_ = r.newField(ctx, key, strconv.FormatInt(rvid, 10), data)
+	}
 
 	tx.Commit()
 	return data, nil

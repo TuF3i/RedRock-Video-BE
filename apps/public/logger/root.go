@@ -1,45 +1,58 @@
 package logger
 
 import (
-	"net/http"
-	"sync"
+	"os"
 
+	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-// ------------ 全局常量配置（生产可抽离到配置中心） ------------
-const (
-	lokiChanSize  = 1000 // 日志缓冲通道大小，根据业务QPS调整
-	lokiWorkerNum = 3    // 异步推送协程数，建议3-5个
-)
-
-// LokiConfig ------------ Loki 相关结构体定义 ------------
-// LokiConfig Loki配置项，适配viper/nacos等配置中心（mapstructure标签）
-type LokiConfig struct {
-	ServiceName string
-	Namespace   string
-	LokiAddr    []string `mapstructure:"loki_addr"`        // Loki地址，如http://127.0.0.1:3100
-	Service     string   `mapstructure:"service_tag.yaml"` // 服务名，作为Loki标签
-	Env         string   `mapstructure:"env"`              // 环境，如dev/test/prod，作为Loki标签
-	Level       string   `mapstructure:"level"`            // 日志级别，如debug/info/error
+// LoggerConfig 日志配置项
+type LoggerConfig struct {
+	Service string // 服务名
+	Env     string // 环境
+	Level   string // 日志级别
 }
 
-// LokiPushRequest Loki /loki/api/v1/push 接口标准请求体
-type LokiPushRequest struct {
-	Streams []LokiStream `json:"streams"`
-}
+// ------------ Zap 日志初始化核心方法 ------------
+// initZap 初始化Zap日志器
+func initZap(config LoggerConfig) *zap.Logger {
+	// 1. 解析日志级别，默认InfoLevel
+	level, err := zapcore.ParseLevel(config.Level)
+	if err != nil {
+		zap.L().Warn("parse log level failed, use default info level", zap.Error(err))
+		level = zapcore.InfoLevel
+	}
 
-// LokiStream Loki 流结构，包含标签和日志条目
-type LokiStream struct {
-	Labels  string     `json:"stream"` // 标签，必须是JSON字符串格式
-	Entries [][]string `json:"values"` // 日志条目，格式：[[时间戳(RFC3339Nano), 日志内容], ...]
-}
+	// 2. 生产级JSON编码器配置（控制台输出结构化日志）
+	encoderConfig := zapcore.EncoderConfig{
+		TimeKey:        "time",
+		LevelKey:       "level",
+		CallerKey:      "caller",
+		MessageKey:     "msg",
+		StacktraceKey:  "stack",
+		EncodeLevel:    zapcore.CapitalLevelEncoder,
+		EncodeTime:     zapcore.ISO8601TimeEncoder,
+		EncodeCaller:   zapcore.ShortCallerEncoder,
+		EncodeDuration: zapcore.SecondsDurationEncoder,
+	}
 
-// ------------ Zap Hook 核心结构体 ------------
-// lokiHook 实现zap.Hook接口，生产级异步钩子
-type lokiHook struct {
-	config  LokiConfig          // 配置信息
-	client  *http.Client        // 全局复用HTTP客户端，避免频繁创建连接
-	logChan chan *zapcore.Entry // 日志缓冲通道，异步解耦
-	wg      sync.WaitGroup      // 等待组，保证优雅退出时所有日志推送完成
+	// 3. 构建Zap Core（编码器+输出器+日志级别）
+	core := zapcore.NewCore(
+		zapcore.NewJSONEncoder(encoderConfig),
+		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout)),
+		level,
+	)
+
+	// 4. 创建Logger
+	logger := zap.New(core,
+		zap.AddCaller(),
+		zap.AddStacktrace(zapcore.ErrorLevel),
+		zap.ErrorOutput(zapcore.AddSync(os.Stderr)),
+	)
+
+	// 5. 替换Zap全局日志器
+	zap.ReplaceGlobals(logger)
+
+	return logger
 }

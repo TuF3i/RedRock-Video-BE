@@ -3,6 +3,7 @@ package dto
 import (
 	"LiveDanmu/apps/public/response"
 	"LiveDanmu/apps/rpc/videosvr/kitex_gen/videosvr"
+	"reflect"
 )
 
 func genFinalResp(resp Kresp, data interface{}) response.FinalResponse {
@@ -15,8 +16,8 @@ func genFinalResp(resp Kresp, data interface{}) response.FinalResponse {
 
 func GenFinalResponse[T KitexResps](resp T) response.FinalResponse {
 	// 空指针检查
-	v := any(resp)
-	if v == nil {
+	t := reflect.ValueOf(resp)
+	if t.Kind() == reflect.Ptr && t.IsNil() {
 		return response.FinalResponse{
 			Status: 0,
 			Info:   "nil response",
@@ -34,6 +35,11 @@ func GenFinalResponse[T KitexResps](resp T) response.FinalResponse {
 	case *videosvr.DelVideoResp:
 		if v.GetStatus() == 0 {
 			return genFinalResp(response.OperationSuccess, nil)
+		}
+		return genFinalResp(v, nil)
+	case *videosvr.GetJudgeListResp:
+		if v.GetStatus() == 0 {
+			return genFinalResp(response.OperationSuccess, v.GetData())
 		}
 		return genFinalResp(v, nil)
 	case *videosvr.JudgeAccessResp:

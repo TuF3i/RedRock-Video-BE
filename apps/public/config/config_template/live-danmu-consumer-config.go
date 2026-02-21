@@ -7,7 +7,7 @@ type LiveDanmuConsumerConfig struct {
 	GroupID string
 	KafKa   KafkaForLiveDanmuConsumer
 	PgSQL   PostgresForLiveDanmuConsumer
-	Loki    logger.LokiConfig
+	Loki    logger.LoggerConfig
 }
 
 type KafkaForLiveDanmuConsumer struct {

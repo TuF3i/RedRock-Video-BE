@@ -4,9 +4,7 @@ import (
 	"LiveDanmu/apps/public/models/dao"
 	KMsg "LiveDanmu/apps/public/models/kafka"
 	"LiveDanmu/apps/public/union_var"
-	"LiveDanmu/apps/rpc/livesvr/core/dto"
 	"context"
-	"errors"
 	"strconv"
 
 	jsoniter "github.com/json-iterator/go"
@@ -22,13 +20,13 @@ func (r *KClient) genDanmuKMsg(rvid int64) KMsg.DanmuKMsg {
 	}
 }
 
-func (r *KClient) produceDanmuKMsg(ctx context.Context, rvid int64, writer *kafka.Writer) dto.Response {
+func (r *KClient) produceDanmuKMsg(ctx context.Context, rvid int64, writer *kafka.Writer) error {
 	// 生成KMsg
 	source := r.genDanmuKMsg(rvid)
 	// 序列化Json
 	msg, err := jsoniter.ConfigCompatibleWithStandardLibrary.Marshal(source)
 	if err != nil {
-		return dto.ServerInternalError(err)
+		return err
 	}
 	// 组装弹幕消息
 	kmsg := kafka.Message{
@@ -42,16 +40,12 @@ func (r *KClient) produceDanmuKMsg(ctx context.Context, rvid int64, writer *kafk
 	// 发送消息
 	err = writer.WriteMessages(ctx, kmsg)
 	if err != nil {
-		return dto.ServerInternalError(err)
+		return err
 	}
 
-	return dto.OperationSuccess
+	return nil
 }
 
-func (r *KClient) SendLiveOffMsg(ctx context.Context, rvid int64) dto.Response {
-	resp := r.produceDanmuKMsg(ctx, rvid, r.boardCastController)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return resp
-	}
-	return dto.OperationSuccess
+func (r *KClient) SendLiveOffMsg(ctx context.Context, rvid int64) error {
+	return r.produceDanmuKMsg(ctx, rvid, r.boardCastController)
 }

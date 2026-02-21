@@ -10,6 +10,7 @@ import (
 	"LiveDanmu/apps/rpc/usersvr/core/handle"
 	"LiveDanmu/apps/rpc/usersvr/core/middleware"
 	"LiveDanmu/apps/rpc/usersvr/kitex_gen/usersvr/usersvr"
+	"fmt"
 	"net"
 	"os"
 	"os/signal"
@@ -17,9 +18,11 @@ import (
 	"time"
 
 	"gitee.com/liumou_site/logger"
+	"github.com/cloudwego/kitex/pkg/klog"
+	rinfo "github.com/cloudwego/kitex/pkg/registry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
-	etcd "github.com/kitex-contrib/registry-etcd"
+	zookeeper "github.com/kitex-contrib/registry-zookeeper/registry"
 )
 
 //func main() {
@@ -47,7 +50,8 @@ func onCreate() {
 	}
 
 	// 初始化etcd
-	registry, err := etcd.NewEtcdRegistry(conf.Etcd.Urls, etcd.WithDialTimeoutOpt(5*time.Second))
+	registry, err := zookeeper.NewZookeeperRegistry(conf.Etcd.Urls, 40*time.Second)
+	fmt.Printf("Etcd: %v", conf.Etcd.Urls)
 	if err != nil {
 		l.Error("Init Etcd Error: %v", err.Error())
 		os.Exit(1)
@@ -70,7 +74,7 @@ func onCreate() {
 	core.Logger = llog
 
 	// 向注册中心注册服务
-	addr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:8888")
+	addr, err := net.ResolveTCPAddr("tcp", "192.168.0.144:8888")
 	if err != nil {
 		l.Error("Resolve TCPAddr Error: %v", err.Error())
 		os.Exit(1)
@@ -82,10 +86,11 @@ func onCreate() {
 			ServiceName: union_var.USER_SVR,
 		}),
 		server.WithRegistry(registry),
+		server.WithRegistryInfo(&rinfo.Info{ServiceName: union_var.USER_SVR, Addr: addr}),
 		server.WithServiceAddr(addr),
 		server.WithMiddleware(middleware.PreInit),
-		server.WithLogger(adapter.NewKitexLokiLogger(core.Logger.Logger)),
 	)
+	klog.SetLogger(adapter.NewKitexLokiLogger(core.Logger.Logger))
 
 	// 启动服务
 	err = svr.Run()

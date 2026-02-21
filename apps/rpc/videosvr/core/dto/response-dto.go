@@ -33,7 +33,7 @@ func (r Response) GetInfo() string {
 // ServerInternalError 服务器内部错误封装
 func ServerInternalError(err error) Response {
 	return Response{
-		Status: 500,
+		Status: 59999,
 		Info:   err.Error(),
 	}
 }

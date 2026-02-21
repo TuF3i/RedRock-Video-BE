@@ -14,9 +14,9 @@ type DUserInfo struct {
 
 type DanmuData struct {
 	ID        uint           `json:"-" gorm:"primarykey"`
-	CreatedAt time.Time      `json:"-"`
-	UpdatedAt time.Time      `json:"-"`
-	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
+	CreatedAt time.Time      `gorm:"column:created_at;type:timestamp;not null;default:CURRENT_TIMESTAMP;comment:创建时间"`
+	UpdatedAt time.Time      `gorm:"column:updated_at;type:timestamp;not null;default:CURRENT_TIMESTAMP;comment:更新时间"`
+	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;type:timestamp;index;comment:删除时间（软删除）"`
 
 	DanID   int64  `json:"dan_id" gorm:"column:dan_id;index:idx_dan_id,priority:1;not null;comment:弹幕ID"`
 	RVID    int64  `json:"rv_id" gorm:"column:rvid;index:idx_rvid,priority:1;not null;comment:RVID"`
@@ -25,7 +25,7 @@ type DanmuData struct {
 	Color   string `json:"color" binding:"omitempty,hexcolor" gorm:"column:color;size:20;default:'#FFFFFF';comment:弹幕颜色"`
 	Ts      int64  `json:"ts" gorm:"column:ts;index:idx_room_time,priority:2;not null;comment:发送时间戳(ms)"`
 
-	User DUserInfo `json:"user"`
+	User DUserInfo `json:"user" gorm:"-"`
 }
 
 func (DanmuData) TableName() string {

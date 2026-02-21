@@ -199,35 +199,5 @@ func DelDanmuHandleFunc() app.HandlerFunc {
 
 func LiveDanmuHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		// danmu/live/:rvid
-		// 将连接升级成ws
-		err := upgrader.Upgrade(c, func(conn *websocket.Conn) {
-			// 从路由中提取rvid
-			rvid_ := c.Param("rvid")
-			if rvid_ == "" {
-				c.JSON(consts.StatusOK, dto.GenFinalResponse(response.EmptyRVID))
-				return
-			}
-			// 将string转为int64
-			rvid, err := strconv.ParseInt(rvid_, 10, 64)
-			if err != nil {
-				resp := response.InternalError(err)
-				c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
-				return
-			}
-			// 在连接池内新建连接
-			err = core.PoolGroup.AddConnToGroup(rvid, conn)
-			if err != nil {
-				resp := response.InternalError(err)
-				c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
-				return
-			}
-		})
-		// 是否升级成功
-		if err != nil {
-			resp := response.InternalError(err)
-			c.JSON(consts.StatusOK, dto.GenFinalResponse(resp))
-			return
-		}
 	}
 }

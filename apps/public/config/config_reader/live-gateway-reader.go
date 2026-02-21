@@ -11,7 +11,7 @@ import (
 func setDefaultForLiveGateway(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_GATEWAY_HERTZ_LISTENADDR, "0.0.0.0")
 	v.SetDefault(config_template.LIVE_GATEWAY_HERTZ_LISTENPORT, "8080")
-	v.SetDefault(config_template.LIVE_GATEWAY_HERTZ_MONITORINGPORT, "8081")
+	v.SetDefault(config_template.LIVE_GATEWAY_HERTZ_MONITORINGPORT, "8099")
 	v.SetDefault(config_template.LIVE_GATEWAY_ETCD_SERVICENAME, "etcd")
 	v.SetDefault(config_template.LIVE_GATEWAY_ETCD_NAMESPACE, "")
 	v.SetDefault(config_template.LIVE_GATEWAY_LOKI_NAMESPACE, "")
@@ -19,6 +19,9 @@ func setDefaultForLiveGateway(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_GATEWAY_LOKI_SERVICE, "LIVE_GATEWAY")
 	v.SetDefault(config_template.LIVE_GATEWAY_LOKI_ENV, "proc")
 	v.SetDefault(config_template.LIVE_GATEWAY_LOKI_LEVEL, "INFO")
+	v.SetDefault(config_template.LIVE_GATEWAY_REDIS_SERVIVENAME, "redis")
+	v.SetDefault(config_template.LIVE_GATEWAY_REDIS_NAMESPACE, "")
+	v.SetDefault(config_template.LIVE_GATEWAY_REDIS_PASSWORD, "eeelcgkklo12l13l17gg")
 	v.SetDefault(config_template.LIVE_GATEWAY_POD_UID, uuid.New().String())
 }
 

@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"LiveDanmu/apps/consumer/live_danmu_consumer"
 	"LiveDanmu/apps/consumer/live_danmu_consumer/dao"
 	"LiveDanmu/apps/consumer/live_danmu_consumer/kafka_boardcast"
 	"LiveDanmu/apps/public/union_var"
@@ -11,13 +12,16 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/segmentio/kafka-go"
+	"go.uber.org/zap"
 )
 
 const RETRY_COUNT = 5
 
 func process(ctx context.Context, dao *dao.Dao, boardCast *kafka_boardcast.BoardCast, m kafka.Message) error {
+	live_danmu_consumer.Logger.INFO("OnConsuming:", zap.Any("KMsg", m))
+
 	var dataStruct kafkaMsg.DanmuKMsg
-	err := jsoniter.ConfigCompatibleWithStandardLibrary.Unmarshal(m.Value, dataStruct)
+	err := jsoniter.ConfigCompatibleWithStandardLibrary.Unmarshal(m.Value, &dataStruct)
 	if err != nil {
 		return err
 	}

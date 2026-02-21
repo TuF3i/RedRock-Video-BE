@@ -6,7 +6,7 @@ type LiveGatewayConfig struct {
 	PodUID string
 	Hertz  HertzForLiveGateway
 	Etcd   EtcdForLiveGateway
-	Loki   logger.LokiConfig
+	Loki   logger.LoggerConfig
 	Redis  RedisForLiveGateway
 }
 

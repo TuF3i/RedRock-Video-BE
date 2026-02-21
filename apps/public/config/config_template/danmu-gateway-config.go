@@ -7,7 +7,7 @@ type DanmuGatewayConfig struct {
 	Hertz  HertzForDanmuGateway
 	Etcd   EtcdForDanmuGateway
 	Redis  RedisForDanmuGateway
-	Loki   logger.LokiConfig
+	Loki   logger.LoggerConfig
 	Kafka  KafkaForDanmuGateway
 }
 

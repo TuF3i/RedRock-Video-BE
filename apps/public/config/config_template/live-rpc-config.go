@@ -8,7 +8,7 @@ type LiveRpcConfig struct {
 	PgSQL  PostgresForLiveRpc
 	Redis  RedisForLiveRpc
 	Kafka  KafkaForLiveRpc
-	Loki   logger.LokiConfig
+	Loki   logger.LoggerConfig
 }
 
 type EtcdForLiveRpc struct {

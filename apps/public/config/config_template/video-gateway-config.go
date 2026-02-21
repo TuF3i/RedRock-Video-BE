@@ -7,7 +7,7 @@ type VideoGatewayConfig struct {
 	Hertz  HertzForVideoGateway
 	Redis  RedisForVideoGateway
 	Etcd   EtcdForVideoGateway
-	Loki   logger.LokiConfig
+	Loki   logger.LoggerConfig
 	Minio  MinioForVideoGateway
 }
 

@@ -1,8 +1,6 @@
 package kafka
 
 import (
-	"LiveDanmu/apps/gateway/danmu_gateway/core"
-	"LiveDanmu/apps/gateway/danmu_gateway/core/dto"
 	kafkaMsg "LiveDanmu/apps/public/models/kafka"
 	"LiveDanmu/apps/public/union_var"
 	"LiveDanmu/apps/public/utils"
@@ -14,19 +12,18 @@ import (
 
 const RETRY_COUNT = 5
 
+//type DanmuKMsg struct {
+//	RVID int64
+//	OP   string
+//	Data dao.DanmuData
+//}
+
 func boardCastNewDanmu(ctx context.Context, dataStruct kafkaMsg.DanmuKMsg) {
-	if !core.PoolGroup.IfPoolExist(dataStruct.RVID) {
-		core.PoolGroup.NewPool(ctx, dataStruct.RVID)
-	}
-	core.PoolGroup.BoardCastMsg(dataStruct.RVID, dto.GenAddDanmuWMsg(&dataStruct.Data))
+
 }
 
 func closeLive(dataStruct kafkaMsg.DanmuKMsg) {
-	if !core.PoolGroup.IfPoolExist(dataStruct.RVID) {
-		return
-	}
-	core.PoolGroup.BoardCastMsg(dataStruct.RVID, dto.GenLiveOffWMsg())
-	core.PoolGroup.CancelPool(dataStruct.RVID)
+
 }
 
 func process(ctx context.Context, m kafka.Message) error {

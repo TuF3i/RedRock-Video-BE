@@ -162,6 +162,9 @@ const (
 	LIVE_GATEWAY_LOKI_SERVICE         = "loki.service_tag.yaml"
 	LIVE_GATEWAY_LOKI_ENV             = "loki.env"
 	LIVE_GATEWAY_LOKI_LEVEL           = "loki.level"
+	LIVE_GATEWAY_REDIS_SERVIVENAME    = "redis.servicename"
+	LIVE_GATEWAY_REDIS_NAMESPACE      = "redis.namespace"
+	LIVE_GATEWAY_REDIS_PASSWORD       = "redis.password"
 	LIVE_GATEWAY_POD_UID              = "poduid"
 
 	LIVE_RPC_ETCD_SERVICENAME  = "etcd.servicename"

@@ -19,7 +19,7 @@ import (
 	"gitee.com/liumou_site/logger"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/client"
-	etcd "github.com/kitex-contrib/registry-etcd"
+	"github.com/kitex-contrib/registry-zookeeper/resolver"
 )
 
 var k *kafka.KClient
@@ -37,7 +37,7 @@ func onCreate() {
 	}
 
 	// 初始化etcd
-	discovery, err := etcd.NewEtcdResolver(conf.Etcd.Urls)
+	discovery, err := resolver.NewZookeeperResolver(conf.Etcd.Urls, 10*time.Second)
 	if err != nil {
 		l.Error("Init Etcd Error: %v", err.Error())
 		os.Exit(1)
@@ -71,7 +71,6 @@ func onCreate() {
 	svr, err := danmusvr.NewClient(
 		union_var.DANMU_SVR,
 		client.WithResolver(discovery),
-		client.WithHostPorts(""),
 		client.WithRPCTimeout(5*time.Second),
 	)
 	if err != nil {

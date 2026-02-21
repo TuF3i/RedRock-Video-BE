@@ -30,8 +30,9 @@ func HertzShutdown() error {
 func HertzApi(conf *config_template.DanmuGatewayConfig) {
 	// 构造Url
 	url := fmt.Sprintf("%v:%v", conf.Hertz.ListenAddr, conf.Hertz.ListenPort)
+	monitorUrl := fmt.Sprintf("%v:%v", conf.Hertz.ListenAddr, conf.Hertz.MonitoringPort)
 	// 创建服务核心
-	h = server.Default(server.WithHostPorts(url), server.WithTracer(prometheus.NewServerTracer(conf.Hertz.MonitoringPort, "/hertz")))
+	h = server.Default(server.WithHostPorts(url), server.WithTracer(prometheus.NewServerTracer(monitorUrl, "/hertz")))
 	// 注册TraceID生成中间件
 	h.Use(middleware.TraceIDMiddleware())
 	// 初始化路由
@@ -52,7 +53,7 @@ func initRouter(h *server.Hertz) {
 		// 删除视频弹幕
 		g.DELETE("/video/:rvid", middleware.JWTMiddleware(), handler.DelDanmuHandleFunc())
 		// 建立直播实时ws
-		g.GET("/live/:rvid", handler.LiveDanmuHandleFunc())
+		g.GET("/live", handler.LiveDanmuHandleFunc())
 		// 获取首屏视频弹幕
 		g.GET("/hot/:rvid", handler.GetHotDanmuHandleFunc())
 		// 获取全量视频弹幕

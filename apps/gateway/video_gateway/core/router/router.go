@@ -29,8 +29,9 @@ func HertzShutdown() error {
 func HertzApi(conf *config_template.VideoGatewayConfig) {
 	// 构造Url
 	url := fmt.Sprintf("%v:%v", conf.Hertz.ListenAddr, conf.Hertz.ListenPort)
+	monitorUrl := fmt.Sprintf("%v:%v", conf.Hertz.ListenAddr, conf.Hertz.MonitoringPort)
 	// 创建服务核心
-	h = server.Default(server.WithHostPorts(url), server.WithTracer(prometheus.NewServerTracer(conf.Hertz.MonitoringPort, "/hertz")))
+	h = server.Default(server.WithHostPorts(url), server.WithMaxRequestBodySize(1024*1024*1024), server.WithTracer(prometheus.NewServerTracer(monitorUrl, "/hertz")))
 	// 注册TraceID生成中间件
 	h.Use(middleware.TraceIDMiddleware())
 	// 初始化路由
@@ -52,12 +53,12 @@ func initRouter(h *server.Hertz) {
 		g.GET("/new/rvid", middleware.JWTMiddleware(), handler.GetNewRvidHandleFunc())
 		// 发布视频
 		g.POST("/new", middleware.JWTMiddleware(), handler.AddVideoHandleFunc())
-		// 删除视频
-		g.DELETE("/:rvid", middleware.JWTMiddleware(), handler.DelVideoHandleFunc())
 		// 增加观看数
-		g.GET("/:rvid/innocent", handler.InnocentViewNumHandleFunc())
+		g.PATCH("/:rvid/innocent", handler.InnocentViewNumHandleFunc())
 		// 查看视频详情
 		g.GET("/:rvid/detail", handler.GetVideoDetailHandleFunc())
+		// 删除视频
+		g.DELETE("/:rvid", middleware.JWTMiddleware(), handler.DelVideoHandleFunc())
 
 		// 审核子分组
 		judgeGroup := g.Group("/judge")

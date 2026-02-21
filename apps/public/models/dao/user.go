@@ -17,9 +17,9 @@ type GitHubUser struct {
 type RvUser struct {
 	// 通用基础字段（表主键+时间+软删除）
 	ID        int64          `gorm:"primaryKey;type:bigint;autoIncrement;comment:表自增主键ID"`
-	CreatedAt time.Time      `gorm:"autoCreateTime;type:datetime;comment:记录创建时间"`
-	UpdatedAt time.Time      `gorm:"autoUpdateTime;type:datetime;comment:记录更新时间"`
-	DeletedAt gorm.DeletedAt `gorm:"index;type:datetime;comment:软删除标记"`
+	CreatedAt time.Time      `gorm:"column:created_at;type:timestamp;not null;default:CURRENT_TIMESTAMP;comment:创建时间"`
+	UpdatedAt time.Time      `gorm:"column:updated_at;type:timestamp;not null;default:CURRENT_TIMESTAMP;comment:更新时间"`
+	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;type:timestamp;index;comment:删除时间（软删除）"`
 
 	// GitHub用户相关字段
 	Uid       int64  `json:"uid" gorm:"column:github_uid;type:bigint;not null;uniqueIndex;comment:GitHub用户唯一ID"`

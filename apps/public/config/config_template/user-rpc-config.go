@@ -8,7 +8,7 @@ type UserRpcConfig struct {
 	Etcd    EtcdForUserRpc
 	PgSQL   PostgresForUserRpc
 	Redis   RedisForUserRpc
-	Loki    logger.LokiConfig
+	Loki    logger.LoggerConfig
 }
 
 type EtcdForUserRpc struct {

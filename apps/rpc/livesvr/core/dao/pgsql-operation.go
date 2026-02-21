@@ -35,7 +35,7 @@ func (r *Dao) getRecords(tx *gorm.DB, page int32, pageSize int32) ([]*dao.LiveIn
 }
 
 func (r *Dao) getRecordDetail(tx *gorm.DB, rvid int64) (*dao.LiveInfo, error) {
-	var data *dao.LiveInfo
+	data := &dao.LiveInfo{}
 	err := tx.Where("rv_id = ?", rvid).Find(data).Error
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (r *Dao) getRecordDetailForUsers(tx *gorm.DB, uid int64) ([]*dao.LiveInfo, 
 
 func (r *Dao) ifRecordExist(tx *gorm.DB, rvid int64) (bool, error) {
 	var count int64
-	err := tx.Model(&dao.RvUser{}).Where("rv_id = ?", rvid).Count(&count).Error
+	err := tx.Model(&dao.LiveInfo{}).Where("rv_id = ?", rvid).Count(&count).Error
 	if err != nil {
 		return false, err
 	}
@@ -77,7 +77,7 @@ func (r *Dao) ifRecordExist(tx *gorm.DB, rvid int64) (bool, error) {
 
 func (r *Dao) getUserInfo(uid int64) (dao.LUserInfo, error) {
 	var data dao.RvUser
-	err := r.pgdb.Where("uid = ?", uid).Select("github_uid", "github_login", "avatar_url").First(&data).Error
+	err := r.pgdb.Where("github_uid = ?", uid).Select("github_uid", "github_login", "avatar_url").First(&data).Error
 	if err != nil {
 		return dao.LUserInfo{
 			Uid:       0,

@@ -52,6 +52,7 @@ func LooseJWTMiddleware() app.HandlerFunc {
 		authHeader := string(c.GetHeader("Authorization"))
 		if authHeader == "" {
 			c.Next(ctx)
+			return
 		}
 		// 提取AccessToken
 		token := jwt.StripBearer(authHeader)

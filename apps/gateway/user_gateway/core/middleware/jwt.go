@@ -6,6 +6,7 @@ import (
 	"LiveDanmu/apps/public/response"
 	"LiveDanmu/apps/public/union_var"
 	"context"
+	"fmt"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -58,6 +59,7 @@ func JWTRefreshMiddleware() app.HandlerFunc {
 		token := jwt.StripBearer(authHeader)
 		// 验证并解析JWT
 		claims, err := jwt.VerifyRefreshToken(token)
+		fmt.Printf("Error: %v \n", err)
 		if err != nil {
 			c.JSON(consts.StatusOK, response.InternalError(err))
 			c.Abort()

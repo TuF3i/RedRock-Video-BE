@@ -5,18 +5,17 @@ import (
 )
 
 type NewLogger struct {
-	Logger   *zap.Logger
-	LokiHook *lokiHook
+	Logger *zap.Logger
 }
 
-func GetLogger(conf LokiConfig) (*NewLogger, error) {
+func GetLogger(conf LoggerConfig) (*NewLogger, error) {
 	l := NewLogger{}
-	l.Logger, l.LokiHook = initZapWithLoki(conf)
+	l.Logger = initZap(conf)
 	return &l, nil
 }
+
 func (r *NewLogger) SyncClean() error {
-	err := r.Logger.Sync() // 刷新Zap缓冲区
-	r.LokiHook.Close()     // 关闭Loki Hook，等待所有日志推送完成
+	err := r.Logger.Sync()
 	if err != nil {
 		return err
 	}
@@ -30,6 +29,7 @@ func (r *NewLogger) INFO(msg string, fields ...zap.Field) {
 func (r *NewLogger) WARN(msg string, fields ...zap.Field) {
 	r.Logger.Warn(msg, fields...)
 }
+
 func (r *NewLogger) DEBUG(msg string, fields ...zap.Field) {
 	r.Logger.Debug(msg, fields...)
 }

@@ -129,7 +129,7 @@ func VerifyRefreshToken(tokenStr string) (*dao.MainClaims, error) {
 			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok || t.Method.Alg() != union_var.SigningMethod.Alg() {
 				return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 			}
-			return union_var.AccessSecret, nil
+			return union_var.RefreshSecret, nil
 		},
 		jwt.WithLeeway(5*time.Second),
 	)

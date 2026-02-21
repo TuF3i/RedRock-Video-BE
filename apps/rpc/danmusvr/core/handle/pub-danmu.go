@@ -6,7 +6,7 @@ import (
 	"LiveDanmu/apps/rpc/danmusvr/core/pkg"
 	"LiveDanmu/apps/rpc/danmusvr/kitex_gen/danmusvr"
 	"context"
-	"errors"
+	"fmt"
 )
 
 func PubVideoDanmu(ctx context.Context, req *danmusvr.PubVideoReq) dto.Response {
@@ -29,9 +29,10 @@ func PubVideoDanmu(ctx context.Context, req *danmusvr.PubVideoReq) dto.Response 
 		return dto.InvalidContent
 	}
 	// 发送kafka消息
-	resp := core.KClient.SendVideoDanmuMsg(ctx, danmuData)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return resp
+	err := core.KClient.SendVideoDanmuMsg(ctx, danmuData)
+	fmt.Printf("PubVideoDanmu Called \n")
+	if err != nil {
+		return dto.ServerInternalError(err)
 	}
 	return dto.OperationSuccess
 }
@@ -56,9 +57,9 @@ func PubLiveDanmu(ctx context.Context, req *danmusvr.PubLiveReq) dto.Response {
 		return dto.InvalidContent
 	}
 	// 发送kafka消息
-	resp := core.KClient.SendLiveDanmuMsg(ctx, danmuData)
-	if !errors.Is(resp, dto.OperationSuccess) {
-		return resp
+	err := core.KClient.SendLiveDanmuMsg(ctx, danmuData)
+	if err != nil {
+		return dto.ServerInternalError(err)
 	}
 	return dto.OperationSuccess
 }

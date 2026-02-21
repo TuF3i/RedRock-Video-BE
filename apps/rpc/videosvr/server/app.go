@@ -3,7 +3,6 @@ package app
 import (
 	"LiveDanmu/apps/public/config"
 	logger2 "LiveDanmu/apps/public/logger"
-	"LiveDanmu/apps/public/logger/adapter"
 	"LiveDanmu/apps/public/union_var"
 	"LiveDanmu/apps/rpc/videosvr/core"
 	dao2 "LiveDanmu/apps/rpc/videosvr/core/dao"
@@ -18,9 +17,10 @@ import (
 	"time"
 
 	"gitee.com/liumou_site/logger"
+	rinfo "github.com/cloudwego/kitex/pkg/registry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
-	etcd "github.com/kitex-contrib/registry-etcd"
+	zookeeper "github.com/kitex-contrib/registry-zookeeper/registry"
 )
 
 //func main() {
@@ -48,7 +48,7 @@ func onCreate() {
 	}
 
 	// 初始化etcd
-	registry, err := etcd.NewEtcdRegistry(conf.Etcd.Urls, etcd.WithDialTimeoutOpt(5*time.Second))
+	registry, err := zookeeper.NewZookeeperRegistry(conf.Etcd.Urls, 40*time.Second)
 	if err != nil {
 		l.Error("Init Etcd Error: %v", err.Error())
 		os.Exit(1)
@@ -91,9 +91,9 @@ func onCreate() {
 			ServiceName: union_var.VIDEO_SVR,
 		}),
 		server.WithRegistry(registry),
+		server.WithRegistryInfo(&rinfo.Info{ServiceName: union_var.VIDEO_SVR, Addr: addr}),
 		server.WithServiceAddr(addr),
 		server.WithMiddleware(middleware.PreInit),
-		server.WithLogger(adapter.NewKitexLokiLogger(core.Logger.Logger)),
 	)
 
 	// 启动服务

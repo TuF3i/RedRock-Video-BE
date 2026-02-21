@@ -1,17 +1,14 @@
 package router
 
 import (
-	"LiveDanmu/apps/gateway/user_gateway/core"
 	"LiveDanmu/apps/gateway/user_gateway/core/handler"
 	"LiveDanmu/apps/gateway/user_gateway/core/middleware"
 	"LiveDanmu/apps/public/config/config_template"
-	"LiveDanmu/apps/public/logger/adapter"
 	"context"
 	"fmt"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	prometheus "github.com/hertz-contrib/monitor-prometheus"
 )
 
@@ -29,14 +26,15 @@ func HertzShutdown() error {
 func HertzApi(conf *config_template.UserGatewayConfig) {
 	// 构造Url
 	url := fmt.Sprintf("%v:%v", conf.Hertz.ListenAddr, conf.Hertz.ListenPort)
+	monitorUrl := fmt.Sprintf("%v:%v", conf.Hertz.ListenAddr, conf.Hertz.MonitoringPort)
 	// 创建服务核心
-	h = server.Default(server.WithHostPorts(url), server.WithTracer(prometheus.NewServerTracer(conf.Hertz.MonitoringPort, "/hertz")))
+	h = server.Default(server.WithHostPorts(url), server.WithTracer(prometheus.NewServerTracer(monitorUrl, "/hertz")))
 	// 注册TraceID生成中间件
 	h.Use(middleware.TraceIDMiddleware())
 	// 初始化路由
 	initRouter(h)
 	// 设置日志内核
-	hlog.SetLogger(adapter.NewHertzZapLogger(core.Logger.Logger))
+	//hlog.SetLogger(adapter.NewHertzZapLogger(core.Logger.Logger))
 	// 启动Hertz引擎
 	go func() { h.Spin() }()
 }
@@ -49,7 +47,7 @@ func initRouter(h *server.Hertz) {
 		{
 			authGroup.GET("", handler.UserLoginHandleFunc())
 			authGroup.GET("/callback", handler.CallbackHandleFunc())
-			authGroup.GET("/logout", handler.LogoutHandleFunc())
+			authGroup.GET("/logout", middleware.JWTMiddleware(), handler.LogoutHandleFunc())
 		}
 
 		// 刷新AccessToken
@@ -64,6 +62,6 @@ func initRouter(h *server.Hertz) {
 		}
 
 		// 给用户设置Admin权限
-		g.GET("/set/adminer", middleware.JWTRefreshMiddleware(), handler.SetAdminRoleHandleFunc())
+		g.GET("/set/adminer", middleware.JWTMiddleware(), handler.SetAdminRoleHandleFunc())
 	}
 }

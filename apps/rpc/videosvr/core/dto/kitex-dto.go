@@ -78,6 +78,7 @@ func GenKitexResp[T KitexResp](resp DtoResp, data interface{}) T {
 		v = new(videosvr.InnocentViewNumResp)
 		v.SetStatus(resp.GetStatus())
 		v.SetInfo(resp.GetInfo())
+		res = any(v).(T)
 	case *videosvr.GetVideoDetailResp:
 		v = new(videosvr.GetVideoDetailResp)
 		v.SetStatus(resp.GetStatus())

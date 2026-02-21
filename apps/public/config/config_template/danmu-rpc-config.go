@@ -8,7 +8,7 @@ type DanmuRpcConfig struct {
 	KafKa  KafkaForDanmuRpc
 	PgSQL  PostgresForDanmuRpc
 	Redis  RedisForDanmuRpc
-	Loki   logger.LokiConfig
+	Loki   logger.LoggerConfig
 }
 
 type EtcdForDanmuRpc struct {

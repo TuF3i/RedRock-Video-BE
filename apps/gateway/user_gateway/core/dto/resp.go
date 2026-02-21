@@ -3,6 +3,7 @@ package dto
 import (
 	"LiveDanmu/apps/public/response"
 	"LiveDanmu/apps/rpc/usersvr/kitex_gen/usersvr"
+	"reflect"
 )
 
 func genFinalResp(resp Kresp, data interface{}) response.FinalResponse {
@@ -15,8 +16,7 @@ func genFinalResp(resp Kresp, data interface{}) response.FinalResponse {
 
 func GenFinalResponse[T KitexResps](resp T) response.FinalResponse {
 	// 空指针检查
-	v := any(resp)
-	if v == nil {
+	if reflect.ValueOf(resp).IsNil() {
 		return response.FinalResponse{
 			Status: 0,
 			Info:   "nil response",

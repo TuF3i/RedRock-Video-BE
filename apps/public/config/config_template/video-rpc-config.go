@@ -6,7 +6,7 @@ type VideoRpcConfig struct {
 	PodUID string
 	Redis  RedisForVideoRpc
 	PgSQL  PostgresForVideoRpc
-	Loki   logger.LokiConfig
+	Loki   logger.LoggerConfig
 	Etcd   EtcdForVideoRpc
 	Minio  MinioForVideoRpc
 }
