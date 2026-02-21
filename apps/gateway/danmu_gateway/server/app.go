@@ -80,8 +80,7 @@ func onCreate() {
 	core.DanmuSvr = svr
 
 	// 初始化WS连接池组
-	group := websocket.NewPoolGroup()
-	core.PoolGroup = group
+	websocket.InitManager()
 
 	// 启动Kafka监听携程
 	kClient := kafka.GetKClient(conf)
@@ -111,10 +110,10 @@ func onDestroy() {
 		l.Error("Stop Consumer Error: %v", err.Error())
 	}
 
-	// 关闭PoolGroup
-	for k, _ := range core.PoolGroup.Pools {
-		core.PoolGroup.CancelPool(k)
-	}
+	//// 关闭PoolGroup
+	//for k, _ := range core.PoolGroup.Pools {
+	//	core.PoolGroup.CancelPool(k)
+	//}
 
 	// 关闭Logger
 	err = core.Logger.SyncClean()

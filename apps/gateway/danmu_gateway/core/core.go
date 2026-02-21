@@ -13,6 +13,6 @@ var (
 	Dao       *dao.Dao
 	SnowFlake *snowflake.Node // 雪花
 	DanmuSvr  danmusvr.Client
-	PoolGroup *websocket.PoolGroup
+	PoolGroup *websocket.WebSocketManager
 	Logger    *logger.NewLogger
 )

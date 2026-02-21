@@ -1,6 +1,8 @@
 package kafka
 
 import (
+	"LiveDanmu/apps/gateway/danmu_gateway/core"
+	ws "LiveDanmu/apps/gateway/danmu_gateway/core/websocket"
 	kafkaMsg "LiveDanmu/apps/public/models/kafka"
 	"LiveDanmu/apps/public/union_var"
 	"LiveDanmu/apps/public/utils"
@@ -8,6 +10,7 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/segmentio/kafka-go"
+	"go.uber.org/zap"
 )
 
 const RETRY_COUNT = 5
@@ -18,29 +21,25 @@ const RETRY_COUNT = 5
 //	Data dao.DanmuData
 //}
 
-func boardCastNewDanmu(ctx context.Context, dataStruct kafkaMsg.DanmuKMsg) {
-
-}
-
-func closeLive(dataStruct kafkaMsg.DanmuKMsg) {
-
-}
-
 func process(ctx context.Context, m kafka.Message) error {
 	var dataStruct kafkaMsg.DanmuKMsg
-	err := jsoniter.ConfigCompatibleWithStandardLibrary.Unmarshal(m.Value, dataStruct)
+	err := jsoniter.ConfigCompatibleWithStandardLibrary.Unmarshal(m.Value, &dataStruct)
 	if err != nil {
 		return err
 	}
 
 	ctx = context.WithValue(ctx, union_var.TRACE_ID_KEY, utils.GetHeaderValue(m, union_var.TRACE_ID_KEY))
 
-	// 提取操作
-	switch dataStruct.OP {
-	case kafkaMsg.CLOSE_LIVE:
-		closeLive(dataStruct)
-	case kafkaMsg.PUB_LIVE_DANMU:
-		boardCastNewDanmu(ctx, dataStruct)
+	raw, err := jsoniter.ConfigCompatibleWithStandardLibrary.Marshal(dataStruct.Data)
+	if err != nil {
+		return err
+	}
+
+	core.Logger.INFO("PushDanmaku", zap.Any("Data", dataStruct.Data))
+
+	err = ws.SendDanmaku(dataStruct.RVID, raw)
+	if err != nil {
+		return err
 	}
 
 	return nil

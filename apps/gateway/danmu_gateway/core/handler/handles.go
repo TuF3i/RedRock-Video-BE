@@ -13,6 +13,8 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/websocket"
+
+	ws "LiveDanmu/apps/gateway/danmu_gateway/core/websocket"
 )
 
 // websocket设置
@@ -199,5 +201,6 @@ func DelDanmuHandleFunc() app.HandlerFunc {
 
 func LiveDanmuHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
+		ws.HandleWebSocket(ctx, c)
 	}
 }

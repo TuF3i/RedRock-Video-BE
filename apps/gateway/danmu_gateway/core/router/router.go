@@ -53,7 +53,7 @@ func initRouter(h *server.Hertz) {
 		// 删除视频弹幕
 		g.DELETE("/video/:rvid", middleware.JWTMiddleware(), handler.DelDanmuHandleFunc())
 		// 建立直播实时ws
-		g.GET("/live", handler.LiveDanmuHandleFunc())
+		g.GET("/live/ws", handler.LiveDanmuHandleFunc())
 		// 获取首屏视频弹幕
 		g.GET("/hot/:rvid", handler.GetHotDanmuHandleFunc())
 		// 获取全量视频弹幕
