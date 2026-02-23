@@ -1,0 +1,4 @@
+service_tag:
+  group: "apps.rpc"
+  name: "livesvr"
+  svr_id: "9"

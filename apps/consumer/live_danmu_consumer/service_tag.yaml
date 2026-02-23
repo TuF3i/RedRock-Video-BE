@@ -1,0 +1,4 @@
+service_tag:
+  group: "apps.consumer"
+  name: "live_danmu_consumer"
+  svr_id: "7"

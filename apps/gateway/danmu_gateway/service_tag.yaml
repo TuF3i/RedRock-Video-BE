@@ -1,0 +1,4 @@
+service_tag:
+  group: "apps.gateway"
+  name: "danmu_gateway"
+  svr_id: "1"
