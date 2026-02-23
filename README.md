@@ -2,7 +2,7 @@
 
 > **红岩网校后端寒假考核项目**
 
-![logo](docs\image\logo.png)
+![logo](docs/image/logo.png)
 
 ## 1. 业务模块划分
 
@@ -13,7 +13,7 @@
 
 ## 2. 架构图
 
-![arch](docs\image\arch.png)
+![arch](docs/image/arch.png)
 
 ## 3. 接口设计
 
@@ -1589,7 +1589,7 @@ var (
 | 名称           | 路径                                        |
 | -------------- | ------------------------------------------- |
 | ApiFox接口文件 | [ApiFox](docs/RedRockVideo.apifox.json)     |
-| 接口文档       | [RedRockVideo.html](docs\RedRockVideo.html) |
+| 接口文档       | [RedRockVideo.html](docs/RedRockVideo.html) |
 
 
 > [!note]
