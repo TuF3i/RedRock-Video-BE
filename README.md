@@ -2,6 +2,8 @@
 
 > **红岩网校后端寒假考核项目**
 
+![logo](docs\image\logo.png)
+
 ## 1. 业务模块划分
 
 - **用户模块**
@@ -11,7 +13,7 @@
 
 ## 2. 架构图
 
-![arch](D:\Project\RedRock-Video-BE\docs\image\arch.png)
+![arch](docs\image\arch.png)
 
 ## 3. 接口设计
 
