@@ -8,9 +8,11 @@
       <w>kmsg</w>
       <w>kresp</w>
       <w>listenaddr</w>
+      <w>listenport</w>
       <w>livesvr</w>
       <w>llog</w>
       <w>mapstructure</w>
+      <w>monitoringport</w>
       <w>pgdb</w>
       <w>resps</w>
       <w>rvid</w>
