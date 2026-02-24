@@ -8,8 +8,8 @@ import (
 )
 
 func setDefaultForDBInit(v *viper.Viper) {
-	v.SetDefault(config_template.DB_INIT_PGSQL_SERVICENAME, "pgsql")
-	v.SetDefault(config_template.DB_INIT_PGSQL_NAMESPACE, "")
+	v.SetDefault(config_template.DB_INIT_PGSQL_HOST, "pgsql")
+	v.SetDefault(config_template.DB_INIT_PGSQL_PORT, "5432")
 	v.SetDefault(config_template.DB_INIT_PGSQL_USER, "root")
 	v.SetDefault(config_template.DB_INIT_PGSQL_PASSWORD, "")
 	v.SetDefault(config_template.DB_INIT_PGSQL_DBNAME, "rvideo")

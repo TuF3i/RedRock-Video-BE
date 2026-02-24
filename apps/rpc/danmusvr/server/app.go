@@ -37,7 +37,7 @@ func onCreate() {
 	}
 
 	// 初始化etcd
-	registry, err := zookeeper.NewZookeeperRegistry(conf.Etcd.Urls, 40*time.Second)
+	registry, err := zookeeper.NewZookeeperRegistry(conf.Registry.Urls, 40*time.Second)
 	if err != nil {
 		l.Error("Init Etcd Error: %v", err.Error())
 		os.Exit(1)

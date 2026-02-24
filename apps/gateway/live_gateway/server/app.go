@@ -4,10 +4,10 @@ import (
 	"LiveDanmu/apps/gateway/live_gateway/core"
 	dao2 "LiveDanmu/apps/gateway/live_gateway/core/dao"
 	"LiveDanmu/apps/gateway/live_gateway/core/router"
+	"LiveDanmu/apps/rpc/livesvr/kitex_gen/livesvr/livesvr"
 	"LiveDanmu/apps/shared/config"
 	logger2 "LiveDanmu/apps/shared/logger"
 	"LiveDanmu/apps/shared/union_var"
-	"LiveDanmu/apps/rpc/livesvr/kitex_gen/livesvr/livesvr"
 	"hash/fnv"
 	"os"
 	"os/signal"
@@ -34,7 +34,7 @@ func onCreate() {
 	}
 
 	// 初始化etcd
-	discovery, err := resolver.NewZookeeperResolver(conf.Etcd.Urls, 10*time.Second)
+	discovery, err := resolver.NewZookeeperResolver(conf.Registry.Urls, 10*time.Second)
 	if err != nil {
 		l.Error("Init Etcd Error: %v", err.Error())
 		os.Exit(1)

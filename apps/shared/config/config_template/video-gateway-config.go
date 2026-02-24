@@ -3,12 +3,12 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type VideoGatewayConfig struct {
-	PodUID string
-	Hertz  HertzForVideoGateway
-	Redis  RedisForVideoGateway
-	Etcd   EtcdForVideoGateway
-	Loki   logger.LoggerConfig
-	Minio  MinioForVideoGateway
+	PodUID   string
+	Hertz    HertzForVideoGateway
+	Redis    RedisForVideoGateway
+	Registry RegistryForVideoGateway
+	Loki     logger.LoggerConfig
+	Minio    MinioForVideoGateway
 }
 
 type HertzForVideoGateway struct {
@@ -18,22 +18,18 @@ type HertzForVideoGateway struct {
 }
 
 type RedisForVideoGateway struct {
-	Password    string
-	ServiceName string
-	Namespace   string
-	Urls        []string
+	Password string
+	Hosts    string
+	Urls     []string
 }
 
-type EtcdForVideoGateway struct {
-	ServiceName string
-	Namespace   string
-	Urls        []string
+type RegistryForVideoGateway struct {
+	Hosts string
+	Urls  []string
 }
 
 type MinioForVideoGateway struct {
-	ServiceName    string
-	Namespace      string
-	Urls           []string
+	Host           string
 	UseSSL         bool
 	AccessKey      string
 	SecretKey      string

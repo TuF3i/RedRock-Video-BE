@@ -3,7 +3,7 @@ package config
 import (
 	"LiveDanmu/apps/shared/config/config_reader"
 	"LiveDanmu/apps/shared/config/config_template"
-	"LiveDanmu/apps/shared/config/dns_lookup"
+	"LiveDanmu/apps/shared/config/parse_string"
 	"os"
 )
 
@@ -14,53 +14,17 @@ func LoadDanmuGatewayConfig() (*config_template.DanmuGatewayConfig, error) {
 	}
 
 	if os.Getenv("RV_DEBUG") != "" {
-		conf.Etcd.Urls = ETCD_ADDRS
+		conf.Registry.Urls = ZOOKEEPER_ADDRS
 		conf.Redis.Urls = REDIS_CLUSTER_ADDRS
 		conf.Kafka.Urls = KAFKA_CLUSTER_ADDRS
 		return conf, nil
 	}
 
-	if conf.Etcd.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Etcd.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	}
+	conf.Registry.Urls = parse_string.GetAddrs(conf.Registry.Hosts)
 
-	if conf.Redis.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Redis.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	}
+	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
-	if conf.Kafka.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Kafka.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Kafka.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Kafka.ServiceName, conf.Kafka.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Kafka.Urls = addrList
-	}
+	conf.Kafka.Urls = parse_string.GetAddrs(conf.Kafka.Hosts)
 
 	return conf, nil
 }
@@ -72,68 +36,19 @@ func LoadDanmuRpcConfig() (*config_template.DanmuRpcConfig, error) {
 	}
 
 	if os.Getenv("RV_DEBUG") != "" {
-		conf.Etcd.Urls = ETCD_ADDRS
+		conf.Registry.Urls = ZOOKEEPER_ADDRS
 		conf.Redis.Urls = REDIS_CLUSTER_ADDRS
 		conf.KafKa.Urls = KAFKA_CLUSTER_ADDRS
-		conf.PgSQL.Urls = PGSQL_ADDRS
+		conf.PgSQL.Host = PGSQL_ADDR
+		conf.PgSQL.Port = PGSQL_PORT
 		return conf, nil
 	}
 
-	if conf.Etcd.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Etcd.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	}
+	conf.Registry.Urls = parse_string.GetAddrs(conf.Registry.Hosts)
 
-	if conf.KafKa.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.KafKa.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.KafKa.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.KafKa.ServiceName, conf.KafKa.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.KafKa.Urls = addrList
-	}
+	conf.KafKa.Urls = parse_string.GetAddrs(conf.KafKa.Hosts)
 
-	if conf.PgSQL.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.PgSQL.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	}
-
-	if conf.Redis.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Redis.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	}
+	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
 	return conf, nil
 }
@@ -146,37 +61,12 @@ func LoadLiveDanmuConsumerConfig() (*config_template.LiveDanmuConsumerConfig, er
 
 	if os.Getenv("RV_DEBUG") != "" {
 		conf.KafKa.Urls = KAFKA_CLUSTER_ADDRS
-		conf.PgSQL.Urls = PGSQL_ADDRS
+		conf.PgSQL.Host = PGSQL_ADDR
+		conf.PgSQL.Port = PGSQL_PORT
 		return conf, nil
 	}
 
-	if conf.KafKa.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.KafKa.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.KafKa.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.KafKa.ServiceName, conf.KafKa.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.KafKa.Urls = addrList
-	}
-
-	if conf.PgSQL.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.PgSQL.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	}
+	conf.KafKa.Urls = parse_string.GetAddrs(conf.KafKa.Hosts)
 
 	return conf, nil
 }
@@ -190,51 +80,14 @@ func LoadVideoDanmuConsumerConfig() (*config_template.VideoDanmuConsumerConfig, 
 	if os.Getenv("RV_DEBUG") != "" {
 		conf.Redis.Urls = REDIS_CLUSTER_ADDRS
 		conf.KafKa.Urls = KAFKA_CLUSTER_ADDRS
-		conf.PgSQL.Urls = PGSQL_ADDRS
+		conf.PgSQL.Host = PGSQL_ADDR
+		conf.PgSQL.Port = PGSQL_PORT
 		return conf, nil
 	}
 
-	if conf.KafKa.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.KafKa.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.KafKa.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.KafKa.ServiceName, conf.KafKa.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.KafKa.Urls = addrList
-	}
+	conf.KafKa.Urls = parse_string.GetAddrs(conf.KafKa.Hosts)
 
-	if conf.PgSQL.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.PgSQL.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	}
-
-	if conf.Redis.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Redis.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	}
+	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
 	return conf, nil
 }
@@ -246,53 +99,15 @@ func LoadVideoGatewayConfig() (*config_template.VideoGatewayConfig, error) {
 	}
 
 	if os.Getenv("RV_DEBUG") != "" {
-		conf.Etcd.Urls = ETCD_ADDRS
+		conf.Registry.Urls = ZOOKEEPER_ADDRS
 		conf.Redis.Urls = REDIS_CLUSTER_ADDRS
-		conf.Minio.Urls = MINIO_ADDRS
+		conf.Minio.Host = MINIO_HOST
 		return conf, nil
 	}
 
-	if conf.Minio.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Minio.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Minio.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Minio.ServiceName, conf.Minio.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Minio.Urls = addrList
-	}
+	conf.Registry.Urls = parse_string.GetAddrs(conf.Registry.Hosts)
 
-	if conf.Etcd.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Etcd.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	}
-
-	if conf.Redis.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Redis.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	}
+	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
 	return conf, nil
 }
@@ -304,68 +119,17 @@ func LoadVideoRpcConfig() (*config_template.VideoRpcConfig, error) {
 	}
 
 	if os.Getenv("RV_DEBUG") != "" {
-		conf.Etcd.Urls = ETCD_ADDRS
+		conf.Registry.Urls = ZOOKEEPER_ADDRS
 		conf.Redis.Urls = REDIS_CLUSTER_ADDRS
-		conf.Minio.Urls = MINIO_ADDRS
-		conf.PgSQL.Urls = PGSQL_ADDRS
+		conf.Minio.Host = MINIO_HOST
+		conf.PgSQL.Host = PGSQL_ADDR
+		conf.PgSQL.Port = PGSQL_PORT
 		return conf, nil
 	}
 
-	if conf.Minio.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Minio.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Minio.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Minio.ServiceName, conf.Minio.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Minio.Urls = addrList
-	}
+	conf.Registry.Urls = parse_string.GetAddrs(conf.Registry.Hosts)
 
-	if conf.Etcd.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Etcd.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	}
-
-	if conf.Redis.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Redis.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	}
-
-	if conf.PgSQL.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.PgSQL.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	}
+	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
 	return conf, nil
 }
@@ -377,38 +141,14 @@ func LoadUserGatewayConfig() (*config_template.UserGatewayConfig, error) {
 	}
 
 	if os.Getenv("RV_DEBUG") != "" {
-		conf.Etcd.Urls = ETCD_ADDRS
+		conf.Registry.Urls = ZOOKEEPER_ADDRS
 		conf.Redis.Urls = REDIS_CLUSTER_ADDRS
 		return conf, nil
 	}
 
-	if conf.Etcd.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Etcd.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	}
+	conf.Registry.Urls = parse_string.GetAddrs(conf.Registry.Hosts)
 
-	if conf.Redis.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Redis.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	}
+	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
 	return conf, nil
 }
@@ -420,53 +160,16 @@ func LoadUserRpcConfig() (*config_template.UserRpcConfig, error) {
 	}
 
 	if os.Getenv("RV_DEBUG") != "" {
-		conf.Etcd.Urls = ETCD_ADDRS
+		conf.Registry.Urls = ZOOKEEPER_ADDRS
 		conf.Redis.Urls = REDIS_CLUSTER_ADDRS
-		conf.PgSQL.Urls = PGSQL_ADDRS
+		conf.PgSQL.Host = PGSQL_ADDR
+		conf.PgSQL.Port = PGSQL_PORT
 		return conf, nil
 	}
 
-	if conf.Etcd.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Etcd.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	}
+	conf.Registry.Urls = parse_string.GetAddrs(conf.Registry.Hosts)
 
-	if conf.PgSQL.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.PgSQL.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	}
-
-	if conf.Redis.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Redis.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	}
+	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
 	return conf, nil
 }
@@ -478,38 +181,14 @@ func LoadLiveGatewayConfig() (*config_template.LiveGatewayConfig, error) {
 	}
 
 	if os.Getenv("RV_DEBUG") != "" {
-		conf.Etcd.Urls = ETCD_ADDRS
+		conf.Registry.Urls = ZOOKEEPER_ADDRS
 		conf.Redis.Urls = REDIS_CLUSTER_ADDRS
 		return conf, nil
 	}
 
-	if conf.Etcd.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Etcd.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	}
+	conf.Registry.Urls = parse_string.GetAddrs(conf.Registry.Hosts)
 
-	if conf.Redis.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Redis.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	}
+	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
 	return conf, nil
 }
@@ -521,54 +200,17 @@ func LoadLiveRpcConfig() (*config_template.LiveRpcConfig, error) {
 	}
 
 	if os.Getenv("RV_DEBUG") != "" {
-		conf.Etcd.Urls = ETCD_ADDRS
+		conf.Registry.Urls = ZOOKEEPER_ADDRS
 		conf.Redis.Urls = REDIS_CLUSTER_ADDRS
-		conf.PgSQL.Urls = PGSQL_ADDRS
+		conf.PgSQL.Host = PGSQL_ADDR
+		conf.PgSQL.Port = PGSQL_PORT
 		conf.Kafka.Urls = KAFKA_CLUSTER_ADDRS
 		return conf, nil
 	}
 
-	if conf.Etcd.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Etcd.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Etcd.ServiceName, conf.Etcd.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Etcd.Urls = addrList
-	}
+	conf.Registry.Urls = parse_string.GetAddrs(conf.Registry.Hosts)
 
-	if conf.PgSQL.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.PgSQL.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	}
-
-	if conf.Redis.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.Redis.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.Redis.ServiceName, conf.Redis.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.Redis.Urls = addrList
-	}
+	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
 	return conf, nil
 }
@@ -580,22 +222,9 @@ func LoadDBInitConfig() (*config_template.DBInitConfig, error) {
 	}
 
 	if os.Getenv("RV_DEBUG") != "" {
-		conf.PgSQL.Urls = PGSQL_ADDRS
+		conf.PgSQL.Host = PGSQL_ADDR
+		conf.PgSQL.Port = PGSQL_PORT
 		return conf, nil
-	}
-
-	if conf.PgSQL.Namespace == "" {
-		addrList, err := dns_lookup.ServiceDiscoveryOverDocker(conf.PgSQL.ServiceName)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
-	} else {
-		addrList, err := dns_lookup.ServiceDiscovery(conf.PgSQL.ServiceName, conf.PgSQL.Namespace)
-		if err != nil {
-			return nil, err
-		}
-		conf.PgSQL.Urls = addrList
 	}
 
 	return conf, nil

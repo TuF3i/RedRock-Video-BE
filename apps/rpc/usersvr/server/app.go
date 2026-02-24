@@ -10,7 +10,6 @@ import (
 	logger2 "LiveDanmu/apps/shared/logger"
 	"LiveDanmu/apps/shared/logger/adapter"
 	"LiveDanmu/apps/shared/union_var"
-	"fmt"
 	"net"
 	"os"
 	"os/signal"
@@ -49,8 +48,7 @@ func onCreate() {
 	}
 
 	// 初始化etcd
-	registry, err := zookeeper.NewZookeeperRegistry(conf.Etcd.Urls, 40*time.Second)
-	fmt.Printf("Etcd: %v", conf.Etcd.Urls)
+	registry, err := zookeeper.NewZookeeperRegistry(conf.Registry.Urls, 40*time.Second)
 	if err != nil {
 		l.Error("Init Etcd Error: %v", err.Error())
 		os.Exit(1)

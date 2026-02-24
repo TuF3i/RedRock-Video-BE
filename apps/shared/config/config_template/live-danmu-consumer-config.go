@@ -11,16 +11,14 @@ type LiveDanmuConsumerConfig struct {
 }
 
 type KafkaForLiveDanmuConsumer struct {
-	ServiceName string
-	Namespace   string
-	Urls        []string
+	Hosts string
+	Urls  []string
 }
 
 type PostgresForLiveDanmuConsumer struct {
-	User        string
-	Password    string
-	DBName      string
-	ServiceName string
-	Namespace   string
-	Urls        []string
+	User     string
+	Password string
+	DBName   string
+	Host     string
+	Port     string
 }
