@@ -9,6 +9,7 @@ import (
 	"LiveDanmu/apps/shared/union_var"
 	"LiveDanmu/apps/shared/utils"
 	"context"
+	"net/url"
 	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -154,9 +155,20 @@ func StopLiveHandleFunc() app.HandlerFunc {
 
 func SRSAuthHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		// 获取字段
-		streamName := c.Query("stream")
-		key := c.Query("key")
+		var callbackReq models.SRSCallback
+
+		if err := c.BindJSON(&callbackReq); err != nil {
+			c.JSON(consts.StatusOK, map[string]int{"code": 1})
+		}
+
+		values, err := url.ParseQuery(callbackReq.Param[1:])
+		if err != nil {
+			c.JSON(consts.StatusOK, map[string]int{"code": 1})
+		}
+
+		streamName := callbackReq.Stream
+		key := values.Get("key")
+
 		rvid := utils.RVIDDecoder(streamName)
 		// 构造请求
 		req := dto.GenSRSAuthReq(rvid, key)
