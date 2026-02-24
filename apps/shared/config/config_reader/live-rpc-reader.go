@@ -9,7 +9,7 @@ import (
 
 func setDefaultForLiveRpc(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_RPC_REGISTRY_HOSTS, "zookeeper:2181")
-	v.SetDefault(config_template.LIVE_RPC_PGSQL_HOST, "pgpool")
+	v.SetDefault(config_template.LIVE_RPC_PGSQL_HOST, "pgsql")
 	v.SetDefault(config_template.LIVE_RPC_PGSQL_PORT, "5432")
 	v.SetDefault(config_template.LIVE_RPC_PGSQL_USER, "root")
 	v.SetDefault(config_template.LIVE_RPC_PGSQL_PASSWORD, "")

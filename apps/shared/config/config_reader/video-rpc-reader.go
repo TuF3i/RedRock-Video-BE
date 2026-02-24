@@ -21,7 +21,7 @@ func setDefaultForVideoRpc(v *viper.Viper) {
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_SECRETKEY, "")
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_BLANKETNAME, "video")
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_PICBLANKETNAME, "videoface")
-	v.SetDefault(config_template.VIDEO_RPC_PGSQL_HOST, "pgpool")
+	v.SetDefault(config_template.VIDEO_RPC_PGSQL_HOST, "pgsql")
 	v.SetDefault(config_template.VIDEO_RPC_PGSQL_PORT, "5432")
 	v.SetDefault(config_template.VIDEO_RPC_PGSQL_USER, "root")
 	v.SetDefault(config_template.VIDEO_RPC_PGSQL_PASSWORD, "")

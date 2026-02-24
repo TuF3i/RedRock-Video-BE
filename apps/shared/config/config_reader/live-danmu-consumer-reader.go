@@ -9,7 +9,7 @@ import (
 
 func setDefaultForLiveDanmuConsumer(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_KAFKA_HOSTS, "kafka:9092")
-	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_HOST, "pgpool")
+	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_HOST, "pgsql")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_PORT, "5432")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_USER, "root")
 	v.SetDefault(config_template.LIVE_DANMU_CONSUMER_PGSQL_PASSWORD, "")
