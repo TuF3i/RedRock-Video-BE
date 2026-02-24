@@ -4,7 +4,7 @@ import (
 	response2 "LiveDanmu/apps/gateway/response"
 	"LiveDanmu/apps/gateway/video_gateway/core"
 	"LiveDanmu/apps/gateway/video_gateway/core/dto"
-	"LiveDanmu/apps/gateway/video_gateway/models"
+	"LiveDanmu/apps/gateway/video_gateway/core/models"
 	models2 "LiveDanmu/apps/shared/models"
 	"LiveDanmu/apps/shared/union_var"
 	"LiveDanmu/apps/shared/utils"

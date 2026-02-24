@@ -11,7 +11,7 @@ import (
 
 func (r *ConsumerGroup) initKClient() {
 	dialer := &kafka.Dialer{
-		ClientID: r.conf.PodUID,
+		ClientID: r.conf.ContainerName,
 		Timeout:  10 * time.Second,
 	}
 
@@ -27,6 +27,6 @@ func (r *ConsumerGroup) initKClient() {
 		zap.Strings("brokers", r.conf.KafKa.Urls),
 		zap.String("group_id", r.conf.GroupID),
 		zap.String("topic", union_var.VIDEO_DANMU_PUB_TOPIC),
-		zap.String("client_id", r.conf.PodUID),
+		zap.String("client_id", r.conf.ContainerName),
 	)
 }

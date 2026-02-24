@@ -3,31 +3,27 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type VideoRpcConfig struct {
-	PodUID string
-	Redis  RedisForVideoRpc
-	PgSQL  PostgresForVideoRpc
-	Loki   logger.LoggerConfig
-	Etcd   EtcdForVideoRpc
-	Minio  MinioForVideoRpc
+	ContainerName string
+	Redis         RedisForVideoRpc
+	PgSQL         PostgresForVideoRpc
+	Loki          logger.LoggerConfig
+	Registry      RegistryForVideoRpc
+	Minio         MinioForVideoRpc
 }
 
 type RedisForVideoRpc struct {
-	Password    string
-	ServiceName string
-	Namespace   string
-	Urls        []string
+	Password string
+	Hosts    string
+	Urls     []string
 }
 
-type EtcdForVideoRpc struct {
-	ServiceName string
-	Namespace   string
-	Urls        []string
+type RegistryForVideoRpc struct {
+	Hosts string
+	Urls  []string
 }
 
 type MinioForVideoRpc struct {
-	ServiceName    string
-	Namespace      string
-	Urls           []string
+	Host           string
 	UseSSL         bool
 	AccessKey      string
 	SecretKey      string
@@ -36,10 +32,9 @@ type MinioForVideoRpc struct {
 }
 
 type PostgresForVideoRpc struct {
-	User        string
-	Password    string
-	DBName      string
-	ServiceName string
-	Namespace   string
-	Urls        []string
+	User     string
+	Password string
+	DBName   string
+	Port     string
+	Host     string
 }

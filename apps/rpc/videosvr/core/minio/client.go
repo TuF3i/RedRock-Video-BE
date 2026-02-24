@@ -11,7 +11,7 @@ import (
 func (r *Minio) initMinioClient() error {
 	// 创建连接
 	client, err := minio.New(
-		r.conf.Minio.Urls[0],
+		r.conf.Minio.Host,
 		&minio.Options{
 			Creds: credentials.NewStaticV4(
 				r.conf.Minio.AccessKey,

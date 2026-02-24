@@ -2,9 +2,9 @@ package config_reader
 
 import (
 	"LiveDanmu/apps/shared/config/config_template"
+	"fmt"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
@@ -12,19 +12,15 @@ func setDefaultForUserGatewayGateway(v *viper.Viper) {
 	v.SetDefault(config_template.USER_GATEWAY_HERTZ_LISTENADDR, "0.0.0.0")
 	v.SetDefault(config_template.USER_GATEWAY_HERTZ_LISTENPORT, "8080")
 	v.SetDefault(config_template.USER_GATEWAY_HERTZ_MONITORINGPORT, "8081")
-	v.SetDefault(config_template.USER_GATEWAY_ETCD_SERVICENAME, "zookeeper")
-	v.SetDefault(config_template.USER_GATEWAY_ETCD_NAMESPACE, "")
-	v.SetDefault(config_template.USER_GATEWAY_LOKI_NAMESPACE, "")
-	v.SetDefault(config_template.USER_GATEWAY_LOKI_SERVICENAME, "loki")
+	v.SetDefault(config_template.USER_GATEWAY_REGISTRY_HOSTS, "zookeeper:2181")
 	v.SetDefault(config_template.USER_GATEWAY_LOKI_SERVICE, "USER_GATEWAY")
 	v.SetDefault(config_template.USER_GATEWAY_LOKI_ENV, "proc")
 	v.SetDefault(config_template.USER_GATEWAY_LOKI_LEVEL, "INFO")
-	v.SetDefault(config_template.USER_GATEWAY_REDIS_SERVICENAME, "redis")
-	v.SetDefault(config_template.USER_GATEWAY_REDIS_NAMESPACE, "")
+	v.SetDefault(config_template.USER_GATEWAY_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.USER_GATEWAY_REDIS_PASSWORD, "")
-	v.SetDefault(config_template.USER_GATEWAY_POD_UID, uuid.New().String())
-	v.SetDefault(config_template.USER_GATEWAY_CLIENT_ID, "")
-	v.SetDefault(config_template.USER_GATEWAY_CLIENT_SECRET, "")
+	v.SetDefault(config_template.USER_GATEWAY_CONTAINERNAME, "default-container-name")
+	v.SetDefault(config_template.USER_GATEWAY_OAUTH_CLIENTID, "")
+	v.SetDefault(config_template.USER_GATEWAY_OAUTH_CLIENTSECRET, "")
 	v.SetDefault(config_template.USER_GATEWAY_REDIRECT_URL, "http://127.0.0.1:8080/user/auth/callback")
 }
 
@@ -46,6 +42,9 @@ func UserGatewayConfigLoader() (*config_template.UserGatewayConfig, error) {
 	if err := v.Unmarshal(conf); err != nil {
 		return nil, err
 	}
+
+	fmt.Println(conf.Oauth.ClientID)
+	fmt.Println(conf.Oauth.ClientSecret)
 
 	return conf, nil
 }

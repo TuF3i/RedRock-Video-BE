@@ -3,12 +3,12 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type DanmuGatewayConfig struct {
-	PodUID string
-	Hertz  HertzForDanmuGateway
-	Etcd   EtcdForDanmuGateway
-	Redis  RedisForDanmuGateway
-	Loki   logger.LoggerConfig
-	Kafka  KafkaForDanmuGateway
+	ContainerName string
+	Hertz         HertzForDanmuGateway
+	Registry      RegistryForDanmuGateway
+	Redis         RedisForDanmuGateway
+	Loki          logger.LoggerConfig
+	Kafka         KafkaForDanmuGateway
 }
 
 type HertzForDanmuGateway struct {
@@ -18,20 +18,17 @@ type HertzForDanmuGateway struct {
 }
 
 type KafkaForDanmuGateway struct {
-	ServiceName string
-	Namespace   string
-	Urls        []string
+	Urls  []string
+	Hosts string
 }
 
 type RedisForDanmuGateway struct {
-	Password    string
-	ServiceName string
-	Namespace   string
-	Urls        []string
+	Password string
+	Urls     []string
+	Hosts    string
 }
 
-type EtcdForDanmuGateway struct {
-	ServiceName string
-	Namespace   string
-	Urls        []string
+type RegistryForDanmuGateway struct {
+	Urls  []string
+	Hosts string
 }

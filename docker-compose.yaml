@@ -1,0 +1,181 @@
+networks:
+  overlay-net:
+    external: true
+  1panel-network:
+    external: true
+
+services:
+  video-gateway:
+    image: redrock-video:latest
+    container_name: video-gateway-1
+    environment:
+      VIDEO_GATEWAY_CONTAINERNAME: video-gateway-inner-1
+      VIDEO_GATEWAY_REDIS_PASSWORD:
+      VIDEO_GATEWAY_MINIO_HOST:
+      VIDEO_GATEWAY_MINIO_ACCESSKEY:
+      VIDEO_GATEWAY_MINIO_SECRETKEY:
+    command: ["run", "gateway", "video"]
+    networks:
+      overlay-net:
+        aliases:
+          - video-gateway-inner-1
+      1panel-network:
+        aliases:
+          - video-gateway-1
+    restart: unless-stopped
+
+  danmu-gateway:
+    image: redrock-video:latest
+    container_name: danmu-gateway-1
+    environment:
+      DANMU_GATEWAY_CONTAINERNAME: danmu-gateway-inner-1
+      DANMU_GATEWAY_REDIS_PASSWORD:
+    command: ["run", "gateway", "danmu"]
+    networks:
+      overlay-net:
+        aliases:
+          - danmu-gateway-inner-1
+      1panel-network:
+        aliases:
+          - danmu-gateway-1
+    restart: unless-stopped
+
+  live-gateway:
+    image: redrock-video:latest
+    container_name: live-gateway-1
+    environment:
+      LIVE_GATEWAY_REDIS_PASSWORD:
+      LIVE_GATEWAY_CONTAINERNAME: live-gateway-inner-1
+    command: ["run", "gateway", "live"]
+    networks:
+      overlay-net:
+        aliases:
+          - live-gateway-inner-1
+      1panel-network:
+        aliases:
+          - live-gateway-1
+    restart: unless-stopped
+
+  user-gateway:
+    image: redrock-video:latest
+    container_name: user-gateway-1
+    environment:
+      USER_GATEWAY_REDIS_PASSWORD:
+      USER_GATEWAY_CLIENT_ID:
+      USER_GATEWAY_CLIENT_SECRET:
+      USER_GATEWAY_REDIRECT_URL:
+      USER_GATEWAY_CONTAINERNAME: user-gateway-inner-1
+    command: [ "run", "gateway", "user" ]
+    networks:
+      overlay-net:
+        aliases:
+          - user-gateway-inner-1
+      1panel-network:
+        aliases:
+          - user-gateway-1
+    restart: unless-stopped
+
+  video-svr:
+    image: redrock-video:latest
+    container_name: video-svr-1
+    environment:
+      VIDEO_RPC_REDIS_PASSWORD:
+      VIDEO_RPC_MINIO_HOST:
+      VIDEO_RPC_MINIO_ACCESSKEY:
+      VIDEO_RPC_MINIO_SECRETKEY:
+      VIDEO_RPC_PGSQL_PASSWORD:
+      VIDEO_RPC_CONTAINERNAME: video-svr-inner-1
+    command: [ "run", "rpc", "videosvr" ]
+    networks:
+      overlay-net:
+        aliases:
+          - video-svr-inner-1
+      1panel-network:
+        aliases:
+          - video-svr-1
+    restart: unless-stopped
+
+  danmu-svr:
+    image: redrock-video:latest
+    container_name: danmu-svr-1
+    environment:
+      DANMU_RPC_PGSQL_PASSWORD:
+      DANMU_RPC_REDIS_PASSWORD:
+      DANMU_RPC_CONTAINERNAME: danmu-svr-inner-1
+    command: [ "run", "rpc", "danmusvr" ]
+    networks:
+      overlay-net:
+        aliases:
+          - danmu-svr-inner-1
+      1panel-network:
+        aliases:
+          - danmu-svr-1
+    restart: unless-stopped
+
+  live-svr:
+    image: redrock-video:latest
+    container_name: live-svr-1
+    environment:
+      LIVE_RPC_PGSQL_PASSWORD:
+      LIVE_RPC_REDIS_PASSWORD:
+      LIVE_RPC_CONTAINERNAME: live-svr-inner-1
+    command: [ "run", "rpc", "livesvr" ]
+    networks:
+      overlay-net:
+        aliases:
+          - live-svr-inner-1
+      1panel-network:
+        aliases:
+          - live-svr-1
+    restart: unless-stopped
+
+  user-svr:
+    image: redrock-video:latest
+    container_name: user-svr-1
+    environment:
+      USER_RPC_PGSQL_PASSWORD:
+      USER_RPC_REDIS_PASSWORD:
+      USER_RPC_ADMIN:
+      USER_RPC_CONTAINERNAME: user-svr-inner-1
+    command: [ "run", "rpc", "usersvr" ]
+    networks:
+      overlay-net:
+        aliases:
+          - user-svr-inner-1
+      1panel-network:
+        aliases:
+          - user-svr-1
+    restart: unless-stopped
+
+  video-danmu-consumer:
+    image: redrock-video:latest
+    container_name: video-danmu-consumer-1
+    environment:
+      VIDEO_DANMU_CONSUMER_PGSQL_PASSWORD:
+      VIDEO_DANMU_CONSUMER_REDIS_PASSWORD:
+      VIDEO_DANMU_CONSUMER_CONTAINERNAME: video-danmu-consumer-inner-1
+    command: [ "run", "consumer", "videoDanmu" ]
+    networks:
+      overlay-net:
+        aliases:
+          - video-danmu-consumer-inner-1
+      1panel-network:
+        aliases:
+          - video-danmu-consumer-1
+    restart: unless-stopped
+
+  live-danmu-consumer:
+    image: redrock-video:latest
+    container_name: live-danmu-consumer-1
+    environment:
+      LIVE_DANMU_CONSUMER_PGSQL_PASSWORD:
+      LIVE_DANMU_CONSUMER_CONTAINERNAME: live-danmu-consumer-inner-1
+    command: [ "run", "consumer", "liveDanmu" ]
+    networks:
+      overlay-net:
+        aliases:
+          - live-danmu-consumer-inner-1
+      1panel-network:
+        aliases:
+          - live-danmu-consumer-1
+    restart: unless-stopped

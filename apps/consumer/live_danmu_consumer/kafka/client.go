@@ -10,7 +10,7 @@ import (
 func (r *ConsumerGroup) initKClient() {
 	// 连接拨号器
 	dialer := &kafka.Dialer{
-		ClientID: r.conf.PodUID,
+		ClientID: r.conf.ContainerName,
 		Timeout:  10 * time.Second,
 	}
 

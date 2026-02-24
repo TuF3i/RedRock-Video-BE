@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"LiveDanmu/apps/gateway/video_gateway/models"
+	"LiveDanmu/apps/gateway/video_gateway/core/models"
 	"LiveDanmu/apps/rpc/videosvr/kitex_gen/videosvr"
 )
 

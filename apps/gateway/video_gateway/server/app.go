@@ -5,10 +5,10 @@ import (
 	dao2 "LiveDanmu/apps/gateway/video_gateway/core/dao"
 	minio2 "LiveDanmu/apps/gateway/video_gateway/core/minio"
 	"LiveDanmu/apps/gateway/video_gateway/core/router"
+	"LiveDanmu/apps/rpc/videosvr/kitex_gen/videosvr/videosvr"
 	"LiveDanmu/apps/shared/config"
 	logger2 "LiveDanmu/apps/shared/logger"
 	"LiveDanmu/apps/shared/union_var"
-	"LiveDanmu/apps/rpc/videosvr/kitex_gen/videosvr/videosvr"
 	"hash/fnv"
 	"os"
 	"os/signal"
@@ -35,7 +35,7 @@ func onCreate() {
 	}
 
 	// 初始化etcd
-	discovery, err := resolver.NewZookeeperResolver(conf.Etcd.Urls, 10*time.Second)
+	discovery, err := resolver.NewZookeeperResolver(conf.Registry.Urls, 10*time.Second)
 	if err != nil {
 		l.Error("Init Etcd Error: %v", err.Error())
 		os.Exit(1)
@@ -43,7 +43,7 @@ func onCreate() {
 
 	// 初始化snowflake
 	hash := fnv.New64a()
-	_, err = hash.Write([]byte(conf.PodUID))
+	_, err = hash.Write([]byte(conf.ContainerName))
 	if err != nil {
 		l.Error("Init SnowFlake Error: %v", err.Error())
 		os.Exit(1)

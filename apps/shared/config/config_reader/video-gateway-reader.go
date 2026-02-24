@@ -4,7 +4,6 @@ import (
 	"LiveDanmu/apps/shared/config/config_template"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
@@ -12,19 +11,14 @@ func setDefaultForVideoGatewayGateway(v *viper.Viper) {
 	v.SetDefault(config_template.VIDEO_GATEWAY_HERTZ_LISTENADDR, "0.0.0.0")
 	v.SetDefault(config_template.VIDEO_GATEWAY_HERTZ_LISTENPORT, "8080")
 	v.SetDefault(config_template.VIDEO_GATEWAY_HERTZ_MONITORINGPORT, "8081")
-	v.SetDefault(config_template.VIDEO_GATEWAY_ETCD_SERVICENAME, "zookeeper")
-	v.SetDefault(config_template.VIDEO_GATEWAY_ETCD_NAMESPACE, "")
-	v.SetDefault(config_template.VIDEO_GATEWAY_POD_UID, uuid.New().String())
-	v.SetDefault(config_template.VIDEO_GATEWAY_LOKI_NAMESPACE, "")
-	v.SetDefault(config_template.VIDEO_GATEWAY_LOKI_SERVICENAME, "loki")
+	v.SetDefault(config_template.VIDEO_GATEWAY_REGISTRY_HOSTS, "zookeeper:2181")
+	v.SetDefault(config_template.VIDEO_GATEWAY_CONTAINERNAME, "default-container-name")
 	v.SetDefault(config_template.VIDEO_GATEWAY_LOKI_SERVICE, "VIDEO_GATEWAY")
 	v.SetDefault(config_template.VIDEO_GATEWAY_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.VIDEO_GATEWAY_LOKI_ENV, "proc")
-	v.SetDefault(config_template.VIDEO_GATEWAY_REDIS_SERVICENAME, "redis")
-	v.SetDefault(config_template.VIDEO_GATEWAY_REDIS_NAMESPACE, "")
+	v.SetDefault(config_template.VIDEO_GATEWAY_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.VIDEO_GATEWAY_REDIS_PASSWORD, "")
-	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_SERVICENAME, "minio")
-	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_NAMESPACE, "")
+	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_HOST, "")
 	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_USESSL, false)
 	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_ACCESSKEY, "")
 	v.SetDefault(config_template.VIDEO_GATEWAY_MINIO_SECRETKEY, "")

@@ -5,11 +5,10 @@ import (
 	OAuth "LiveDanmu/apps/gateway/user_gateway/core/OAuth2"
 	dao2 "LiveDanmu/apps/gateway/user_gateway/core/dao"
 	"LiveDanmu/apps/gateway/user_gateway/core/router"
+	"LiveDanmu/apps/rpc/usersvr/kitex_gen/usersvr/usersvr"
 	"LiveDanmu/apps/shared/config"
 	logger2 "LiveDanmu/apps/shared/logger"
 	"LiveDanmu/apps/shared/union_var"
-	"LiveDanmu/apps/rpc/usersvr/kitex_gen/usersvr/usersvr"
-	"fmt"
 	"hash/fnv"
 	"os"
 	"os/signal"
@@ -36,8 +35,7 @@ func onCreate() {
 	}
 
 	// 初始化etcd
-	discovery, err := resolver.NewZookeeperResolver(conf.Etcd.Urls, 10*time.Second)
-	fmt.Printf("Etcd: %v \n", conf.Etcd.Urls)
+	discovery, err := resolver.NewZookeeperResolver(conf.Registry.Urls, 10*time.Second)
 	if err != nil {
 		l.Error("Init Etcd Error: %v", err.Error())
 		os.Exit(1)
@@ -45,7 +43,7 @@ func onCreate() {
 
 	// 初始化snowflake
 	hash := fnv.New64a()
-	_, err = hash.Write([]byte(conf.PodUID))
+	_, err = hash.Write([]byte(conf.ContainerName))
 	if err != nil {
 		l.Error("Init SnowFlake Error: %v", err.Error())
 		os.Exit(1)

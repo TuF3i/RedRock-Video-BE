@@ -21,7 +21,7 @@ func (r *OAuthCore) AuthHandle(c *app.RequestContext) {
 }
 
 // CallbackHandler 授权回调接口
-func (r *OAuthCore) CallbackHandler(ctx context.Context, c *app.RequestContext) *models.GitHubUser {
+func (r *OAuthCore) CallbackHandler(ctx context.Context, c *app.RequestContext) (*models.GitHubUser, error) {
 	// 初始化数据
 	user := new(models.GitHubUser)
 	// 获取code
@@ -29,6 +29,7 @@ func (r *OAuthCore) CallbackHandler(ctx context.Context, c *app.RequestContext) 
 	if code == "" {
 		// TODO 重定向到错误页面
 		fmt.Printf("Error: %v\n", errors.New("empty code"))
+		return nil, errors.New("empty code")
 	}
 
 	// 用code交换accessToken
@@ -36,7 +37,7 @@ func (r *OAuthCore) CallbackHandler(ctx context.Context, c *app.RequestContext) 
 	if err != nil {
 		// TODO 重定向到错误页面
 		fmt.Printf("Error: %v\n", err)
-		return nil
+		return nil, err
 	}
 
 	// 用access_token请求GitHub用户信息接口
@@ -46,7 +47,7 @@ func (r *OAuthCore) CallbackHandler(ctx context.Context, c *app.RequestContext) 
 	if err != nil {
 		// TODO 重定向到错误页面
 		fmt.Printf("Error: %v\n", err)
-		return nil
+		return nil, err
 	}
 
 	// 解析用户信息
@@ -54,8 +55,8 @@ func (r *OAuthCore) CallbackHandler(ctx context.Context, c *app.RequestContext) 
 	if err != nil {
 		// TODO 重定向到错误页面
 		fmt.Printf("Error: %v\n", err)
-		return nil
+		return nil, err
 	}
 
-	return user
+	return user, nil
 }

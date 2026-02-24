@@ -5,10 +5,9 @@ type DBInitConfig struct {
 }
 
 type PostgresForDBInit struct {
-	User        string
-	Password    string
-	DBName      string
-	ServiceName string
-	Namespace   string
-	Urls        []string
+	User     string
+	Password string
+	DBName   string
+	Host     string
+	Port     string
 }

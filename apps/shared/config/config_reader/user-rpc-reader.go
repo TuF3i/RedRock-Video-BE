@@ -2,30 +2,26 @@ package config_reader
 
 import (
 	"LiveDanmu/apps/shared/config/config_template"
+	"fmt"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
 func setDefaultForUserRpc(v *viper.Viper) {
-	v.SetDefault(config_template.USER_RPC_ETCD_SERVICENAME, "zookeeper")
-	v.SetDefault(config_template.USER_RPC_ETCD_NAMESPACE, "")
-	v.SetDefault(config_template.USER_RPC_PGSQL_SERVICENAME, "pgpool")
-	v.SetDefault(config_template.USER_RPC_PGSQL_NAMESPACE, "")
+	v.SetDefault(config_template.USER_RPC_REGISTRY_HOSTS, "zookeeper:2181")
+	v.SetDefault(config_template.USER_RPC_PGSQL_HOST, "pgsql")
+	v.SetDefault(config_template.USER_RPC_PGSQL_PORT, "5432")
 	v.SetDefault(config_template.USER_RPC_PGSQL_USER, "root")
 	v.SetDefault(config_template.USER_RPC_PGSQL_PASSWORD, "")
 	v.SetDefault(config_template.USER_RPC_PGSQL_DBNAME, "rvideo")
-	v.SetDefault(config_template.USER_RPC_REDIS_SERVICENAME, "redis")
-	v.SetDefault(config_template.USER_RPC_REDIS_NAMESPACE, "")
+	v.SetDefault(config_template.USER_RPC_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.USER_RPC_REDIS_PASSWORD, "")
-	v.SetDefault(config_template.USER_RPC_POD_UID, uuid.New().String())
-	v.SetDefault(config_template.USER_RPC_LOKI_NAMESPACE, "")
-	v.SetDefault(config_template.USER_RPC_LOKI_SERVICENAME, "loki")
+	v.SetDefault(config_template.USER_RPC_CONTAINERNAME, "default-container-name")
 	v.SetDefault(config_template.USER_RPC_LOKI_SERVICE, "USER_RPC")
 	v.SetDefault(config_template.USER_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.USER_RPC_LOKI_ENV, "proc")
-	v.SetDefault(config_template.USER_RPC_ADMIN, "")
+	v.SetDefault(config_template.USER_RPC_ADMINID, "")
 }
 
 func UserRpcConfigLoader() (*config_template.UserRpcConfig, error) {
@@ -46,6 +42,8 @@ func UserRpcConfigLoader() (*config_template.UserRpcConfig, error) {
 	if err := v.Unmarshal(conf); err != nil {
 		return nil, err
 	}
+
+	fmt.Println(conf.ContainerName)
 
 	return conf, nil
 }

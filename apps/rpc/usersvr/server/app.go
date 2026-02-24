@@ -10,7 +10,6 @@ import (
 	logger2 "LiveDanmu/apps/shared/logger"
 	"LiveDanmu/apps/shared/logger/adapter"
 	"LiveDanmu/apps/shared/union_var"
-	"fmt"
 	"net"
 	"os"
 	"os/signal"
@@ -37,6 +36,24 @@ import (
 var l *logger.LocalLogger
 var svr server.Server
 
+func getRegAddr(ContainerName string) net.Addr {
+	if ContainerName == "default-container-name" {
+		addr, err := net.ResolveTCPAddr("tcp", net.JoinHostPort("127.0.0.1", "8888"))
+		if err != nil {
+			l.Error("Resolve TCPAddr Error: %v", err.Error())
+			os.Exit(1)
+		}
+		return addr
+	}
+
+	addr, err := net.ResolveTCPAddr("tcp", net.JoinHostPort(ContainerName, "8888"))
+	if err != nil {
+		l.Error("Resolve TCPAddr Error: %v", err.Error())
+		os.Exit(1)
+	}
+	return addr
+}
+
 func onCreate() {
 	l.Modular = "user-svr-on-create"
 	l.Info("Starting UserSvrNode...")
@@ -49,8 +66,7 @@ func onCreate() {
 	}
 
 	// 初始化etcd
-	registry, err := zookeeper.NewZookeeperRegistry(conf.Etcd.Urls, 40*time.Second)
-	fmt.Printf("Etcd: %v", conf.Etcd.Urls)
+	registry, err := zookeeper.NewZookeeperRegistry(conf.Registry.Urls, 40*time.Second)
 	if err != nil {
 		l.Error("Init Etcd Error: %v", err.Error())
 		os.Exit(1)
@@ -72,12 +88,14 @@ func onCreate() {
 	}
 	core.Logger = llog
 
+	//addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:8888")
+	//if err != nil {
+	//	l.Error("Resolve TCPAddr Error: %v", err.Error())
+	//	os.Exit(1)
+	//}
+
 	// 向注册中心注册服务
-	addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:8888")
-	if err != nil {
-		l.Error("Resolve TCPAddr Error: %v", err.Error())
-		os.Exit(1)
-	}
+	regAddr := getRegAddr(conf.ContainerName)
 
 	svr = usersvr.NewServer(
 		new(handle.UserSvrImpl),
@@ -85,10 +103,9 @@ func onCreate() {
 			ServiceName: union_var.USER_SVR,
 		}),
 		server.WithRegistry(registry),
-		// 容器环境下默认使用容器dns发现，无需在Registry指定IP
-		// server.WithRegistryInfo(&rinfo.Info{ServiceName: union_var.USER_SVR, Addr: addr}),
-		server.WithServiceAddr(addr),
+		server.WithServiceAddr(regAddr),
 		server.WithMiddleware(middleware.PreInit),
+		//server.WithRegistryInfo(&rinfo.Info{ServiceName: union_var.USER_SVR, Addr: regAddr}),
 	)
 	klog.SetLogger(adapter.NewKitexLokiLogger(core.Logger.Logger))
 

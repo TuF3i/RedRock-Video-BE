@@ -4,25 +4,20 @@ import (
 	"LiveDanmu/apps/shared/config/config_template"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
 func setDefaultForVideoDanmuConsumer(v *viper.Viper) {
-	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_KAFKA_SERVICENAME, "kafka")
-	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_KAFKA_NAMESPACE, "")
-	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_PGSQL_SERVICENAME, "pgpool")
-	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_PGSQL_NAMESPACE, "")
+	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_KAFKA_HOSTS, "kafka:9092")
+	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_PGSQL_HOST, "pgsql")
+	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_PGSQL_PORT, "5432")
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_PGSQL_USER, "root")
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_PGSQL_PASSWORD, "")
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_PGSQL_DBNAME, "rvideo")
-	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_REDIS_SERVICENAME, "redis")
-	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_REDIS_NAMESPACE, "")
+	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_REDIS_PASSWORD, "")
 	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_GROUPID, "video-danmu-consumer-group-union")
-	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_POD_UID, uuid.New().String())
-	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_LOKI_NAMESPACE, "")
-	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_LOKI_SERVICENAME, "loki")
+	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_CONTAINERNAME, "default-container-name")
 	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_LOKI_SERVICE, "VIEDO_DANMU_CONSUMER")
 	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_LOKI_ENV, "proc")

@@ -24,7 +24,12 @@ func UserLoginHandleFunc() app.HandlerFunc {
 func CallbackHandleFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 处理Github回调
-		user := core.OAuth2.CallbackHandler(ctx, c)
+		user, err := core.OAuth2.CallbackHandler(ctx, c)
+		if err != nil {
+			resp := dto.GenFinalResponse(response2.InternalError(err))
+			c.JSON(consts.StatusOK, resp)
+			return
+		}
 		// 空值判断
 		if user == nil {
 			resp := dto.GenFinalResponse(response2.NilGithubUserInfo)

@@ -4,31 +4,25 @@ import (
 	"LiveDanmu/apps/shared/config/config_template"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
 func setDefaultForVideoRpc(v *viper.Viper) {
-	v.SetDefault(config_template.VIDEO_RPC_ETCD_SERVICENAME, "zookeeper")
-	v.SetDefault(config_template.VIDEO_RPC_ETCD_NAMESPACE, "")
-	v.SetDefault(config_template.VIDEO_RPC_POD_UID, uuid.New().String())
-	v.SetDefault(config_template.VIDEO_RPC_LOKI_NAMESPACE, "")
-	v.SetDefault(config_template.VIDEO_RPC_LOKI_SERVICENAME, "loki")
+	v.SetDefault(config_template.VIDEO_RPC_REGISTRY_HOSTS, "zookeeper:2181")
+	v.SetDefault(config_template.VIDEO_RPC_CONTAINERNAME, "default-container-name")
 	v.SetDefault(config_template.VIDEO_RPC_LOKI_SERVICE, "VIDEO_RPC")
 	v.SetDefault(config_template.VIDEO_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.VIDEO_RPC_LOKI_ENV, "proc")
-	v.SetDefault(config_template.VIDEO_RPC_REDIS_SERVICENAME, "redis")
-	v.SetDefault(config_template.VIDEO_RPC_REDIS_NAMESPACE, "")
+	v.SetDefault(config_template.VIDEO_RPC_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.VIDEO_RPC_REDIS_PASSWORD, "")
-	v.SetDefault(config_template.VIDEO_RPC_MINIO_SERVICENAME, "minio")
-	v.SetDefault(config_template.VIDEO_RPC_MINIO_NAMESPACE, "")
+	v.SetDefault(config_template.VIDEO_RPC_MINIO_HOST, "")
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_USESSL, false)
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_ACCESSKEY, "")
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_SECRETKEY, "")
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_BLANKETNAME, "video")
 	v.SetDefault(config_template.VIDEO_RPC_MINIO_PICBLANKETNAME, "videoface")
-	v.SetDefault(config_template.VIDEO_RPC_PGSQL_SERVICENAME, "pgpool")
-	v.SetDefault(config_template.VIDEO_RPC_PGSQL_NAMESPACE, "")
+	v.SetDefault(config_template.VIDEO_RPC_PGSQL_HOST, "pgsql")
+	v.SetDefault(config_template.VIDEO_RPC_PGSQL_PORT, "5432")
 	v.SetDefault(config_template.VIDEO_RPC_PGSQL_USER, "root")
 	v.SetDefault(config_template.VIDEO_RPC_PGSQL_PASSWORD, "")
 	v.SetDefault(config_template.VIDEO_RPC_PGSQL_DBNAME, "rvideo")
