@@ -212,6 +212,8 @@ func LoadLiveRpcConfig() (*config_template.LiveRpcConfig, error) {
 
 	conf.Redis.Urls = parse_string.GetAddrs(conf.Redis.Hosts)
 
+	conf.Kafka.Urls = parse_string.GetAddrs(conf.Kafka.Hosts)
+
 	return conf, nil
 }
 

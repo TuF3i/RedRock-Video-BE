@@ -18,7 +18,7 @@ func setDefaultForVideoDanmuConsumer(v *viper.Viper) {
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_REDIS_PASSWORD, "")
 	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_GROUPID, "video-danmu-consumer-group-union")
-	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_POD_UID, uuid.New().String())
+	v.SetDefault(config_template.VIDEO_DANMU_CONSUMER_PODUID, uuid.New().String())
 	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_LOKI_SERVICE, "VIEDO_DANMU_CONSUMER")
 	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.VIEDO_DANMU_CONSUMER_LOKI_ENV, "proc")

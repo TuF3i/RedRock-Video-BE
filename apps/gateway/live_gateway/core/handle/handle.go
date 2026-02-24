@@ -14,6 +14,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"go.uber.org/zap"
 )
 
 func GetLiveInfoHandleFunc() app.HandlerFunc {
@@ -160,6 +161,8 @@ func SRSAuthHandleFunc() app.HandlerFunc {
 		if err := c.BindJSON(&callbackReq); err != nil {
 			c.JSON(consts.StatusOK, map[string]int{"code": 1})
 		}
+
+		core.Logger.INFO("SRSAuthHandleFunc", zap.Any("data", callbackReq))
 
 		values, err := url.ParseQuery(callbackReq.Param[1:])
 		if err != nil {

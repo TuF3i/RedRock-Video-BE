@@ -74,7 +74,7 @@ func onCreate() {
 	core.Logger = llog
 
 	// 向注册中心注册服务
-	addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:8888")
+	addr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:8888")
 	if err != nil {
 		l.Error("Resolve TCPAddr Error: %v", err.Error())
 		os.Exit(1)

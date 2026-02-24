@@ -16,10 +16,10 @@ func GetOAuth2(conf *config_template.UserGatewayConfig) *OAuthCore {
 	o := &OAuthCore{
 		conf: conf,
 		oauthConf: &oauth2.Config{
-			ClientID:     conf.OAuth.ClientID,
-			ClientSecret: conf.OAuth.ClientSecret,
+			ClientID:     conf.Oauth.ClientID,
+			ClientSecret: conf.Oauth.ClientSecret,
 			Endpoint:     github.Endpoint,
-			RedirectURL:  conf.OAuth.RedirectURL,
+			RedirectURL:  conf.Oauth.RedirectURL,
 			Scopes:       []string{},
 		},
 	}

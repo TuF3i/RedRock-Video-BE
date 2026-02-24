@@ -44,13 +44,13 @@ func (r *Dao) initRedisClient() error {
 func (r *Dao) initPgSQL() error {
 	// 创建连接URL
 	dsn := fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s "+
+		"host=%s port=%s user=%s password=%s dbname=%s "+
 			"sslmode=disable "+
 			"connect_timeout=5 "+
 			"target_session_attrs=read-write", // 确保连接主库写数据
 
-		r.conf.PgSQL.Urls[0], // K8s 内部访问
-		5432,
+		r.conf.PgSQL.Host, // K8s 内部访问
+		r.conf.PgSQL.Port,
 		r.conf.PgSQL.User,
 		r.conf.PgSQL.Password,
 		r.conf.PgSQL.DBName,

@@ -17,7 +17,7 @@ func setDefaultForLiveRpc(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_RPC_PGSQL_DBNAME, "rvideo")
 	v.SetDefault(config_template.LIVE_RPC_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.LIVE_RPC_REDIS_PASSWORD, "")
-	v.SetDefault(config_template.LIVE_RPC_POD_UID, uuid.New().String())
+	v.SetDefault(config_template.LIVE_RPC_PODUID, uuid.New().String())
 	v.SetDefault(config_template.LIVE_RPC_LOKI_SERVICE, "LIVE_RPC")
 	v.SetDefault(config_template.LIVE_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.LIVE_RPC_LOKI_ENV, "proc")

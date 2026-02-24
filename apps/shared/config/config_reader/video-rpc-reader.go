@@ -10,7 +10,7 @@ import (
 
 func setDefaultForVideoRpc(v *viper.Viper) {
 	v.SetDefault(config_template.VIDEO_RPC_REGISTRY_HOSTS, "zookeeper:2181")
-	v.SetDefault(config_template.VIDEO_RPC_POD_UID, uuid.New().String())
+	v.SetDefault(config_template.VIDEO_RPC_PODUID, uuid.New().String())
 	v.SetDefault(config_template.VIDEO_RPC_LOKI_SERVICE, "VIDEO_RPC")
 	v.SetDefault(config_template.VIDEO_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.VIDEO_RPC_LOKI_ENV, "proc")

@@ -11,14 +11,14 @@ import (
 func setDefaultForLiveGateway(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_GATEWAY_HERTZ_LISTENADDR, "0.0.0.0")
 	v.SetDefault(config_template.LIVE_GATEWAY_HERTZ_LISTENPORT, "8080")
-	v.SetDefault(config_template.LIVE_GATEWAY_HERTZ_MONITORINGPORT, "8099")
+	v.SetDefault(config_template.LIVE_GATEWAY_HERTZ_MONITORINGPORT, "8081")
 	v.SetDefault(config_template.LIVE_GATEWAY_REGISTRY_HOSTS, "zookeeper:2181")
 	v.SetDefault(config_template.LIVE_GATEWAY_LOKI_SERVICE, "LIVE_GATEWAY")
 	v.SetDefault(config_template.LIVE_GATEWAY_LOKI_ENV, "proc")
 	v.SetDefault(config_template.LIVE_GATEWAY_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.LIVE_GATEWAY_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.LIVE_GATEWAY_REDIS_PASSWORD, "")
-	v.SetDefault(config_template.LIVE_GATEWAY_POD_UID, uuid.New().String())
+	v.SetDefault(config_template.LIVE_GATEWAY_PODUID, uuid.New().String())
 }
 
 func LiveGatewayConfigLoader() (*config_template.LiveGatewayConfig, error) {

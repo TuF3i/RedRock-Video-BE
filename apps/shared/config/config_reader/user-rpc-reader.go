@@ -17,11 +17,11 @@ func setDefaultForUserRpc(v *viper.Viper) {
 	v.SetDefault(config_template.USER_RPC_PGSQL_DBNAME, "rvideo")
 	v.SetDefault(config_template.USER_RPC_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.USER_RPC_REDIS_PASSWORD, "")
-	v.SetDefault(config_template.USER_RPC_POD_UID, uuid.New().String())
+	v.SetDefault(config_template.USER_RPC_PODUID, uuid.New().String())
 	v.SetDefault(config_template.USER_RPC_LOKI_SERVICE, "USER_RPC")
 	v.SetDefault(config_template.USER_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.USER_RPC_LOKI_ENV, "proc")
-	v.SetDefault(config_template.USER_RPC_ADMIN, "")
+	v.SetDefault(config_template.USER_RPC_ADMINID, "")
 }
 
 func UserRpcConfigLoader() (*config_template.UserRpcConfig, error) {

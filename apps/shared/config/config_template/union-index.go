@@ -11,7 +11,7 @@ const (
 	DANMU_GATEWAY_REDIS_HOSTS          = "redis.hosts"
 	DANMU_GATEWAY_REDIS_PASSWORD       = "redis.password"
 	DANMU_GATEWAY_KAFKA_HOSTS          = "kafka.hosts"
-	DANMU_GATEWAY_POD_UID              = "poduid"
+	DANMU_GATEWAY_PODUID               = "poduid"
 
 	DANMU_RPC_REGISTRY_HOSTS = "registry.hosts"
 	DANMU_RPC_KAFKA_HOSTS    = "kafka.hosts"
@@ -25,7 +25,7 @@ const (
 	DANMU_RPC_LOKI_SERVICE   = "loki.service"
 	DANMU_RPC_LOKI_ENV       = "loki.env"
 	DANMU_RPC_LOKI_LEVEL     = "loki.level"
-	DANMU_RPC_POD_UID        = "poduid"
+	DANMU_RPC_PODUID         = "poduid"
 
 	LIVE_DANMU_CONSUMER_KAFKA_HOSTS    = "kafka.hosts"
 	LIVE_DANMU_CONSUMER_PGSQL_HOST     = "pgsql.host"
@@ -37,7 +37,7 @@ const (
 	LIVE_DANMU_CONSUMER_LOKI_SERVICE   = "loki.service"
 	LIVE_DANMU_CONSUMER_LOKI_ENV       = "loki.env"
 	LIVE_DANMU_CONSUMER_LOKI_LEVEL     = "loki.level"
-	LIVE_DANMU_CONSUMER_POD_UID        = "poduid"
+	LIVE_DANMU_CONSUMER_PODUID         = "poduid"
 
 	VIDEO_DANMU_CONSUMER_KAFKA_HOSTS    = "kafka.hosts"
 	VIDEO_DANMU_CONSUMER_PGSQL_HOST     = "pgsql.host"
@@ -51,7 +51,7 @@ const (
 	VIEDO_DANMU_CONSUMER_LOKI_SERVICE   = "loki.service"
 	VIEDO_DANMU_CONSUMER_LOKI_ENV       = "loki.env"
 	VIEDO_DANMU_CONSUMER_LOKI_LEVEL     = "loki.level"
-	VIDEO_DANMU_CONSUMER_POD_UID        = "poduid"
+	VIDEO_DANMU_CONSUMER_PODUID         = "poduid"
 
 	VIDEO_GATEWAY_HERTZ_LISTENADDR     = "hertz.listenaddr"
 	VIDEO_GATEWAY_HERTZ_LISTENPORT     = "hertz.listenport"
@@ -68,7 +68,7 @@ const (
 	VIDEO_GATEWAY_MINIO_SECRETKEY      = "minio.secretkey"
 	VIDEO_GATEWAY_MINIO_BLANKETNAME    = "minio.blanketname"
 	VIDEO_GATEWAY_MINIO_PICBLANKETNAME = "minio.picblanketname"
-	VIDEO_GATEWAY_POD_UID              = "poduid"
+	VIDEO_GATEWAY_PODUID               = "poduid"
 
 	VIDEO_RPC_REGISTRY_HOSTS       = "registry.hosts"
 	VIDEO_RPC_LOKI_SERVICE         = "loki.service"
@@ -87,7 +87,7 @@ const (
 	VIDEO_RPC_PGSQL_USER           = "pgsql.user"
 	VIDEO_RPC_PGSQL_PASSWORD       = "pgsql.password"
 	VIDEO_RPC_PGSQL_DBNAME         = "pgsql.dbname"
-	VIDEO_RPC_POD_UID              = "poduid"
+	VIDEO_RPC_PODUID               = "poduid"
 
 	USER_GATEWAY_HERTZ_LISTENADDR     = "hertz.listenaddr"
 	USER_GATEWAY_HERTZ_LISTENPORT     = "hertz.listenport"
@@ -98,10 +98,10 @@ const (
 	USER_GATEWAY_LOKI_LEVEL           = "loki.level"
 	USER_GATEWAY_REDIS_HOSTS          = "redis.hosts"
 	USER_GATEWAY_REDIS_PASSWORD       = "redis.password"
-	USER_GATEWAY_CLIENT_ID            = "oauth.clientid"
-	USER_GATEWAY_CLIENT_SECRET        = "oauth.clientsecret"
+	USER_GATEWAY_OAUTH_CLIENTID       = "oauth.clientid"
+	USER_GATEWAY_OAUTH_CLIENTSECRET   = "oauth.clientsecret"
 	USER_GATEWAY_REDIRECT_URL         = "oauth.redirecturl"
-	USER_GATEWAY_POD_UID              = "poduid"
+	USER_GATEWAY_PODUID               = "poduid"
 
 	USER_RPC_REGISTRY_HOSTS = "registry.hosts"
 	USER_RPC_PGSQL_HOST     = "pgsql.host"
@@ -114,8 +114,8 @@ const (
 	USER_RPC_LOKI_SERVICE   = "loki.service"
 	USER_RPC_LOKI_ENV       = "loki.env"
 	USER_RPC_LOKI_LEVEL     = "loki.level"
-	USER_RPC_ADMIN          = "adminid"
-	USER_RPC_POD_UID        = "poduid"
+	USER_RPC_ADMINID        = "adminid"
+	USER_RPC_PODUID         = "poduid"
 
 	LIVE_GATEWAY_HERTZ_LISTENADDR     = "hertz.listenaddr"
 	LIVE_GATEWAY_HERTZ_LISTENPORT     = "hertz.listenport"
@@ -126,7 +126,7 @@ const (
 	LIVE_GATEWAY_LOKI_LEVEL           = "loki.level"
 	LIVE_GATEWAY_REDIS_HOSTS          = "redis.hosts"
 	LIVE_GATEWAY_REDIS_PASSWORD       = "redis.password"
-	LIVE_GATEWAY_POD_UID              = "poduid"
+	LIVE_GATEWAY_PODUID               = "poduid"
 
 	LIVE_RPC_REGISTRY_HOSTS = "registry.hosts"
 	LIVE_RPC_PGSQL_HOST     = "pgsql.host"
@@ -140,7 +140,7 @@ const (
 	LIVE_RPC_LOKI_ENV       = "loki.env"
 	LIVE_RPC_LOKI_LEVEL     = "loki.level"
 	LIVE_RPC_KAFKA_HOSTS    = "kafka.hosts"
-	LIVE_RPC_POD_UID        = "poduid"
+	LIVE_RPC_PODUID         = "poduid"
 
 	DB_INIT_PGSQL_HOST     = "pgsql.host"
 	DB_INIT_PGSQL_PORT     = "pgsql.port"
