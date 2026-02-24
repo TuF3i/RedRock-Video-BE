@@ -3,12 +3,12 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type VideoDanmuConsumerConfig struct {
-	PodUID  string
-	GroupID string
-	KafKa   KafkaForVideoDanmuConsumer
-	PgSQL   PostgresForVideoDanmuConsumer
-	Redis   RedisForVideoDanmuConsumer
-	Loki    logger.LoggerConfig
+	ContainerName string
+	GroupID       string
+	KafKa         KafkaForVideoDanmuConsumer
+	PgSQL         PostgresForVideoDanmuConsumer
+	Redis         RedisForVideoDanmuConsumer
+	Loki          logger.LoggerConfig
 }
 
 type KafkaForVideoDanmuConsumer struct {

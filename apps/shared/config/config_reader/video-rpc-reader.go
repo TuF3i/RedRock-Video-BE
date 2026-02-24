@@ -4,13 +4,12 @@ import (
 	"LiveDanmu/apps/shared/config/config_template"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
 func setDefaultForVideoRpc(v *viper.Viper) {
 	v.SetDefault(config_template.VIDEO_RPC_REGISTRY_HOSTS, "zookeeper:2181")
-	v.SetDefault(config_template.VIDEO_RPC_PODUID, uuid.New().String())
+	v.SetDefault(config_template.VIDEO_RPC_CONTAINERNAME, "default-container-name")
 	v.SetDefault(config_template.VIDEO_RPC_LOKI_SERVICE, "VIDEO_RPC")
 	v.SetDefault(config_template.VIDEO_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.VIDEO_RPC_LOKI_ENV, "proc")

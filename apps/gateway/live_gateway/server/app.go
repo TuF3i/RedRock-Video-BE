@@ -42,7 +42,7 @@ func onCreate() {
 
 	// 初始化snowflake
 	hash := fnv.New64a()
-	_, err = hash.Write([]byte(conf.PodUID))
+	_, err = hash.Write([]byte(conf.ContainerName))
 	if err != nil {
 		l.Error("Init SnowFlake Error: %v", err.Error())
 		os.Exit(1)

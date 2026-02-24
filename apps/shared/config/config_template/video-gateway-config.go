@@ -3,12 +3,12 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type VideoGatewayConfig struct {
-	PodUID   string
-	Hertz    HertzForVideoGateway
-	Redis    RedisForVideoGateway
-	Registry RegistryForVideoGateway
-	Loki     logger.LoggerConfig
-	Minio    MinioForVideoGateway
+	ContainerName string
+	Hertz         HertzForVideoGateway
+	Redis         RedisForVideoGateway
+	Registry      RegistryForVideoGateway
+	Loki          logger.LoggerConfig
+	Minio         MinioForVideoGateway
 }
 
 type HertzForVideoGateway struct {

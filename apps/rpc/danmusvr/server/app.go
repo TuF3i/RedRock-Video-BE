@@ -25,6 +25,16 @@ import (
 var l *logger.LocalLogger
 var svr server.Server
 
+func getRegAddr(ContainerName string) net.Addr {
+	if ContainerName == "default-container-name" {
+		addr, _ := net.ResolveTCPAddr("tcp", net.JoinHostPort("127.0.0.1", "8888"))
+		return addr
+	}
+
+	addr, _ := net.ResolveTCPAddr("tcp", net.JoinHostPort(ContainerName, "8888"))
+	return addr
+}
+
 func onCreate() {
 	l.Modular = "danmu-svr-on-create"
 	l.Info("Starting DanmuSvrNode...")
@@ -63,12 +73,14 @@ func onCreate() {
 	}
 	core.Logger = llog
 
+	//addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:8888")
+	//if err != nil {
+	//	l.Error("Resolve TCPAddr Error: %v", err.Error())
+	//	os.Exit(1)
+	//}
+
 	// 向注册中心注册服务
-	addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:8888")
-	if err != nil {
-		l.Error("Resolve TCPAddr Error: %v", err.Error())
-		os.Exit(1)
-	}
+	regAddr := getRegAddr(conf.ContainerName)
 
 	svr = danmusvr.NewServer(
 		new(handle.DanmuSvrImpl),
@@ -76,9 +88,8 @@ func onCreate() {
 			ServiceName: union_var.DANMU_SVR,
 		}),
 		server.WithRegistry(registry),
-		server.WithServiceAddr(addr),
-		// 容器环境下默认使用容器dns发现，无需在Registry指定IP
-		// server.WithRegistryInfo(&rinfo.Info{ServiceName: union_var.DANMU_SVR, Addr: addr}),
+		server.WithServiceAddr(regAddr),
+		// server.WithRegistryInfo(&rinfo.Info{ServiceName: union_var.DANMU_SVR, Addr: getRegAddr(conf.ContainerName)}),
 		server.WithMiddleware(middleware.PreInit),
 		server.WithMiddleware(middleware.DanmuPoolReleaseMiddleware),
 	)

@@ -3,11 +3,11 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type LiveDanmuConsumerConfig struct {
-	PodUID  string
-	GroupID string
-	KafKa   KafkaForLiveDanmuConsumer
-	PgSQL   PostgresForLiveDanmuConsumer
-	Loki    logger.LoggerConfig
+	ContainerName string
+	GroupID       string
+	KafKa         KafkaForLiveDanmuConsumer
+	PgSQL         PostgresForLiveDanmuConsumer
+	Loki          logger.LoggerConfig
 }
 
 type KafkaForLiveDanmuConsumer struct {

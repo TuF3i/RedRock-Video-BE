@@ -3,11 +3,11 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type LiveGatewayConfig struct {
-	PodUID   string
-	Hertz    HertzForLiveGateway
-	Registry RegistryForLiveGateway
-	Loki     logger.LoggerConfig
-	Redis    RedisForLiveGateway
+	ContainerName string
+	Hertz         HertzForLiveGateway
+	Registry      RegistryForLiveGateway
+	Loki          logger.LoggerConfig
+	Redis         RedisForLiveGateway
 }
 
 type HertzForLiveGateway struct {

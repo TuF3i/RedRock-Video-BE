@@ -3,12 +3,12 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type LiveRpcConfig struct {
-	PodUID   string
-	Registry RegistryForLiveRpc
-	PgSQL    PostgresForLiveRpc
-	Redis    RedisForLiveRpc
-	Kafka    KafkaForLiveRpc
-	Loki     logger.LoggerConfig
+	ContainerName string
+	Registry      RegistryForLiveRpc
+	PgSQL         PostgresForLiveRpc
+	Redis         RedisForLiveRpc
+	Kafka         KafkaForLiveRpc
+	Loki          logger.LoggerConfig
 }
 
 type RegistryForLiveRpc struct {

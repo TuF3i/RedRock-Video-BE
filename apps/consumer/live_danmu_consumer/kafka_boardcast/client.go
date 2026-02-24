@@ -10,7 +10,7 @@ import (
 func (b *BoardCast) initKClient() {
 	// 连接拨号器
 	dialer := &kafka.Transport{
-		ClientID:    b.conf.PodUID,
+		ClientID:    b.conf.ContainerName,
 		DialTimeout: 10 * time.Second,
 	}
 	// 弹幕广播器

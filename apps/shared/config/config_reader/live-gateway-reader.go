@@ -4,7 +4,6 @@ import (
 	"LiveDanmu/apps/shared/config/config_template"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
@@ -18,7 +17,7 @@ func setDefaultForLiveGateway(v *viper.Viper) {
 	v.SetDefault(config_template.LIVE_GATEWAY_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.LIVE_GATEWAY_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.LIVE_GATEWAY_REDIS_PASSWORD, "")
-	v.SetDefault(config_template.LIVE_GATEWAY_PODUID, uuid.New().String())
+	v.SetDefault(config_template.LIVE_GATEWAY_CONTAINERNAME, "default-container-name")
 }
 
 func LiveGatewayConfigLoader() (*config_template.LiveGatewayConfig, error) {

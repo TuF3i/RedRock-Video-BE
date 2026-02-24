@@ -2,9 +2,9 @@ package config_reader
 
 import (
 	"LiveDanmu/apps/shared/config/config_template"
+	"fmt"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
@@ -17,7 +17,7 @@ func setDefaultForUserRpc(v *viper.Viper) {
 	v.SetDefault(config_template.USER_RPC_PGSQL_DBNAME, "rvideo")
 	v.SetDefault(config_template.USER_RPC_REDIS_HOSTS, "redis-1:6379,redis-2:6379,redis-3:6379")
 	v.SetDefault(config_template.USER_RPC_REDIS_PASSWORD, "")
-	v.SetDefault(config_template.USER_RPC_PODUID, uuid.New().String())
+	v.SetDefault(config_template.USER_RPC_CONTAINERNAME, "default-container-name")
 	v.SetDefault(config_template.USER_RPC_LOKI_SERVICE, "USER_RPC")
 	v.SetDefault(config_template.USER_RPC_LOKI_LEVEL, "INFO")
 	v.SetDefault(config_template.USER_RPC_LOKI_ENV, "proc")
@@ -42,6 +42,8 @@ func UserRpcConfigLoader() (*config_template.UserRpcConfig, error) {
 	if err := v.Unmarshal(conf); err != nil {
 		return nil, err
 	}
+
+	fmt.Println(conf.ContainerName)
 
 	return conf, nil
 }

@@ -3,12 +3,12 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type VideoRpcConfig struct {
-	PodUID   string
-	Redis    RedisForVideoRpc
-	PgSQL    PostgresForVideoRpc
-	Loki     logger.LoggerConfig
-	Registry RegistryForVideoRpc
-	Minio    MinioForVideoRpc
+	ContainerName string
+	Redis         RedisForVideoRpc
+	PgSQL         PostgresForVideoRpc
+	Loki          logger.LoggerConfig
+	Registry      RegistryForVideoRpc
+	Minio         MinioForVideoRpc
 }
 
 type RedisForVideoRpc struct {

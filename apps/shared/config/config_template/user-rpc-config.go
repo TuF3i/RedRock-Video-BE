@@ -3,12 +3,12 @@ package config_template
 import "LiveDanmu/apps/shared/logger"
 
 type UserRpcConfig struct {
-	PodUID   string
-	AdminId  string
-	Registry RegistryForUserRpc
-	PgSQL    PostgresForUserRpc
-	Redis    RedisForUserRpc
-	Loki     logger.LoggerConfig
+	ContainerName string
+	AdminId       string
+	Registry      RegistryForUserRpc
+	PgSQL         PostgresForUserRpc
+	Redis         RedisForUserRpc
+	Loki          logger.LoggerConfig
 }
 
 type RegistryForUserRpc struct {
