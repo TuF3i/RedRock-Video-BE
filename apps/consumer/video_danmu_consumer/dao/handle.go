@@ -41,6 +41,14 @@ func (r *Dao) InsertDanmuIntoDBs(ctx context.Context, data *models.DanmuData) er
 		return nil
 	}
 
+	// 填充用户信息
+	uInfo, err := r.getUserInfoFromPgSQL(tx, data.UserId)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	data.User = *uInfo
+
 	// 向redis里插入数据
 	err = r.insertDanmuToRedis(ctx, data)
 	if err != nil {

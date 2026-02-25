@@ -26,3 +26,18 @@ func (r *Dao) insertDanmuToPgSQL(Tx *gorm.DB, data *models.DanmuData) error {
 	}
 	return nil
 }
+
+func (r *Dao) getUserInfoFromPgSQL(Tx *gorm.DB, uid int64) (*models.DUserInfo, error) {
+	var raw models.RvUser
+	if err := Tx.Where("github_uid = ?", uid).Select("github_uid", "avatar_url", "github_login").First(&raw).Error; err != nil {
+		return nil, err
+	}
+
+	data := models.DUserInfo{
+		Uid:       raw.Uid,
+		UserName:  raw.Login,
+		AvatarURL: raw.AvatarURL,
+	}
+
+	return &data, nil
+}
